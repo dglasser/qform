@@ -29,13 +29,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/qform/ForeignKeyColumnManager.java,v $
- * $Revision: 1.3 $
- * $Author: dglasser $
- * $Date: 2003/12/22 03:39:50 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.qform;
 

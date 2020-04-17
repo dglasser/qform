@@ -29,13 +29,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/qform/QueryPanel.java,v $
- * $Revision: 1.21 $
- * $Author: dglasser $
- * $Date: 2005/06/06 03:06:34 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.qform;
 

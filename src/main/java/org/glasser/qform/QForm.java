@@ -29,13 +29,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/qform/QForm.java,v $
- * $Revision: 1.9 $
- * $Author: dglasser $
- * $Date: 2004/06/03 01:18:01 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.qform;
 

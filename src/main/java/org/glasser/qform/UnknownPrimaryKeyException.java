@@ -29,13 +29,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/qform/UnknownPrimaryKeyException.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/07/11 03:04:07 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.qform;
 

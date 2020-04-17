@@ -29,13 +29,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/qform/ThirdPartyLafDialog.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/07/14 10:13:58 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.qform;
 

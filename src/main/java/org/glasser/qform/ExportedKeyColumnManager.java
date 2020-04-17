@@ -30,13 +30,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/qform/ExportedKeyColumnManager.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/12/22 03:38:26 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.qform;
 

@@ -29,13 +29,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/qform/TableInfoPanel.java,v $
- * $Revision: 1.7 $
- * $Author: dglasser $
- * $Date: 2004/09/28 02:05:45 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.qform;
 
