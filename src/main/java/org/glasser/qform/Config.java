@@ -1,7 +1,7 @@
 /* ====================================================================
  * The QueryForm License, Version 1.1
  *
- * Copyright (c) 1998 - 2003 David F. Glasser.  All rights
+ * Copyright (c) 1998 - 2020 David F. Glasser.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
