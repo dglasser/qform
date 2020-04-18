@@ -40,12 +40,30 @@ plugins {
 
 repositories {
     jcenter()
+	maven {
+		// for Oracle JDBC driver
+		url = uri("https://repo.spring.io/libs-release/")
+	}
 }
 
 dependencies {
     implementation("commons-collections:commons-collections:3.2.2")
     implementation("commons-pool:commons-pool:1.6")
     implementation("commons-dbcp:commons-dbcp:1.4")
+
+
+	// JDBC drivers
+	runtime("mysql:mysql-connector-java:8.0.19")
+    runtime("net.sourceforge.jtds:jtds:1.3.1")
+    runtime("org.postgresql:postgresql:42.2.12")
+
+	// 10.15.n.n and later versions of the derbyclient library do not
+	// contain org.apache.derby.jdbc.ClientDriver. See
+	// https://issues.apache.org/jira/browse/DERBY-6945
+    runtime("org.apache.derby:derbyclient:10.14.2.0")
+
+    runtime("com.oracle.jdbc:com.springsource.oracle.jdbc:10.2.0.2")
+    
 }
 
 application {
