@@ -32,10 +32,12 @@
  *
  */
 
+val version = "1.4.1"
 
 plugins {
     java
     application
+    id("com.bmuschko.izpack") version "3.0"
 }
 
 repositories {
@@ -58,6 +60,9 @@ dependencies {
     implementation("commons-pool:commons-pool:1.6")
     implementation("commons-dbcp:commons-dbcp:1.4")
 
+    runtime("commons-collections:commons-collections:3.2.2")
+    runtime("commons-pool:commons-pool:1.6")
+    runtime("commons-dbcp:commons-dbcp:1.4")
 
     // JDBC drivers
     runtime("mysql:mysql-connector-java:8.0.19")
@@ -72,9 +77,48 @@ dependencies {
     }
 
     runtime("com.oracle.jdbc:com.springsource.oracle.jdbc:10.2.0.2")
+
+    implementation("com.bmuschko:gradle-izpack-plugin:3.0")
+
+    izpack("org.codehaus.izpack:izpack-standalone-compiler:4.3.5")
+
     
 }
 
 application {
     mainClassName = "org.glasser.qform.QForm"
+}
+
+tasks.jar {
+    manifest {
+        attributes("Main-Class" to application.mainClassName,
+                   "Class-Path" to "commons-collections-3.2.2.jar commons-dbcp-1.4.jar commons-pool-1.6.jar")
+    }
+}
+
+izpack {
+    setBaseDir (
+        file("installer")
+    )
+    setInstallFile(
+        file("installer/qform_izpack.xml")
+    )
+    outputFile = file("$buildDir/distributions/qform-${version}-installer.jar")
+    compression = "deflate"
+    compressionLevel = 9
+    appProperties = mapOf("app.group" to "QueryForm", 
+                          "app.name" to "qform", 
+                          "app.title" to "QueryForm",
+                          "app.version" to version, 
+                          "app.subpath" to "QueryForm-$version")
+}
+
+tasks.register<Copy>("copyToLib") {
+    into("${buildDir}/libs")
+    from(configurations.runtime)
+}
+
+tasks.named("izPackCreateInstaller") {
+    dependsOn(":assemble")
+    dependsOn(":copyToLib")
 }

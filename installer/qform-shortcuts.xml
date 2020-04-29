@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+	<programGroup	defaultName="QueryForm"
+					location="applications"/>
+	<shortcut	name="QueryForm Database Tool"
+				target="$INSTALL_PATH/qform.bat"
+				workingDirectory="$INSTALL_PATH"
+				description="QueryForm Database Tool"
+				iconFile="$INSTALL_PATH/LogoIcon32.bmp"
+				initialState="minimized"
+				programGroup="yes"
+				desktop="yes"
+				applications="no"
+				startMenu="no"
+				startup="no">
+		<createForPack name="QueryForm Classes"/>
+	</shortcut>
+</shortcuts>
+

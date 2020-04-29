@@ -1,0 +1,42 @@
+QueryForm Database Tool
+Copyright 1998 - 2004 David F. Glasser
+
+Several third-party libraries are required to compile and run
+this program. The jar files for these libraries are not stored
+in the CVS repository. Instead, they can be downloaded from their
+respective providers or from the QueryForm homepage at
+http://qform.sourceforge.net. If you install the QueryForm application 
+with the automated Windows installation program 
+(qform-N.NN-installer.jar), the required libraries will be installed 
+along with the application.
+
+The following jar files, which are part of the Apache Jakarta Commons
+project (http://jakarta.apache.org/commons) are required:
+
+commons-collections.jar
+commons-dbcp.jar
+commons-pool.jar
+
+The following jar files, which are part of the Apache XML project
+(http://xml.apache.org) are required:
+
+crimson.jar
+xalan.jar
+
+Crimson.jar and xalan.jar provide XML parsers and transformers, 
+respectively, and are called through Java's JAXP API. Advanced
+users may want to configure their Java runtime environment to
+use different libraries for these purposes.
+
+If you are running a version of Java prior to version 1.4 (QueryForm
+requires Java 1.3 or better), then you'll need to have these jar files,
+which are available from http://java.sun.com, in your classpath:
+
+jaxp-api.jar*
+dom.jar* 
+sax.jar*  
+jdbc2_0-stdext.jar
+
+*These jars are bundled in the Java Web Services Developer Pack.
+
+

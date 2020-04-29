@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<installation version="1.0">
+    <info>
+        <appname>QueryForm</appname>
+        <appversion>1.4.1</appversion>
+        <authors>
+            <author name="David Glasser" email="dglasser@pobox.com"/>
+        </authors>
+        <javaversion>1.8</javaversion>
+        <url>https://github.com/dglasser/qform</url>
+    </info>
+    <guiprefs height="480" resizable="yes" width="640"/>
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="deu"/>
+        <langpack iso3="fra"/>
+        <langpack iso3="jpn"/>
+        <langpack iso3="hun"/>
+        <langpack iso3="pol"/>
+        <langpack iso3="rus"/>
+        <langpack iso3="swe"/>
+        <langpack iso3="ukr"/>
+        <langpack iso3="fin"/>
+        <langpack iso3="cat"/>
+        <langpack iso3="por"/>
+        <langpack iso3="ned"/>
+        <langpack iso3="spa"/>
+    </locale>
+    <resources>
+        <res src="./GNU_General_Public_License.txt" id="LicencePanel.licence"/>
+        <res src="./qform-shortcuts.xml" id="shortcutSpec.xml"/>
+    </resources>
+    <native name="ShellLink_x64.dll" type="izpack"/>
+    <native name="ShellLink.dll" type="izpack"/>
+    <panels>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+    <packs>
+        <pack name="QueryForm Classes" required="yes">
+            <description>Main Binaries</description>
+            <file targetdir="$INSTALL_PATH" src="qform.bat" os="windows"/>
+            <parsable targetfile="$INSTALL_PATH/qform.bat" os="windows"/>
+            <file targetdir="$INSTALL_PATH" src="../build/libs/commons-collections-3.2.2.jar"/>
+            <file targetdir="$INSTALL_PATH" src="../build/libs/commons-pool-1.6.jar"/>
+            <file targetdir="$INSTALL_PATH" src="../build/libs/commons-dbcp-1.4.jar"/>
+            <file targetdir="$INSTALL_PATH" src="../build/libs/qform.jar"/>
+            <file targetdir="$INSTALL_PATH/drivers" src="../installer/README_DRIVERS.TXT"/>
+            <parsable targetfile="$INSTALL_PATH/drivers/README_DRIVERS.TXT"/>  
+            <file targetdir="$INSTALL_PATH" src="../docs/INSTRUCTIONS.TXT"/>               
+            <file targetdir="$INSTALL_PATH" src="../docs/instructions.html"/>              
+        </pack>
+        <pack name="Windows Shortcut Icon" required="yes">
+            <description>Shortcuts for launching QueryForm</description>
+            <file targetdir="$INSTALL_PATH" src="./LogoIcon32.bmp"/>
+            <os family="windows"/>
+        </pack>
+        <pack name="Unix Launch Scripts" required="yes">
+            <description>Shell script to launch QueryForm</description>
+            <os family="unix"/>
+            <file targetdir="$INSTALL_PATH" src="qform.sh" os="unix"/>
+            <executable targetfile="$INSTALL_PATH/qform.sh" stage="never" os="unix" keep="true"/>
+            <parsable targetfile="$INSTALL_PATH/qform.sh" os="unix"/>
+        </pack>
+    </packs>
+</installation>
