@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>QueryForm Database Tool</title>
+
+<LINK REL=stylesheet HREF="css/styles.css" TYPE="text/css">
+
+</head>
+<body>
+<table width='400'><tr><td>
+<a name='top'></a>
+<h1>QueryForm User's Guide</h1>
+<a href='http://qform.sourceforge.net/'>[QueryForm Home Page]</a>
+<h4>CONTENTS</h4>
+<ol>
+    <li><a href='#installing'>Installing QueryForm</a>
+</li><li><a href='#running'>Running QueryForm</a>
+</li><li><a href='#configuring'>Configuring a Data Source</a>
+</li><li><a href='#queries'>Running Queries</a>
+</li><li><a href='#metadata'>Viewing Table Metadata</a>
+</li><li><a href='#plaf'>Pluggable Look-and-Feels</a>
+</li>
+</ol>
+<p>
+<a name='installing' href='#top'>top</a>
+<h4>INSTALLING QUERYFORM</h4>
+To install or run QueryForm, you must first have the Java Runtime Environment, 
+version 1.3 or later, installed on your computer. If you do not already have it,
+it is freely available and can be dowloaded at 
+<a href='http://java.sun.com' target='_blank'>http://java.sun.com</a>.
+<p>
+If you are installing QueryForm on a Windows PC, the easiest method is to use the
+automated installation program.* The automated installation program is packaged in a jar
+file named "qform-N.N-installer.jar", where "N.N" is the number of the version 
+you are installing. The installation program can be downloaded from 
+<a href='http://sourceforge.net/project/showfiles.php?group_id=71893' target='_blank'>
+QueryForm's download page</a>.
+<p>
+To run the installer program, first try double-clicking on its icon in the folder
+where it was downloaded. If your system is configured so that files with a ".jar" extension
+are associated with the Java virtual machine, the installer program should launch. If it doesn't,
+open a Command Prompt window (DOS shell), change to the directory where the qform-N.N-installer.jar 
+is located, and run this command (making the appropriate substitution for "N.N"):
+<p><pre>
+    java -jar qform-N.N-installer.jar
+</pre><p>	
+Once the installation program has completed, you can run QueryForm by double-clicking
+its shortcut. If you chose not to create a shortcut during installation, you
+can run it by launching the file qform.bat, which will be located in the directory
+in which you installed QueryForm.
+<p>
+<strong>NOTE: </strong>The automated installation program will run on non-Windows platforms,
+however, no shortcut or launch script will be created. It is nonetheless a convenient way to install
+QueryForm along with all of it's required libraries.
+<p> 
+<strong>Manual Installation:</strong> To install QueryForm manually, you will need the file
+qform.jar, which is packaged inside qform-N.N-bin.zip ("N.N" is the version number) and is available 
+<a href='http://sourceforge.net/project/showfiles.php?group_id=71893' target='_blank'>
+here</a>. You will also need the required library jar files, which are available
+<a href='http://qform.sourceforge.net/downloads/' target='_blank'>here</a>.
+The libraries required to run 
+QueryForm are listed in the file REQUIRED_LIBRARIES.TXT, which is 
+distributed with QueryForm. If you don't have a copy, you can get it 
+<a href='http://qform.sourceforge.net/downloads/REQUIRED_LIBRARIES.TXT' target='_blank'>here</a>.
+<p>
+The qform.jar file must be in your Java classpath, and the library jars
+should be in the same directory as qform.jar. As long as the library jars are
+in the same directory as qform.jar, they should not need to be in your Java classpath,
+because they are referenced in qform.jar's manifest file with the "Class-Path" header.
+<p>
+Within the directory where the qform.jar file is, create a subdirectory 
+called "drivers". Place any jar or zip files containing JDBC drivers into 
+that directory, and they will be loaded when the program is started.
+<p>
+If you're not familiar with what a Java classpath is, don't worry; simply arrange
+the qform.jar file, the libary jars and the drivers directory as described above,
+and try one of the launching methods described below. One of them should work.
+<p>
+<a name='running' href='#top'>top</a>
+<h4>RUNNING QUERYFORM</h4>
+<p>
+As previously mentioned, if you have installed QueryForm with the automated installation
+program on a Windows PC, you can run the program simply by double-clicking the
+shortcut created by the install program. If you installed QueryForm manually, or
+on a non-Windows computer, or are experiencing problems with the shortcut or the 
+supplied qform.bat file, this section explains how to launch the program from a command 
+line or script.
+<p>
+If you have arranged qform.jar, the library jars, the drivers directory 
+and any needed JDBC driver files (.jar or .zip) as described above, you can 
+start QueryForm simply by executing the followng command from a command prompt, 
+in the same directory where qform.jar is located:
+<p>
+<pre>
+    java -jar qform.jar
+</pre>
+<p>	
+If you want QueryForm to use JDBC drivers that are already in your system 
+classpath, use this command line on a Windows system:
+<p>
+<pre>
+    java -classpath qform.jar;%CLASSPATH% org.glasser.qform.QForm
+</pre>
+<p>	
+and this command on Unix systems:
+<p>
+<pre>
+    java -classpath qform.jar:$CLASSPATH org.glasser.qform.QForm
+</pre>
+<p>	
+If qform.jar and all needed JDBC drivers are in your system classpath, and 
+the library jars are in the same directory as qform.jar, you can run the 
+program with this command:
+<p>
+<pre>
+    java org.glasser.qform.QForm
+</pre>
+If you are running QueryForm against a DB2 database (particularly one on a 
+mainframe) and the program terminates abnormally, try starting it with 
+this command line switch:
+<p>
+<pre>
+    java -Dno.foreign.keys=true org.glasser.qform.QForm
+</pre>
+<p>    
+Configuration information for QueryForm is stored in an XML file called 
+qform.xml which normally resides in the user's home directory. If one is 
+not found when the program is launched, it will be created. Alternate 
+configuration files can be specified as a command line argument:
+<p>
+<pre>
+    java org.glasser.qform.QForm S:/share/project/qform-share.xml
+</pre>
+<p>    
+or by using the -D switch to set the "qform.config" system property:
+<p>
+<pre>
+    java -Dqform.config=/etc/qform/config.xml org.glasser.qform.QForm
+</pre>
+<p>      
+The order of priority for specifying a configuration file is:
+
+<ol>
+         <li> First the presence of a command line argument is checked for.
+    </li><li> Second, the presence of the "qform.config" system property is checked for.
+    </li><li> Third, the presence of a file "qform.xml" in the user's home directory is checked for.
+    </li><li> The configuration file is created in the user's home directory.
+    </li>
+</ol>
+        
+<strong>NOTE:</strong> Passwords that are saved in the configuration file between sessions 
+are stored in clear text. If this creates a security problem, do not save 
+passwords; enter them into the login dialog each time you connect to the 
+database.
+<p>
+<strong>NOTE:</strong> The configuration file is not locked while the program is running, 
+and it is overwritten each time the program is exited normally. If you are 
+sharing a configuration file with other users on a network, you may set 
+its filesystem attributes to read-only to prevent individual users from 
+modifying the configuration file. If QueryForm is unable to overwrite a 
+configuration file, it will simply alert the user and then exit normally.
+<p>
+<a name='configuring' href='#top'>top</a>
+<h4>CONFIGURING A DATA SOURCE</h4>
+
+Eventually, there will (hopefully) be detailed documentation for 
+configuring a data source through QueryForm's data source dialog. For the 
+moment, however, this program will be most useful to Java developers who 
+are already familiar with JDBC (Java Database Connectivity), and who are 
+familiar with concepts such as driver classes and URLs. If you fall into this
+category, the data source dialog should be self-explanatory.
+<p>
+For those who are not, but are familiar with ODBC data sources, here are 
+brief instructions for connecting QueryForm to an ODBC data source that 
+has already been configured on your computer:
+
+<ol>
+
+ <li>From the Connect menu, select Data Source...
+
+ <li>In the dialog that appears, click the New button to make the fields 
+editable. Then make the following entries:</li>
+</ol>
+
+<ul>
+<li><strong>Display Name</strong> - This is any descriptive name that you choose for this 
+data source, for example, "Test Database".
+
+</li><li><strong>Driver Class</strong> - Select sun.jdbc.odbc.JdbcOdbcDriver from the dropdown list 
+of available drivers.
+
+</li><li><strong>Database URL</strong> - type in the following:
+   <pre>
+   jdbc:odbc:&lt;ODBC Data Source Name&gt;
+   </pre>
+   
+and substitute the name of the ODBC data source for 
+&lt;ODBC Data Source Name&gt;.
+
+</li><li><strong>Requires Login</strong> - Check this box if a username/password combination must be 
+sent to the database when a connection is made.
+
+</li><li><strong>User Name</strong> - This should be a user name that can be used to connect to the 
+ODBC data source indicated in the Database URL field.
+
+</li><li><strong>Password</strong> - This is the password that can be used in combination with the 
+given user name. It can be stored here for convenience, however it will be 
+saved in the configuration file in CLEAR TEXT. You may leave this field 
+blank, and a login dialog will be presented to you when you attempt to 
+connect.
+
+</li><li><strong>Max Connections</strong> - QueryForm pools connections, and will not use a 
+connection for other purposes while there is an open resultset associated 
+with it. An open resultset is a large one, of more than 500 records, that 
+have not all yet been read from the database. You can tell that a 
+resultset is open when the status bar message says something like "Row 45 
+of 750 read". If an entire resultset has been read, the status message 
+will say something like "Row 53 of 97". The absence of the word "read" 
+means that the entire resultset has been read from the database and the 
+connection has been made available again in the pool. If you don't expect 
+to have many large resultsets open simultaneously, then a small number, 
+such as 3 should suffice. Otherwise use a larger number.
+
+</li><li><strong>Login Timeout</strong> - This is the number of seconds after which, if a successful 
+connection is not established, QueryForm should abort the attempt. This 
+value should usually be set to between 15 and 30 seconds.
+
+</li></ul>
+
+Once all of the entries have been made, click the Save button. Then click 
+Connect to connect to that data source, or Close to connect the dialog 
+without connecting. You can reopen the dialog and modify the configuration 
+or connect to the data source later.
+<p>
+<a name='queries' href='#top'>top</a>
+<h4>RUNNINQ QUERIES</h4>
+
+Once a connection has been established, you can query individual tables of 
+the database. Use the following steps:
+
+<ol>
+<li>From the Connect menu, select Query Form...
+
+</li><li>In the table selector dialog that appears, you may select the data 
+source from the top list, which will show the ones you're currently 
+connected to. Then, select the schema or the owner of the table you wish 
+to query from the second list. Then, you can select the table from the 
+third list. <strong>NOTE: </strong>If your datbase contains views as well as tables, the views
+will be included in the table list. They will be listed, however, below all of
+the tables in the list and their names will appear in italics.
+
+</li><li>After you've selected a table, click OK to close the dialog. A new 
+internal frame showing a Form View and a Grid View tab will appear. To 
+enter query parameters in the form, select Form Query from the Action 
+menu. This will make the form editable. 
+
+</li><li>Once the form has been opened for editing, enter search criteria in the 
+fields you want to query on. For example, entering Mary in a field labeled 
+"FIRST_NAME" will return all records where the FIRST_NAME field is "Mary". 
+You may also enter '%' characters as wildcards, for example, M% would 
+match Mary, Mike, Matt, Mavis, etc. The matching may or may not be 
+case-sensitive, depending on the database you're connected to. The 
+comparison operators '<' and '>' can be used in numeric fields, for 
+example, entering "> 100" in a numeric field will return all records with
+a value greater than 100 in that field. An SQL "BETWEEN" clause can also
+be entered in a numeric field, for example, "BETWEEN 100 AND 200".
+
+</li><li>You may browse query results in the form, or switch to the grid view to 
+view them in a table. To select which columns will be visible in the grid 
+view, right-click on the Grid View tab and choose "Select Columns..." from 
+the popup menu. In the dialog that appears, hold the control key and click 
+column names to select or deselect them. To export a resultset to a file, 
+right-click on either tab of the query frame and select one of the export 
+options.
+</li></ol>
+<p>
+<a name='metadata' href='#top'>top</a>
+<h4>VIEWING TABLE METADATA</h4>
+
+To view table metadata, after you've connected to a database, select Table 
+Metadata from the Connect menu. Select a table as you would to open a new 
+query window. This will bring up a window listing all of the columns for 
+the selected table, along with their data types, null/non-null attributes, 
+etc. For some databases, a separate tab will show the foreign keys for the 
+table as well.
+<p>
+<a name='plaf' href='#top'>top</a>
+<h4>PLUGGABLE LOOK-AND-FEELS</h4>
+
+A "pluggable look-and-feel" is an add-on module that can change 
+the appearance of certain visual features of an application, such as 
+fonts, buttons, icons, colors, borders, etc., without changing the
+application's code. QueryForm fully supports pluggable look-and-feels, and 
+allows its look-and-feel to be changed while the program is running.
+<p>
+The Java runtime environment comes bundled with several look-and-feels, 
+in addition to the default "Metal" look-and-feel. These will be available 
+in the "Look and Feel"	submenu (available through the Window menu) when 
+QueryForm is started. 
+<p>
+In addition to Java's bundled look-and-feels, a number of third-party 
+look-and-feels, many of them free and open-source, are available. A 
+partial list of available ones is at <a href='http://www.javootoo.com' target='_blank'>http://www.javootoo.com</a>.
+<p>
+A third-party look-and-feel usually comes packaged in a jar file, and 
+often the jar file may be contained inside a zip file. To use a
+third-party look-and-feel, the jar file must be placed into QueryForm's 
+"drivers" directory (see the description of the drivers directory above) 
+or it must be in QueryForm's classpath.
+<p>
+Each third-party look-and-feel has a main "class name" associated with it, 
+and to use that look-and-feel, you must know the class name. This should 
+be available from the look-and-feel's documentation. Unfortunately, most 
+look-and-feel documentation is targeted toward Java developers, so it may 
+take some digging to determine the main class name. One example is the 
+Oyoaha look-and-feel, which is freely available at 
+<a href='http://www.oyoaha.com/lookandfeel' target='_blank'>http://www.oyoaha.com/lookandfeel</a>. Its main class name is:
+<p><pre>
+    com.oyoaha.swing.plaf.oyoaha.OyoahaLookAndFeel
+</pre><p>	
+The main class name for other look-and-feels will probably be structured 
+similarly to Oyoaha's, and often they end in "LookAndFeel".
+<p>
+After you have placed a third-party look-and-feel's jar file into 
+QueryForm's drivers directory or classpath, restart QueryForm. From 
+the Window menu, select the "Look and Feel" submenu, and then 
+the "Install new..." menu item. This will bring up a dialog box, into 
+which you should enter the look-and-feel's main class name. When you close 
+the dialog box, QueryForm will automatically switch its look-and-feel to 
+the one you have just installed, and it will be available in the "Look and 
+Feel" menu, even after QueryForm has been restarted.
+<p>
+<strong>ADVANCED USERS:</strong> By default, QueryForm will always start up with the 
+default Metal look-and-feel. To use another look-and-feel at startup, edit 
+the script, batch file or shortcut that you are using to start QueryForm, 
+and add this system property to the command line, right after "java":
+<p><pre>
+    -Dqform.laf=&lt;main class name of look-and-feel&gt;
+</pre><p>	
+<strong>CAUTION:</strong> Third-party look-and-feels are of varying quality. Some are 
+better behaved than others. Some of the less-well-behaved ones may modify 
+QueryForm's appearance in a way that, when a new look-and-feel is 
+selected from the menu, features of the old one will remain. (This can be 
+remedied by restarting the program, however, and the effect is purely 
+cosmetic rather than functional.) To be fair to the authors of these 
+look-and-feels, however, it should be noted that most look-and-feels are 
+designed with the intent that they will not be changed "on-the-fly" while 
+a program is running, but rather act as a program's hardcoded 
+look-and-feel. Some of the better-behaved ones I've encountered are 
+Oyoaha, mentioned above, and several from JGoodies, available at:
+<p>
+    <a target='_blank' href='http://www.jgoodies.com/freeware/looks/index.html'>http://www.jgoodies.com/freeware/looks/index.html</a>
+<p>	
+Please understand that I will not be able to provide support for 
+third-party look-and-feels.	
+<p>
+<strong>NOTE: MANY THIRD-PARTY LOOK-AND-FEELS REQUIRE JAVA 1.4 OR LATER TO WORK 
+PROPERLY.</strong>
+
+<p>
+*QueryForm's automatic installation program was created with IzPack, a free, open-source utility from <a href='http://www.izforge.com' target='_blank'>IzForge</a>.
+</td></tr></table>
+</body>
+</html>
