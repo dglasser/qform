@@ -119,7 +119,7 @@ izpack {
 
 tasks.register<Copy>("copyToLib") {
     into("${buildDir}/libs")
-    from(configurations.runtime)
+    from(configurations.runtimeClasspath)
 }
 
 tasks.izPackCreateInstaller {
@@ -127,10 +127,7 @@ tasks.izPackCreateInstaller {
     dependsOn(":copyToLib")
 }
 
-
-
 tasks.register<Zip>("srcZip") {
-
     getArchiveClassifier().set("src")
     getArchiveVersion().set(project.version.toString())
     from(".")
