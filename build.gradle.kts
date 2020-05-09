@@ -33,7 +33,6 @@
  */
 
 project.version = "1.4.1"
-//val version = project.version
 
 plugins {
     java
@@ -61,23 +60,25 @@ dependencies {
     implementation("commons-pool:commons-pool:1.6")
     implementation("commons-dbcp:commons-dbcp:1.4")
 
-    runtime("commons-collections:commons-collections:3.2.2")
-    runtime("commons-pool:commons-pool:1.6")
-    runtime("commons-dbcp:commons-dbcp:1.4")
+    runtimeOnly("commons-collections:commons-collections:3.2.2")
+    runtimeOnly("commons-pool:commons-pool:1.6")
+    runtimeOnly("commons-dbcp:commons-dbcp:1.4")
 
     // JDBC drivers
-    runtime("mysql:mysql-connector-java:8.0.19")
-    runtime("net.sourceforge.jtds:jtds:1.3.1")
-    runtime("org.postgresql:postgresql:42.2.12")
+    runtimeOnly("mysql:mysql-connector-java:8.0.19")
+    runtimeOnly("net.sourceforge.jtds:jtds:1.3.1")
+    runtimeOnly("org.postgresql:postgresql:42.2.12")
 
     // 10.15.n.n and later versions of the derbyclient library do not
     // contain org.apache.derby.jdbc.ClientDriver. See
     // https://issues.apache.org/jira/browse/DERBY-6945
-    runtime("org.apache.derby:derbyclient:10.14.2.0") {
-        isForce = true
+    runtimeOnly("org.apache.derby:derbyclient") {
+        version {
+            strictly("(,10.15)")
+        }
     }
 
-    runtime("com.oracle.jdbc:com.springsource.oracle.jdbc:10.2.0.2")
+    runtimeOnly("com.oracle.jdbc:com.springsource.oracle.jdbc:10.2.0.2")
 
     implementation("com.bmuschko:gradle-izpack-plugin:3.0")
 
@@ -96,7 +97,7 @@ tasks.jar {
                    "Class-Path" to "commons-collections-3.2.2.jar commons-dbcp-1.4.jar commons-pool-1.6.jar " +
                    "libs/commons-collections-3.2.2.jar libs/commons-dbcp-1.4.jar libs/commons-pool-1.6.jar")
     }
-    setVersion("")
+    getArchiveVersion().set("")
 }
 
 izpack {
@@ -130,8 +131,8 @@ tasks.izPackCreateInstaller {
 
 tasks.register<Zip>("srcZip") {
 
-    setClassifier("src")
-    setVersion(version)
+    getArchiveClassifier().set("src")
+    getArchiveVersion().set(project.version.toString())
     from(".")
     include("src/**")
     include("installer/**")
