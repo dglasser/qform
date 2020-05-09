@@ -32,7 +32,8 @@
  *
  */
 
-val version = "1.4.1"
+project.version = "1.4.1"
+//val version = project.version
 
 plugins {
     java
@@ -92,8 +93,10 @@ application {
 tasks.jar {
     manifest {
         attributes("Main-Class" to application.mainClassName,
-                   "Class-Path" to "commons-collections-3.2.2.jar commons-dbcp-1.4.jar commons-pool-1.6.jar")
+                   "Class-Path" to "commons-collections-3.2.2.jar commons-dbcp-1.4.jar commons-pool-1.6.jar " +
+                   "libs/commons-collections-3.2.2.jar libs/commons-dbcp-1.4.jar libs/commons-pool-1.6.jar")
     }
+    setVersion("")
 }
 
 izpack {
@@ -109,7 +112,7 @@ izpack {
     appProperties = mapOf("app.group" to "QueryForm", 
                           "app.name" to "qform", 
                           "app.title" to "QueryForm",
-                          "app.version" to version, 
+                          "app.version" to project.version, 
                           "app.subpath" to "QueryForm-$version")
 }
 
@@ -118,7 +121,26 @@ tasks.register<Copy>("copyToLib") {
     from(configurations.runtime)
 }
 
-tasks.named("izPackCreateInstaller") {
+tasks.izPackCreateInstaller {
     dependsOn(":assemble")
     dependsOn(":copyToLib")
 }
+
+
+
+tasks.register<Zip>("srcZip") {
+
+    setClassifier("src")
+    setVersion(version)
+    from(".")
+    include("src/**")
+    include("installer/**")
+    include("docs/**")
+    include("build.gradle.kts")
+    include("gradle/**")
+    include("gradlew")
+    include("gradlew.bat")
+    exclude("build/**")
+}
+
+
