@@ -68,7 +68,7 @@ public class ThirdPartyLafDialog extends JDialog implements ActionListener {
 
     };
 
-    String prompt =
+    private String prompt =
         "Enter the fully-qualified class name of the Look and Feel class you "
         + "are going to install. This will be something similar to \"com.sun.java.swing.plaf.gtk.GTKLookAndFeel,\""
         + " and the class it represents should currently be in QueryForm's classpath."
@@ -77,7 +77,7 @@ public class ThirdPartyLafDialog extends JDialog implements ActionListener {
         + "\n\nIf you do not know the class name for the Look and Feel, consult the Look and Feel's documentation.";
     
 
-    JTextArea promptDisplay = null;
+    private JTextArea promptDisplay = null;
 
     public ThirdPartyLafDialog(Frame parent) {
         super(parent);
@@ -184,7 +184,7 @@ public class ThirdPartyLafDialog extends JDialog implements ActionListener {
         txtInput.requestFocus();
     }
 
-    String input = null;
+    private String input = null;
 
 
     /**

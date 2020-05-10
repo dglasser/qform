@@ -55,7 +55,7 @@ public class TableInfoPanel extends JPanel {
    
     private TableInfo tableInfo = null;
 
-    JTabbedPane tabbedPane = new JTabbedPane();
+    private JTabbedPane tabbedPane = new JTabbedPane();
 
     protected final String[] columnNames =
     {
@@ -83,50 +83,50 @@ public class TableInfoPanel extends JPanel {
         ,"getColumnDefaultValue"
     };
 
-    ListTableModel columnTableModel = null;
+    private ListTableModel columnTableModel = null;
 
-    JTable columnTable = null;
+    private JTable columnTable = null;
 
-    ListTableModel fkeyModel = null;
-    JPanel fkeyPanel = new JPanel();
-    JTable fkeysTable = null;
+    private ListTableModel fkeyModel = null;
+    private JPanel fkeyPanel = new JPanel();
+    private JTable fkeysTable = null;
 
-    ListTableModel fcolModel = new ListTableModel(new ForeignKeyColumnManager(), null);
-    JTable fcolTable = new JTable(fcolModel);
+    private ListTableModel fcolModel = new ListTableModel(new ForeignKeyColumnManager(), null);
+    private JTable fcolTable = new JTable(fcolModel);
 
 
 
-    ListTableModel exkeyModel = null;
-    JPanel exkeyPanel = new JPanel();
-    JTable exkeysTable = null;
+    private ListTableModel exkeyModel = null;
+    private JPanel exkeyPanel = new JPanel();
+    private JTable exkeysTable = null;
 
-    ListTableModel excolModel = new ListTableModel(new ExportedKeyColumnManager(), null);
+    private ListTableModel excolModel = new ListTableModel(new ExportedKeyColumnManager(), null);
     
-    JTable excolTable = new JTable(excolModel);
+    private JTable excolTable = new JTable(excolModel);
 
 
 
-    JTextField txtDsName = new JTextField();
-    JTextField txtTableName = new JTextField();
-    JTextField txtTableSchem = new JTextField();
-    JTextField txtTableType = new JTextField();
+    private JTextField txtDsName = new JTextField();
+    private JTextField txtTableName = new JTextField();
+    private JTextField txtTableSchem = new JTextField();
+    private JTextField txtTableType = new JTextField();
 
 
-    Object[][] fields1 =
+    private Object[][] fields1 =
     {
         {txtDsName, "Data Source"}
         ,{txtTableType, "Table Type"}
 
     };
 
-    Object[][] fields2 =
+    private Object[][] fields2 =
     {
          {txtTableSchem, "Table Schema"}
         ,{txtTableName, "Table Name"}
         
     };
 
-    Object[][] fields =
+    private Object[][] fields =
     {
          fields1[0]
         ,fields1[1]

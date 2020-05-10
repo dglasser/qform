@@ -48,20 +48,20 @@ public class TextBox extends JTextArea {
 
     private Set editableTypes = null;
 
-    String columnName;
-    Integer dataType;
-    String typeName;
-    int length;
-    boolean nullable;
-    boolean isNull = false;
-    int ordinal;
-    boolean constructorDone = false;
+    private String columnName;
+    private Integer dataType;
+    private String typeName;
+    private int length;
+    private boolean nullable;
+    private boolean isNull = false;
+    private int ordinal;
+    private boolean constructorDone = false;
 
-    boolean isPKComponent = false;
+    private boolean isPKComponent = false;
 
-    boolean dirty = false;
+    private boolean dirty = false;
 
-    JLabel label = null;
+    private JLabel label = null;
 
     protected String dbEncoding = null;
 
@@ -81,8 +81,8 @@ public class TextBox extends JTextArea {
     
 
 
-    static java.awt.Color DISABLED = new java.awt.Color(0xE1E1E1);
-    static java.awt.Color WHITE = java.awt.Color.white;
+    private static java.awt.Color DISABLED = new java.awt.Color(0xE1E1E1);
+    private static java.awt.Color WHITE = java.awt.Color.white;
 
 
     private String decode(String s) {
@@ -114,7 +114,7 @@ public class TextBox extends JTextArea {
 
 
     
-    TextBox(String ColumnName, int DataType, String TypeName, int Length, boolean Nullable, int Ordinal, JLabel lab) {
+    public TextBox(String ColumnName, int DataType, String TypeName, int Length, boolean Nullable, int Ordinal, JLabel lab) {
         super();
         setText("");
         columnName = ColumnName;
@@ -251,7 +251,7 @@ public class TextBox extends JTextArea {
         else setBackground(DISABLED);
     }
 
-    Border backupBorder = new ThinBevelBorder(ThinBevelBorder.LOWERED);
+    private Border backupBorder = new ThinBevelBorder(ThinBevelBorder.LOWERED);
 
     private Border normalBorder() {
         Border b = (Border) UIManager.getBorder("TextField.border");

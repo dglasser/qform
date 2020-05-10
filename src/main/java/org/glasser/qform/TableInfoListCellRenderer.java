@@ -41,7 +41,7 @@ import org.glasser.sql.*;
 public class TableInfoListCellRenderer extends DefaultListCellRenderer {
 
 
-	java.util.HashMap italicFontMap = new java.util.HashMap();
+	private java.util.HashMap italicFontMap = new java.util.HashMap();
 
     public Component getListCellRendererComponent(JList list,
                                               Object value,

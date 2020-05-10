@@ -66,20 +66,20 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     public static final int OPEN_FOR_CLONE = MainPanel.QUERY_PANEL_OPEN_FOR_CLONE;
 
 
-    JToolBar toolBar = new JToolBar();
+    private JToolBar toolBar = new JToolBar();
 
 
-    JButton newQueryButton = new JButton();
-    JButton whereClauseButton = new JButton();
-    JButton addRowButton = new JButton();
-    JButton updateRowButton = new JButton();
-    JButton deleteRowButton = new JButton();
-    JButton leftEndButton = new JButton();
-    JButton leftButton = new JButton();
-    JButton rightButton = new JButton();
-    JButton executeButton = new JButton();
-    JButton refreshButton = new JButton();
-    JButton cancelButton = new JButton();
+    private JButton newQueryButton = new JButton();
+    private JButton whereClauseButton = new JButton();
+    private JButton addRowButton = new JButton();
+    private JButton updateRowButton = new JButton();
+    private JButton deleteRowButton = new JButton();
+    private JButton leftEndButton = new JButton();
+    private JButton leftButton = new JButton();
+    private JButton rightButton = new JButton();
+    private JButton executeButton = new JButton();
+    private JButton refreshButton = new JButton();
+    private JButton cancelButton = new JButton();
 
 
 
@@ -150,9 +150,9 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             
 
 
-    JButton popupButton = new JButton(". . .");
+    private JButton popupButton = new JButton(". . .");
 
-    JLabel statusLabel = new JLabel() {
+    private JLabel statusLabel = new JLabel() {
             public void setText(String s) {
 
                 // always make sure there's some text there, so the
@@ -165,7 +165,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         };
     
 
-    Object[][] toolBarConfig = 
+    private Object[][] toolBarConfig = 
     {
          {newQueryButton,   "OPEN_FOR_QUERY",       "DataQuery2_20.png",        "New query. (Ctrl-Q)"}
         ,{whereClauseButton, "WHERE_CLAUSE_QUERY",  "SQLWizard32.gif",          "Query with custom WHERE clause. (Ctrl-W)"}
@@ -195,7 +195,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 
 
 
-    String[] columnNames = null;
+    private String[] columnNames = null;
 
     /**
      * To see debugging output from this class, start the program with the switch 
@@ -287,10 +287,10 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         }
     };
 
-    HashMap formPopupStateMap = Util.buildMap(formPopupStateMappings);
+    private HashMap formPopupStateMap = Util.buildMap(formPopupStateMappings);
 
 
-    boolean[][] extraOpStates =
+    private boolean[][] extraOpStates =
     {
          {true,     true,   false,  true,   false}
         ,{true,     true,   true,   true,   true}
@@ -315,19 +315,19 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     };
 
 
-    Vector v;
-    String tableName;
-    String tableOwner;
-    BaseForm baseForm = null;
+    private Vector v;
+    private String tableName;
+    private String tableOwner;
+    private BaseForm baseForm = null;
 
-    JPopupMenu extraItemsPopup = new JPopupMenu();
+    private JPopupMenu extraItemsPopup = new JPopupMenu();
 
-    javax.swing.JPopupMenu gridTabPopup = new JPopupMenu();
-    javax.swing.JPopupMenu formTabPopup = new JPopupMenu();
+    private javax.swing.JPopupMenu gridTabPopup = new JPopupMenu();
+    private javax.swing.JPopupMenu formTabPopup = new JPopupMenu();
 
-    PopupMenuManager gridPopupManager = new PopupMenuManager(gridTabPopup);
+    private PopupMenuManager gridPopupManager = new PopupMenuManager(gridTabPopup);
 
-    PopupMenuManager formPopupManager = new PopupMenuManager(formTabPopup);
+    private PopupMenuManager formPopupManager = new PopupMenuManager(formTabPopup);
 
     private JMenuItem[] gridTabPopupItems = null;
 
@@ -337,13 +337,13 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 
 	private JCheckBoxMenuItem[] longformTimestampMenuItems = null;
 
-    JTabbedPane tabbedPane = new JTabbedPane();
+    private JTabbedPane tabbedPane = new JTabbedPane();
 
-    JPanel formTab = new JPanel();
+    private JPanel formTab = new JPanel();
 
-    JPanel gridTab = new JPanel();
+    private JPanel gridTab = new JPanel();
 
-    class GridTable extends JTable {
+    private class GridTable extends JTable {
 
         /**
          * Sends a KeyEvent for the given KeyStroke to the gridTable. The 
@@ -364,45 +364,45 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     };
 
 
-    GridTable gridTable = new GridTable(); 
+    private GridTable gridTable = new GridTable(); 
 
-    PushButtonTableHeader gridTableHeader = new PushButtonTableHeader();
+    private PushButtonTableHeader gridTableHeader = new PushButtonTableHeader();
 
-    JScrollPane gridScrollPane = new JScrollPane(gridTable);
+    private JScrollPane gridScrollPane = new JScrollPane(gridTable);
 
-    int state = NO_RESULTSET;
+    private int state = NO_RESULTSET;
 
-    final static int SELECT = 0;
-    final static int DELETE = 1;
-    final static int COUNT = 2;
-    final static int INSERT = 3;
-    final static int UPDATE = 4;
-    final static int PK_SELECT = 5;
+    private final static int SELECT = 0;
+    private final static int DELETE = 1;
+    private final static int COUNT = 2;
+    private final static int INSERT = 3;
+    private final static int UPDATE = 4;
+    private final static int PK_SELECT = 5;
 
 
-    final static int margin = 2;
+    private final static int margin = 2;
 
     public String getTableName() {
         return tableName;
     }
 
-    DataSource dataSource = null;
+    private DataSource dataSource = null;
 
-    StatusMessageDisplay status = null;
+    private StatusMessageDisplay status = null;
 
-    TableInfo tableInfo = null;
+    private TableInfo tableInfo = null;
 
-    Integer dataSourceId = null;
+    private Integer dataSourceId = null;
 
     private String windowTitle = null;
 
     private String dataSourceDisplayName = null;
 
-    SmartEventListenerList listeners = new SmartEventListenerList();
+    private SmartEventListenerList listeners = new SmartEventListenerList();
 
-	FormattedCellRenderer longDateRenderer = new FormattedCellRenderer(null);
+	private FormattedCellRenderer longDateRenderer = new FormattedCellRenderer(null);
 
-	FormattedCellRenderer defaultDateRenderer = new FormattedCellRenderer(java.text.DateFormat.getDateInstance());
+	private FormattedCellRenderer defaultDateRenderer = new FormattedCellRenderer(java.text.DateFormat.getDateInstance());
 
 
 	public void displayLongTimestampsInGrid(boolean b) {
@@ -425,7 +425,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 	}
 
 
-    QueryPanel(TableInfo ti, 
+    public QueryPanel(TableInfo ti, 
                DataSource dataSource, 
                Integer dataSourceId, 
                StatusMessageDisplay status, 
@@ -702,7 +702,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     }
 
 
-    boolean formTabFrozen = false;
+    private boolean formTabFrozen = false;
 
     public void freezeFormTab(boolean b) {
         if(debug) System.out.println("TRC: " + getClass().getName() + ".freezeFormTab("
@@ -1341,8 +1341,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         return historyList;
     }
 
-    Connection currentConn = null;
-    ResultSet currentResultSet = null;
+    private Connection currentConn = null;
+    private ResultSet currentResultSet = null;
 
 
     private void maybeCloseCurrentConnection() {
@@ -1496,9 +1496,9 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         showRowNum(baseForm.current());
     }
 
-    boolean endReached = false;
+    private boolean endReached = false;
 
-    boolean atBeginningFlag = false;
+    private boolean atBeginningFlag = false;
 
     /**
      * Displays the next record in the resultset.
@@ -1670,7 +1670,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         statusLabel.setText(buffer.toString());
     }
 
-    class GetCount extends Thread {
+    private class GetCount extends Thread {
 
         int rowCount = -1;
 
@@ -1705,7 +1705,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 //        GUIHelper.centerWindowOnScreen(columnMapDialog);
 //    }
 
-    int[] visibleGridColumns = null;
+    private int[] visibleGridColumns = null;
 
 
     public int[] getVisibleGridColumns() {

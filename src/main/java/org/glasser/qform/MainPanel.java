@@ -77,42 +77,42 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     private boolean showSystemTables = System.getProperty("show.system.tables") != null;
 
-    Frame parent = null;
+    private Frame parent = null;
 
-    String configFileName = null;
+    private String configFileName = null;
 
-    Config config = null;
+    private Config config = null;
 
-    LocalDataSourceConfigDialog configDialog = null;
+    private LocalDataSourceConfigDialog configDialog = null;
 
-    ColumnMapDialog columnMapDialog = null;
+    private ColumnMapDialog columnMapDialog = null;
 
-    TableSelector tableSelector = null;
+    private TableSelector tableSelector = null;
 
-    LoginDialog loginDialog = null;
+    private LoginDialog loginDialog = null;
 
-    WhereClauseDialog whereClauseDialog = null;
+    private WhereClauseDialog whereClauseDialog = null;
 
-    ExportDialog exportDialog = null;
+    private ExportDialog exportDialog = null;
 
-    AppendOverwriteDialog overwriteDialog = null;
+    private AppendOverwriteDialog overwriteDialog = null;
 
-    JDialog aboutDialog = null;
+    private JDialog aboutDialog = null;
 
-    JDialog sysInfoDialog = null;
+    private JDialog sysInfoDialog = null;
 
-    ThirdPartyLafDialog tpLafDialog = null;
+    private ThirdPartyLafDialog tpLafDialog = null;
 
-    Component[] dialogs =  null;
-
-
-
-    static JButton tbNew = new JButton();
-    static JButton newFormButton = new JButton();
-    static JButton tbMetaData = new JButton();
+    private Component[] dialogs =  null;
 
 
-    static Object[][] toolBarConfig = 
+
+    private static JButton tbNew = new JButton();
+    private static JButton newFormButton = new JButton();
+    private static JButton tbMetaData = new JButton();
+
+
+    private static Object[][] toolBarConfig = 
     {
          {tbNew,            "DATA_SOURCE_DIALOG",   "DataConnection20.png",     "Create, modify or connect to a data source.", "1"}
         ,{newFormButton,    "NEW_QUERY_FORM",       "New20.gif",                "Select a table to query."}
@@ -135,7 +135,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     };
 
 
-    static String[][] connectMenuConfig =
+    private static String[][] connectMenuConfig =
     {
          {"Data Source...",     "DATA_SOURCE_DIALOG",      "D",    "Create, edit or connect to a data source." }
         ,{"Table Metadata...",  "TABLE_METADATA",          "T",    "View metadata for a table."}
@@ -143,7 +143,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         ,{"Exit",               "EXIT",                    "X",    "Exit the program."} 
     };
 
-    static String[][] connectMenuConfig_ =
+    private static String[][] connectMenuConfig_ =
     {
          {"DATA_SOURCE_DIALOG"}
         ,{"TABLE_METADATA"}
@@ -232,7 +232,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     };
 
 
-    static Object[][] queryformMenuConfig =
+    private static Object[][] queryformMenuConfig =
     {
          {"New Query Form...",  "NEW_QUERY_FORM",       "Q",    "Open a new query form."}
         ,{"Window title...",    "WINDOW_TITLE",         "T",   "Set the window title for the current query form."}
@@ -249,7 +249,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     };
 
 
-    static Object[][] queryformMenuConfig_ =
+    private static Object[][] queryformMenuConfig_ =
     {
          {"NEW_QUERY_FORM",      }
         ,{"WINDOW_TITLE",        }

@@ -72,11 +72,11 @@ import java.util.*;
  */
 public class DDLPanel extends JPanel implements ActionListener {
 
-	JTextArea textArea = new JTextArea();
+	private JTextArea textArea = new JTextArea();
 
-	ConfigPanel configPanel = new ConfigPanel();
+	private ConfigPanel configPanel = new ConfigPanel();
 
-	TableInfo tableInfo = null;
+	private TableInfo tableInfo = null;
 
 	public DDLPanel(TableInfo tableInfo) {
 		this.tableInfo = tableInfo;
@@ -204,7 +204,7 @@ public class DDLPanel extends JPanel implements ActionListener {
 	}
 
 
-	static String shift(String s, boolean b) {
+	private static String shift(String s, boolean b) {
 		if(s == null) {
 			return s;
 		}
@@ -217,7 +217,7 @@ public class DDLPanel extends JPanel implements ActionListener {
 	}
 
 
-	static String shift(String s, int n) {
+	private static String shift(String s, int n) {
 		if(s == null || n == 0) {
 			return s;
 		}
@@ -229,7 +229,7 @@ public class DDLPanel extends JPanel implements ActionListener {
 		}
 	}
 
-    class ConfigPanel extends JPanel {
+    private class ConfigPanel extends JPanel {
     
     	String[] caseChoices = {"Preserve", "Force to lower", "Force to UPPER"};
     	int[] caseStrategies = {0, -1, 1};

@@ -48,7 +48,7 @@ public class ExportDialog extends JDialog implements ActionListener {
 
 
 
-    static class IndexedCheckBox extends JCheckBox {
+    private static class IndexedCheckBox extends JCheckBox {
 
         public int index = 0;
 
@@ -58,23 +58,23 @@ public class ExportDialog extends JDialog implements ActionListener {
         }
     }
 
-    JPanel topPanel = new JPanel();
-    JPanel scrollHolder = new JPanel();
-    JPanel buttonPanel = new JPanel();
+    private JPanel topPanel = new JPanel();
+    private JPanel scrollHolder = new JPanel();
+    private JPanel buttonPanel = new JPanel();
 
-    JTextField txtTableName = new JTextField();
-    JTextField txtTerminalChar = new JTextField();
+    private JTextField txtTableName = new JTextField();
+    private JTextField txtTerminalChar = new JTextField();
 
-    JButton btnOk = new JButton("OK");
-    JButton btnCancel = new JButton("Cancel");
+    private JButton btnOk = new JButton("OK");
+    private JButton btnCancel = new JButton("Cancel");
 
-    Object[][] formFields =
+    private Object[][] formFields =
     {
         {txtTableName, "Table Name", "Name of the table that will be used in each insert statement."}
         ,{txtTerminalChar, "Terminal Character(s)", "Optional character(s) that will be appended to the end of each insert statement. (Usually \";\")"}
     };
 
-    Object[][] buttonConfig = 
+    private Object[][] buttonConfig = 
     {
          {btnOk,   "O", "OK", "Export resultset."}
         ,{btnCancel, "C", "CANCEL", "Cancel the export operation."}
@@ -162,11 +162,11 @@ public class ExportDialog extends JDialog implements ActionListener {
         }
     }
 
-    ExportPanel exportPanel = null;
+    private ExportPanel exportPanel = null;
 
-    HashMap cachedPanels = new HashMap();
+    private HashMap cachedPanels = new HashMap();
 
-    int currentExportType = EXPORT_INSERT_STATEMENTS;
+    private int currentExportType = EXPORT_INSERT_STATEMENTS;
 
     public void openDialog(TableInfo ti, int exportType) {
 
@@ -209,9 +209,9 @@ public class ExportDialog extends JDialog implements ActionListener {
 
     public final static int EXPORT_CSV = 1;
 
-    HashMap[] panelCaches = {new HashMap(), new HashMap()};
+    private HashMap[] panelCaches = {new HashMap(), new HashMap()};
 
-    String [] defaultTerminals = {";", ""};
+    private String [] defaultTerminals = {";", ""};
 
     private ExportPanel getExportPanel(TableInfo ti, int exportType) {
 

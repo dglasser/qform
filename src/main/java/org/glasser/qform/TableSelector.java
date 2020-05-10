@@ -103,25 +103,25 @@ public class TableSelector extends JDialog implements ActionListener {
 
     protected DefaultComboBoxModel sourceModel = new DefaultComboBoxModel(sourceVector);
 
-    JComboBox schemaList = new JComboBox();
+    private JComboBox schemaList = new JComboBox();
 
     private ComboBoxModel emptySchemaListModel = schemaList.getModel();
 
     private Vector emptyVector = new Vector();
 
-    JList tableList = new JList();
+    private JList tableList = new JList();
 
-    JButton btnOK = new JButton("OK");
+    private JButton btnOK = new JButton("OK");
 
-    JButton btnCancel = new JButton("Cancel");
+    private JButton btnCancel = new JButton("Cancel");
 
 //    HashMap tableMap = new HashMap();
 //
 //    HashMap schemaListMap = new HashMap();
 
-    HashMap schemaModelMap = new HashMap();
+    private HashMap schemaModelMap = new HashMap();
 
-    HashMap tableListMap = new HashMap();
+    private HashMap tableListMap = new HashMap();
 
     private Object[] selections = null;
 

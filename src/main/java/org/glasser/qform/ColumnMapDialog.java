@@ -46,11 +46,11 @@ import org.glasser.util.*;
 public class ColumnMapDialog extends JDialog implements ActionListener {
 
 
-    JList list = new JList();
+    private JList list = new JList();
 
-    JButton btnSelectAll = new JButton("Select All");
-    JButton btnOK = new JButton("OK");
-    JButton btnCancel = new JButton("Cancel");
+    private JButton btnSelectAll = new JButton("Select All");
+    private JButton btnOK = new JButton("OK");
+    private JButton btnCancel = new JButton("Cancel");
 
 
     private int[] selections = null;

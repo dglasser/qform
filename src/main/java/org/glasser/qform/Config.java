@@ -95,9 +95,9 @@ public class Config {
     protected final static String TAB3 = TAB + TAB + TAB;
 
 
-    ArrayList localDataSourceConfigs = new ArrayList();
+    private ArrayList localDataSourceConfigs = new ArrayList();
 
-    Hashtable thirdPartyLafs = new Hashtable();
+    private Hashtable thirdPartyLafs = new Hashtable();
 
     public void setLocalDataSourceConfigs(ArrayList localDataSourceConfigs) {
         this.localDataSourceConfigs = localDataSourceConfigs;
