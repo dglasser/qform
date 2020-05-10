@@ -109,7 +109,7 @@ public class TableSelector extends JDialog implements ActionListener {
 
     private Vector emptyVector = new Vector();
 
-    JList tableList = new KeySelectableJList();
+    JList tableList = new JList();
 
     JButton btnOK = new JButton("OK");
 

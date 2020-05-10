@@ -81,7 +81,7 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
 
     LocalDataSourceConfigPanel configPanel = new LocalDataSourceConfigPanel();
 
-    KeySelectableJList listbox = new KeySelectableJList();
+    JList listbox = new JList();
 
     JButton btnNew = new JButton("New");
 
