@@ -87,7 +87,7 @@ public class ExtensionClassLoader extends java.net.URLClassLoader {
     private final static ExtensionClassLoader singleton = new ExtensionClassLoader(new URL[0]);
 
 
-    static class ArchiveFilter implements java.io.FileFilter {
+    private static class ArchiveFilter implements java.io.FileFilter {
     
         public boolean accept(File pathName) {
             String upcase = pathName.getName().toUpperCase();
