@@ -245,7 +245,7 @@ public class Column implements java.io.Serializable {
 		return buffer.append(openQuote).append(columnName).append(closeQuote).toString();
 	}
 
-    static Object[][] sqlTypes =
+    private static Object[][] sqlTypes =
     {
          {"ARRAY", new Integer(java.sql.Types.ARRAY) }
         ,{"BIGINT", new Integer(java.sql.Types.BIGINT) }
@@ -277,7 +277,7 @@ public class Column implements java.io.Serializable {
         ,{"VARCHAR", new Integer(java.sql.Types.VARCHAR) }
     };
 
-    final static Hashtable typeStrings = new Hashtable();
+    private final static Hashtable typeStrings = new Hashtable();
 
     static {
         for(int j=0; j<sqlTypes.length; j++) { 

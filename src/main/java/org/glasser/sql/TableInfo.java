@@ -68,8 +68,7 @@ import java.util.*;
 
 public class TableInfo {
 
-    String cachedString = null;
-
+    private String cachedString = null;
 
     public final static MethodComparator NAME_COMPARATOR =
         new MethodComparator(org.glasser.sql.TableInfo.class, "getTableName");
