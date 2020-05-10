@@ -43,7 +43,7 @@ public class VersionNumber implements java.io.Serializable {
         // initializing VERSION_NUMBER here insures that the class will always be
         // loaded and VERSION_NUMBER will be dynamically, rather than statically 
         // linked. (Hopefully.)
-        VERSION_NUMBER = "1.4";
+        VERSION_NUMBER = "1.4.1";
         System.setProperty("qform.version", VERSION_NUMBER);
     }
 }
