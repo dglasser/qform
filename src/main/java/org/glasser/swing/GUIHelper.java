@@ -441,7 +441,6 @@ public class GUIHelper {
                 tooltipText = (String) row[3];
             }
 
-
             // now that we've gotten all of the elments out of the array, we'll use them as strings
             // to fetch localized strings from a ResourceBundle, if we have one. Otherwise, we'll use
             // them as the actual displayed text.
@@ -568,9 +567,6 @@ public class GUIHelper {
         return null;
     }
 
-
-
-
     /**
      * Configures and adds JButtons to a JPanel, which is assumed to have a FlowLayout
      * (although other layout managers may work.)
@@ -601,16 +597,11 @@ public class GUIHelper {
         }
     }
 
-
-
-
     public static void setAllSizes(JComponent c, Dimension d) {
         c.setPreferredSize(d == null ? d : (Dimension) d.clone());
         c.setMaximumSize(d == null ? d : (Dimension) d.clone());
         c.setMinimumSize(d == null ? d : (Dimension) d.clone());
     }
-
-
 
     public static void configureToolbar(JToolBar toolBar,
         Object[][] toolBarConfig,
@@ -658,7 +649,6 @@ public class GUIHelper {
             }
 
             toolBar.add(button);
-            
 
             for(int n=0; n<numSeps; n++) { 
                 toolBar.addSeparator();
@@ -685,7 +675,6 @@ public class GUIHelper {
         }
     }
 
-
     public static JViewport getViewport(Component c) {
         Container parent = c.getParent();
         while(parent != null) {
@@ -695,94 +684,25 @@ public class GUIHelper {
         return null;
     }
 
-	static boolean isJavaVersion_1_4_OrGreater = false;
-
-	static int FORWARD_TRAVERSAL_KEYS = 0, BACKWARD_TRAVERSAL_KEYS = 0;
-
-	static Object[] tabArgs = null;
-
-	static Object[] shiftTabArgs = null;
-
-	static Method setFocusEnableMethod = null;
-	static Method setFocusTraversalMethod = null;
-
-	static HashSet forwardTraversalKeys = null;
-	static HashSet backwardTraversalKeys = null;
+	private static HashSet<AWTKeyStroke> forwardTraversalKeys = new HashSet<>();;
+	private static HashSet<AWTKeyStroke> backwardTraversalKeys = new HashSet<>();
 
 	static {
 
-		try {
-			Class c = Class.forName("java.awt.KeyboardFocusManager");
-			Field f1 = c.getField("FORWARD_TRAVERSAL_KEYS");
-			Field f2 = c.getField("BACKWARD_TRAVERSAL_KEYS");
+        forwardTraversalKeys.add(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_TAB, 0));
 
-			FORWARD_TRAVERSAL_KEYS = f1.getInt(null);
-			BACKWARD_TRAVERSAL_KEYS = f2.getInt(null);
-
-			if(debug){
-                 System.out.println("FORWARD_TRAVERSAL_KEYS = " + FORWARD_TRAVERSAL_KEYS);
-                 System.out.println("BACKWARD_TRAVERSAL_KEYS = " + BACKWARD_TRAVERSAL_KEYS);
-            }
-
-			forwardTraversalKeys = new HashSet();
-			forwardTraversalKeys.add(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_TAB, 0));
-
-			backwardTraversalKeys = new HashSet();
-			backwardTraversalKeys.add( KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
+        backwardTraversalKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
 														java.awt.event.InputEvent.SHIFT_MASK));
-
-
-			tabArgs 
-				= new Object[] {
-					new Integer(FORWARD_TRAVERSAL_KEYS), 
-					forwardTraversalKeys};
-
-			shiftTabArgs 
-				= new Object[] {
-					new Integer(BACKWARD_TRAVERSAL_KEYS), 
-					backwardTraversalKeys};
-	
-
-			c = javax.swing.JTextArea.class;
-
-			setFocusTraversalMethod = c.getMethod("setFocusTraversalKeys",
-								   new Class[] {int.class, java.util.Set.class});
-
-			setFocusEnableMethod = c.getMethod("setFocusTraversalKeysEnabled",
-								   new Class[] {boolean.class});
-
-			isJavaVersion_1_4_OrGreater = true;
-
-			System.out.println("Using Java 1.4 functionality for JTextArea focus traversal.");
-		}
-		catch(Throwable t) {
-			if(debug) {
-                t.printStackTrace();
-            }
-		}
 	}
 
     /**
-     * This method will modify the given JTextArea for Java versions 1.4.0 and above so that
-     * pressing the tab key will shift focus away from the JTextArea, rather than insert
-     * a tab character. It uses reflection so that the code can be compiled and run with
-     * versions prior to 1.4.0. Before version 1.4.0, this affect could be achieved
-     * by overriding isManagingFocus() on the JTextArea to return false, however that no
-     * longer works.
+     * This method will modify the given JTextArea so that pressing 
+     * the tab key will shift focus away from the JTextArea, rather than insert 
+     * a tab character.
      */
 	public static void setTabTraversal(JTextArea textArea) {
-
-		if(isJavaVersion_1_4_OrGreater == false) return;
-		try {
-
-			setFocusTraversalMethod.invoke(textArea, tabArgs);
-			setFocusTraversalMethod.invoke(textArea, shiftTabArgs);
-
-		}
-		catch(Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex.toString());
-		}
+        textArea.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardTraversalKeys);
+        textArea.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardTraversalKeys);
 	}
 
 }

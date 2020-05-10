@@ -56,7 +56,6 @@ public class TextBox extends JTextArea {
     boolean isNull = false;
     int ordinal;
     boolean constructorDone = false;
-    boolean managingFocus = false;
 
     boolean isPKComponent = false;
 
@@ -399,14 +398,6 @@ public class TextBox extends JTextArea {
     public String getSetClause() {
         
         return getColumnNameForQuery() + " = " + getValueClause(false);
-    }
-
-    /**
-     * Overridden to always return false. In Java versiond 1.3 and prior, this
-     * causes the tab key to shift focus away from a JTextArea.
-     */
-    public boolean isManagingFocus() {
-        return managingFocus;
     }
 
     public void scrollRectToVisible(Rectangle r) {}

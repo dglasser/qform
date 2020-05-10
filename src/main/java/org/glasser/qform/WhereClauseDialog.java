@@ -48,11 +48,7 @@ public class WhereClauseDialog extends JDialog implements ActionListener {
 
     private String tableName = null;
     
-    private JTextArea txtInput = new JTextArea() {
-            public boolean isManagingFocus() {
-                return false;
-            }
-        };
+    private JTextArea txtInput = new JTextArea();
 
     private JLabel lblHeader = new JLabel();
 
