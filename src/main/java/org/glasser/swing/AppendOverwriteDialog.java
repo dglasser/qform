@@ -90,10 +90,10 @@ public class AppendOverwriteDialog extends JDialog implements ActionListener {
 
     public final static String OVERWRITE_OPTION = "OVERWRITE";
 
-    JTextArea textArea = new JTextArea();
+    private JTextArea textArea = new JTextArea();
 
 
-    Object[][] buttonConfig =
+    private Object[][] buttonConfig =
     {
         {btnAppend, "A", APPEND_OPTION, "Append output to the selected file."}
         ,{btnOverwrite, "O", OVERWRITE_OPTION, "Overwrite existing file."}

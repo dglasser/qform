@@ -83,24 +83,24 @@ import org.glasser.util.*;
 public class SystemPanel extends JPanel {
 
 
-    JTable propsTable = new JTable();
+    private JTable propsTable = new JTable();
 
-    PushButtonTableHeader tableHeader = new PushButtonTableHeader();
+    private PushButtonTableHeader tableHeader = new PushButtonTableHeader();
 
 
-    final ListTableModel model = new ListTableModel(new ArrayColumnManager(new String[] {"System Property", "Value"}, 
+    private final ListTableModel model = new ListTableModel(new ArrayColumnManager(new String[] {"System Property", "Value"}, 
                                                                            new Class[] {String.class, String.class}),
                                                     null);
 
-    Date runningSince = null;
+    private Date runningSince = null;
 
-    JLabel lblRunningSince = new JLabel();
-    JLabel lblTotalMem = new JLabel();
-    JLabel lblFreeMem = new JLabel();
+    private JLabel lblRunningSince = new JLabel();
+    private JLabel lblTotalMem = new JLabel();
+    private JLabel lblFreeMem = new JLabel();
 
-    NumberFormat bytesFormatter = NumberFormat.getInstance();
+    private NumberFormat bytesFormatter = NumberFormat.getInstance();
 
-    Object[][] formConfig =
+    private Object[][] formConfig =
     {
          
          {lblTotalMem, "Total program memory (bytes): "}
@@ -108,7 +108,7 @@ public class SystemPanel extends JPanel {
         ,{lblRunningSince, "Up since: "}
     };
 
-    Object[][] formConfig2 =
+    private Object[][] formConfig2 =
     {
          {"Total program memory (bytes): ", lblTotalMem}
         ,{"Free program memory (bytes): ", lblFreeMem}

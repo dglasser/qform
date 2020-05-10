@@ -70,11 +70,11 @@ import org.glasser.util.*;
 public class ReflectionColumnManager extends AbstractColumnManager {
 
 
-    Class objectClass = null;
+    private Class objectClass = null;
 
-    Method[] getters = null;
+    private Method[] getters = null;
 
-    Method[] setters = null;
+    private Method[] setters = null;
 
     public ReflectionColumnManager(String[] columnNames, Class objectClass, String[] getterNames, String[] setterNames) 
         throws NoSuchMethodException

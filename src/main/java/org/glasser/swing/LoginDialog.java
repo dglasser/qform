@@ -298,7 +298,7 @@ public class LoginDialog extends JDialog implements ActionListener {
     }
 
 
-    class KeyHandler extends KeyAdapter {
+    private class KeyHandler extends KeyAdapter {
 
         public void keyReleased(KeyEvent e) {
             if(e.getKeyCode() == e.VK_ENTER)  {

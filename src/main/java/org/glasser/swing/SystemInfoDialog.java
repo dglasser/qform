@@ -80,17 +80,17 @@ import java.awt.datatransfer.*;
  */
 public class SystemInfoDialog extends JDialog implements ActionListener {
 
-    JButton btnCopy = new JButton("Copy to Clipboard");
+    private JButton btnCopy = new JButton("Copy to Clipboard");
 
-    JButton btnClose = new JButton("Close");
+    private JButton btnClose = new JButton("Close");
 
-    Object[][] buttonConfig =
+    private Object[][] buttonConfig =
     {
         {btnCopy, "C", "COPY", "Copy the displayed information to the clipboard."}
         ,{btnClose, "S", "CLOSE", "Close this dialog."}
     };
 
-    SystemPanel systemPanel = null;
+    private SystemPanel systemPanel = null;
 
 
     public SystemInfoDialog() {

@@ -90,8 +90,8 @@ public class MenuItemListener implements ChangeListener, ItemListener {
         this.display = display;
     }
 
-    JMenuItem lastItem = null;
-    boolean lastArmed = false;
+    private JMenuItem lastItem = null;
+    private boolean lastArmed = false;
 
     public void stateChanged(ChangeEvent e) {
 

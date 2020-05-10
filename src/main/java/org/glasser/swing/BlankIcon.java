@@ -77,9 +77,9 @@ public class BlankIcon implements Icon, java.io.Serializable {
 
     protected double size = 16.0;
 
-    int width = 16;
+    private int width = 16;
 
-    int height = 16;
+    private int height = 16;
 
 
     /**

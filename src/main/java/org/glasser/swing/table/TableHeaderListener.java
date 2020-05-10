@@ -82,13 +82,13 @@ import javax.swing.table.*;
  */
 public abstract class TableHeaderListener extends MouseAdapter implements java.io.Serializable {
 
-    boolean descendingSort = false;
+    private boolean descendingSort = false;
 
-    int sortedColumn = -1;
+    private int sortedColumn = -1;
 
-    TableColumn resizingColumn = null;
+    private TableColumn resizingColumn = null;
 
-    int pressedColumn = -1;
+    private int pressedColumn = -1;
 
 
     public void mousePressed(MouseEvent e) {

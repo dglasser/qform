@@ -68,8 +68,8 @@ import javax.swing.*;
 
 public class EnterEscapeKeyHandler extends KeyAdapter {
 
-    JButton enterButton = null;
-    JButton escapeButton = null;
+    private JButton enterButton = null;
+    private JButton escapeButton = null;
 
 
     public EnterEscapeKeyHandler(JButton enterButton, JButton escapeButton) {

@@ -79,28 +79,28 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
 
     public static boolean debug = System.getProperty("LocalDataSourceConfigDialog.debug") != null;
 
-    LocalDataSourceConfigPanel configPanel = new LocalDataSourceConfigPanel();
+    private LocalDataSourceConfigPanel configPanel = new LocalDataSourceConfigPanel();
 
-    JList listbox = new JList();
+    private JList listbox = new JList();
 
-    JButton btnNew = new JButton("New");
+    private JButton btnNew = new JButton("New");
 
-    JButton btnEdit = new JButton("Edit");
+    private JButton btnEdit = new JButton("Edit");
 
-    JButton btnDelete = new JButton("Delete");
+    private JButton btnDelete = new JButton("Delete");
 
-    JButton btnSave = new JButton("Save");
+    private JButton btnSave = new JButton("Save");
 
-    JButton btnCancel = new JButton("Cancel");
+    private JButton btnCancel = new JButton("Cancel");
 
-    JButton btnClose = new JButton("Close");
+    private JButton btnClose = new JButton("Close");
 
-    JButton btnConnect = new JButton("Connect");
+    private JButton btnConnect = new JButton("Connect");
 
-    Vector configVector = new Vector();
+    private Vector configVector = new Vector();
 
 
-    Object[][] buttonConfig = 
+    private Object[][] buttonConfig = 
     {
          {btnNew,   "N", "OPEN_NEW", "Configure a new data source."}
         ,{btnEdit, "E", "EDIT_EXISTING", "Edit the selected data source."}
@@ -184,7 +184,7 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
 
     }
 
-    LocalDataSourceConfig selectedConfig = null;
+    private LocalDataSourceConfig selectedConfig = null;
 
     public void actionPerformed(ActionEvent e) {
 
