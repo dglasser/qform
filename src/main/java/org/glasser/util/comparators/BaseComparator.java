@@ -98,14 +98,14 @@ import java.util.*;
  * returned to the caller.
  * 
  */
-public abstract class BaseComparator implements Comparator, java.io.Serializable {
+public abstract class BaseComparator<T> implements Comparator<T>, java.io.Serializable {
 
 
     protected boolean nullIsGreater = false;
 
     protected boolean sortDescending = false;
 
-    protected Comparator nestedComparator = null;
+    protected Comparator<? super T> nestedComparator = null;
 
     /**
      * Constructs a BaseComparator instance with default field values. The resulting
@@ -121,7 +121,7 @@ public abstract class BaseComparator implements Comparator, java.io.Serializable
      */
     protected BaseComparator(boolean nullIsGreater, 
         boolean sortDescending, 
-        Comparator nestedComparator) {
+        Comparator<? super T> nestedComparator) {
         this.nullIsGreater = nullIsGreater;
         this.sortDescending = sortDescending;
         this.nestedComparator = nestedComparator;
@@ -151,7 +151,7 @@ public abstract class BaseComparator implements Comparator, java.io.Serializable
      * is unable to establish an order for two objects (i.e., the compare() method
      * would return 0.)
      */
-    protected void setNestedComparator(Comparator nestedComparator) {
+    protected void setNestedComparator(Comparator<? super T> nestedComparator) {
         this.nestedComparator = nestedComparator;
     }
 
@@ -178,12 +178,12 @@ public abstract class BaseComparator implements Comparator, java.io.Serializable
      * may choose to expose this method publicly, but if the nestedComparator is
      * mutable, they may be compromising their immutability (and hence their thread safety.)
      */
-    protected Comparator getNestedComparator() {
+    protected Comparator<? super T> getNestedComparator() {
         return nestedComparator;
     }
 
 
-    public final int compare(Object o1, Object o2) {
+    public final int compare(T o1, T o2) {
 
         // handle the trivial case where both objects are null
         if(o1 == null && o2 == null) return 0;
@@ -256,7 +256,7 @@ public abstract class BaseComparator implements Comparator, java.io.Serializable
      * the sign of the return value for descending sorts; that task will be handled within this
      * (the base) class.
      */
-    protected abstract int doCompare(Object o1, Object o2);
+    protected abstract int doCompare(T o1, T o2);
 
 
 

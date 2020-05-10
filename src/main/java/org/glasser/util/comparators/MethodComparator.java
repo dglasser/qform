@@ -71,9 +71,9 @@ import java.io.*;
  * on the value returned from a no-argument method common to both of them.
  * (Typically, this will be a getter method.)
  */
-public class MethodComparator extends BaseComparator {
+public class MethodComparator<T> extends BaseComparator<T> {
 
-    private Class objectClass = null;
+    private Class<T> objectClass = null;
 
     private String getterName = null;
 
@@ -86,16 +86,16 @@ public class MethodComparator extends BaseComparator {
     private boolean caseSensitive = false;
 
 
-    public MethodComparator(Class objectClass, String getterName) {
+    public MethodComparator(Class<T> objectClass, String getterName) {
         this(objectClass, getterName, false, false, null, false);
     }
 
 
-    public MethodComparator(Class objectClass, 
+    public MethodComparator(Class<T> objectClass, 
                             String getterName, 
                             boolean nullIsGreater, 
                             boolean sortDescending, 
-                            Comparator nestedComparator,
+                            Comparator<? super T> nestedComparator,
                             boolean caseSensitive) 
     {
         super(nullIsGreater, sortDescending, nestedComparator);
@@ -119,10 +119,13 @@ public class MethodComparator extends BaseComparator {
         else if(java.lang.Comparable.class.isAssignableFrom(returnTypeClass)) {
             returnTypeIsComparable = true;
         }
+        else if(returnTypeClass.isPrimitive()) {
+            returnTypeIsComparable = true;
+        }
     }
 
-
-    protected int doCompare(Object o1, Object o2) {
+    @SuppressWarnings("unchecked")
+    protected int doCompare(T o1, T o2) {
 
         try {
             Object val1 = getter.invoke(o1, (Object[]) null);

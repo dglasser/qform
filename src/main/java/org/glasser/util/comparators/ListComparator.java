@@ -73,7 +73,7 @@ import java.util.*;
  * 
  * @author David Glasser
  */
-public class ListComparator extends BaseComparator {
+public class ListComparator<E> extends BaseComparator<List<? extends E>> {
 
 
 
@@ -84,7 +84,7 @@ public class ListComparator extends BaseComparator {
      * compared. If this field is null, then the elements are compared as Comparables 
      * (if they both implement Comparables) or Strings (from their toString() methods.)
      */
-    protected Comparator valueComparator = null;
+    protected Comparator<? super E> valueComparator = null;
 
 
     /**
@@ -114,9 +114,9 @@ public class ListComparator extends BaseComparator {
      */
     protected ListComparator(boolean nullIsGreater, 
         boolean sortDescending, 
-        Comparator nestedComparator,
+        Comparator<? super List<? extends E>> nestedComparator,
         int elementIndex,
-        Comparator valueComparator) 
+        Comparator<? super E> valueComparator) 
     {
         super(nullIsGreater, sortDescending, nestedComparator);
         this.elementIndex = elementIndex;
@@ -134,10 +134,10 @@ public class ListComparator extends BaseComparator {
      * the sign of the return value for descending sorts; that task will be handled within this
      * (the base) class.
      */
-    protected int doCompare(Object o1, Object o2) {
+    protected int doCompare(List<? extends E> o1, List<? extends E> o2) {
 
-        Object val1 = ((List) o1).get(elementIndex);
-        Object val2 = ((List) o2).get(elementIndex);
+        E val1 = o1.get(elementIndex);
+        E val2 = o2.get(elementIndex);
 
         if(val1 == null && val2 == null) return 0;
 

@@ -72,7 +72,7 @@ import java.util.*;
  * 
  * @author David Glasser
  */
-public class MutableListComparator extends ListComparator {
+public class MutableListComparator<E> extends ListComparator<E> {
 
 
     /**
@@ -97,9 +97,9 @@ public class MutableListComparator extends ListComparator {
      */
     public MutableListComparator(boolean nullIsGreater, 
                                boolean sortDescending, 
-                               Comparator nestedComparator,
+                               Comparator<? super List<? extends E>> nestedComparator,
                                int elementIndex,
-                               Comparator valueComparator) {
+                               Comparator<? super E> valueComparator) {
         super(nullIsGreater, sortDescending, nestedComparator, elementIndex, valueComparator);
     }
 
@@ -127,7 +127,7 @@ public class MutableListComparator extends ListComparator {
         return elementIndex;
     }
 
-    public Comparator getNestedComparator() {
+    public Comparator<? super List<? extends E>> getNestedComparator() {
         return nestedComparator;
     }
 

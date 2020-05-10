@@ -79,30 +79,30 @@ import java.util.*;
  * of the first value. Finally, if no value comparator was provided and the fetched
  * values are not Comparables, their toString() values will be compared.
  */
-public class MapComparator extends BaseComparator {
+public class MapComparator<K, V> extends BaseComparator<Map<? super K, ? extends V> > {
 
 
 
-    private Object key = null;
+    private K key = null;
 
-    private Comparator valueComparator = null;
+    private Comparator<? super V> valueComparator = null;
 
 
-    public MapComparator(Object key) {
+    public MapComparator(K key) {
         this.key = key;
     }
 
-    public MapComparator(Object key, Comparator valueComparator) {
+    public MapComparator(K key, Comparator<? super V> valueComparator) {
         this.key = key;
         this.valueComparator = valueComparator;
     }
 
 
-    public MapComparator(Object key, 
-                         Comparator valueComparator, 
+    public MapComparator(K key, 
+                         Comparator<? super V> valueComparator, 
                          boolean nullIsGreater, 
                          boolean sortDescending, 
-                         Comparator nestedComparator) 
+                         Comparator<? super Map<? super K, ? extends V>> nestedComparator) 
     {
         super(nullIsGreater, sortDescending, nestedComparator);
         this.key = key;
@@ -110,10 +110,10 @@ public class MapComparator extends BaseComparator {
     }
 
 
-    public int doCompare(Object o1, Object o2) {
+    public int doCompare(Map<? super K, ? extends V> o1, Map<? super K, ? extends V> o2) {
 
-        Object val1 = ((Map) o1).get(key);
-        Object val2 = ((Map) o2).get(key);
+        V val1 = o1.get(key);
+        V val2 = o2.get(key);
 
         if(val1 == null && val2 == null) return 0;
 
