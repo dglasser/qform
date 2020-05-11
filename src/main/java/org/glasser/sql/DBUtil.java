@@ -523,6 +523,8 @@ public class DBUtil implements java.io.Serializable {
          java.sql.Types.CHAR
         ,java.sql.Types.VARCHAR
         ,java.sql.Types.LONGVARCHAR
+        ,java.sql.Types.NCHAR
+        ,java.sql.Types.NVARCHAR
     };
 
 
