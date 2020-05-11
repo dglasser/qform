@@ -96,7 +96,7 @@ public class DBUtil implements java.io.Serializable {
     public static Column[] getColumns(ResultSet rs) 
         throws SQLException
     {
-        ArrayList columns = new ArrayList();
+        ArrayList<Column> columns = new ArrayList<>();
 
         while(rs.next()) {
 
@@ -118,8 +118,7 @@ public class DBUtil implements java.io.Serializable {
         }
 
 
-        return (Column[])
-            columns.toArray(new Column[columns.size()]);
+        return columns.toArray(new Column[columns.size()]);
 
     }
 
@@ -140,7 +139,7 @@ public class DBUtil implements java.io.Serializable {
         throws SQLException
     {
 
-        ArrayList list = new ArrayList(100);
+        ArrayList<TableInfo> list = new ArrayList<>(100);
         while(rs.next()) {
             TableInfo ti = new TableInfo();
             ti.setTableCat(rs.getString("TABLE_CAT"));
@@ -151,7 +150,7 @@ public class DBUtil implements java.io.Serializable {
             list.add(ti);
         }
 
-        return (TableInfo[]) list.toArray(new TableInfo[list.size()]);
+        return list.toArray(new TableInfo[list.size()]);
 
     }
 

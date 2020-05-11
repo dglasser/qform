@@ -137,7 +137,7 @@ public class DDLPanel extends JPanel implements ActionListener {
 		buffer.append(" (").append(ENDL);
 
 		Column[] columns = tableInfo.getColumns();
-		ArrayList pks = new ArrayList();
+		ArrayList<String> pks = new ArrayList<>();
 		for(int j=0; columns != null && j<columns.length; j++) { 
 			Column col = columns[j];
 			boolean isPK = col.getPkComponent();
@@ -234,10 +234,10 @@ public class DDLPanel extends JPanel implements ActionListener {
     	String[] caseChoices = {"Preserve", "Force to lower", "Force to UPPER"};
     	int[] caseStrategies = {0, -1, 1};
     
-    	JComboBox cmbKeywordCase = new JComboBox(new String[] {"UPPER", "lower"});
-    	JComboBox cmbColumnCase = new JComboBox(caseChoices);
-    	JComboBox cmbTableNameCase = new JComboBox(caseChoices);
-    	JComboBox cmbDataTypeCase = new JComboBox(caseChoices);
+    	JComboBox<String> cmbKeywordCase = new JComboBox<>(new String[] {"UPPER", "lower"});
+    	JComboBox<String> cmbColumnCase = new JComboBox<>(caseChoices);
+    	JComboBox<String> cmbTableNameCase = new JComboBox<>(caseChoices);
+    	JComboBox<String> cmbDataTypeCase = new JComboBox<>(caseChoices);
     
     	boolean getUpperCaseKeyword() {
     		return cmbKeywordCase.getSelectedIndex() == 0;

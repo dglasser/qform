@@ -1015,11 +1015,11 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     private HashMap localConfigMap = new HashMap();
 
-    private HashSet pkeysNotSupported = new HashSet();
+    private HashSet<Integer> pkeysNotSupported = new HashSet<>();
 
-    private HashSet fkeysNotSupported = new HashSet();
+    private HashSet<Integer> fkeysNotSupported = new HashSet<>();
 
-    private HashSet exkeysNotSupported = new HashSet();
+    private HashSet<Integer> exkeysNotSupported = new HashSet<>();
 
     private HashSet establishedConnections = new HashSet();
 
@@ -1723,8 +1723,8 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     private final static String DEFAULT_SCHEMA = "<DEFAULT SCHEMA>";
 
-    MethodComparator tableTypeComparator =
-        new MethodComparator(org.glasser.sql.TableInfo.class, "getTableType", false, false, TableInfo.NAME_COMPARATOR, false);
+    MethodComparator<TableInfo> tableTypeComparator =
+        new MethodComparator<>(org.glasser.sql.TableInfo.class, "getTableType", false, false, TableInfo.NAME_COMPARATOR, false);
 
 
     public void addNewLocalDataSource(LocalDataSourceConfig ld, DataSource ds) 
@@ -1754,7 +1754,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
             TableInfo[] tis = DBUtil.getTableInfos(rs);
 
-            Arrays.sort(tis, tableTypeComparator);
+            Arrays.<TableInfo>sort(tis, tableTypeComparator);
 
 
             

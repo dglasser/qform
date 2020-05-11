@@ -115,11 +115,11 @@ public class MutableListComparator<E> extends ListComparator<E> {
         super.setSortDescending(sortDescending);
     }
 
-    public void setNestedComparator(Comparator nestedComparator) {
+    public void setNestedComparator(Comparator<? super List<? extends E>> nestedComparator) {
         super.setNestedComparator(nestedComparator);
     }
 
-    public void setValueComparator(Comparator valueComparator) {
+    public void setValueComparator(Comparator<? super E> valueComparator) {
         this.valueComparator = valueComparator;
     }
 

@@ -188,8 +188,9 @@ public class ForeignKey implements java.io.Serializable {
     }
     
 
+    @SuppressWarnings("unchecked")
     public List<ForeignKeyColumn> getForeignKeyColumns() {
-        return (Vector<ForeignKeyColumn>) foreignKeyColumns.clone();
+        return (List<ForeignKeyColumn>) foreignKeyColumns.clone();
     }
 
 

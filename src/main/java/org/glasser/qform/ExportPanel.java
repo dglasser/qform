@@ -116,7 +116,7 @@ public abstract class ExportPanel extends JPanel implements ActionListener {
 
             // populate the combo box with the appropriate choices for
             // this data type and export type.
-            JComboBox cmb = new JComboBox(getFormatterChoices(type));
+            JComboBox<Object> cmb = new JComboBox<Object>(getFormatterChoices(type));
 
             cmb.setSelectedIndex(1);
 

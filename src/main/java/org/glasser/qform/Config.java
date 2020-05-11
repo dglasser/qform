@@ -95,17 +95,16 @@ public class Config {
     protected final static String TAB3 = TAB + TAB + TAB;
 
 
-    private ArrayList localDataSourceConfigs = new ArrayList();
+    private ArrayList<LocalDataSourceConfig> localDataSourceConfigs = new ArrayList<>();
 
-    private Hashtable thirdPartyLafs = new Hashtable();
+    private HashMap<String, UIManager.LookAndFeelInfo> thirdPartyLafs = new HashMap<>();
 
-    public void setLocalDataSourceConfigs(ArrayList localDataSourceConfigs) {
+    public void setLocalDataSourceConfigs(ArrayList<LocalDataSourceConfig> localDataSourceConfigs) {
         this.localDataSourceConfigs = localDataSourceConfigs;
     }
 
     public LocalDataSourceConfig[] getLocalDataSourceConfigs() {
-        return (LocalDataSourceConfig[]) 
-            localDataSourceConfigs.toArray(new LocalDataSourceConfig[localDataSourceConfigs.size()]);
+        return localDataSourceConfigs.toArray(new LocalDataSourceConfig[localDataSourceConfigs.size()]);
     }
 
     public void deleteLocalDataSourceConfig(LocalDataSourceConfig config) {
@@ -128,8 +127,8 @@ public class Config {
     /**
      * Sorts UIManager.LookAndFeelInfo objects by their name fields.
      */
-    private MethodComparator lafComparator =
-        new MethodComparator(UIManager.LookAndFeelInfo.class, "getName", false, false, null, false);
+    private MethodComparator<UIManager.LookAndFeelInfo> lafComparator =
+        new MethodComparator<>(UIManager.LookAndFeelInfo.class, "getName", false, false, null, false);
 
     /**
      * Returns all of the third-party LAF's listed in the config file.
@@ -138,11 +137,11 @@ public class Config {
 
         UIManager.LookAndFeelInfo[] lafs = new UIManager.LookAndFeelInfo[thirdPartyLafs.size()];
         int j=0;
-        for(Iterator i = thirdPartyLafs.values().iterator(); i.hasNext(); ) {
-            lafs[j++] = (UIManager.LookAndFeelInfo) i.next();
+        for(Iterator<UIManager.LookAndFeelInfo> i = thirdPartyLafs.values().iterator(); i.hasNext(); ) {
+            lafs[j++] = i.next();
         }
 
-        Arrays.sort(lafs, lafComparator);
+        Arrays.<UIManager.LookAndFeelInfo>sort(lafs, lafComparator);
 
         return lafs;
 

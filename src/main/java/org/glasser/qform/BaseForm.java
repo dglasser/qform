@@ -422,11 +422,11 @@ public class BaseForm extends JPanel {
     //
     public int previous() {
 
-        Vector cachedRow = resultSetBuffer.getPreviousRow();
+        List<Object> cachedRow = resultSetBuffer.getPreviousRow();
 
         if(cachedRow != null) {
             for(int j = 0; j < fields.length; j++) {
-                Object fieldValue = cachedRow.elementAt(j);
+                Object fieldValue = cachedRow.get(j);
                 fields[j].setValue(fieldValue);
             }
             return resultSetBuffer.getCursor();
@@ -520,7 +520,7 @@ public class BaseForm extends JPanel {
     }
 
     public Vector<Object> getContentsOfFields() {
-        Vector<Object> v = new Vector();
+        Vector<Object> v = new Vector<>();
         for(int j=0; j<fields.length; j++) {
             v.add(fields[j].getText());
         }

@@ -209,14 +209,15 @@ public class ExportDialog extends JDialog implements ActionListener {
 
     public final static int EXPORT_CSV = 1;
 
-    private HashMap[] panelCaches = {new HashMap(), new HashMap()};
+    private HashMap[] panelCaches = {new HashMap<TableInfo, ExportPanel>(), new HashMap<TableInfo, ExportPanel>()};
 
     private String [] defaultTerminals = {";", ""};
 
     private ExportPanel getExportPanel(TableInfo ti, int exportType) {
 
-
-        ExportPanel panel = (ExportPanel) panelCaches[exportType].get(ti);
+        @SuppressWarnings("unchecked")
+        HashMap<TableInfo, ExportPanel> panelCache = (HashMap<TableInfo, ExportPanel>) panelCaches[exportType]; 
+        ExportPanel panel = panelCache.get(ti);
         if(panel != null) return panel;
         switch(exportType) {
             case EXPORT_INSERT_STATEMENTS :
@@ -234,7 +235,7 @@ public class ExportDialog extends JDialog implements ActionListener {
         panel.setMinimumSize((Dimension) d.clone());
         panel.setPreferredSize((Dimension) d.clone());
 
-        panelCaches[exportType].put(ti, panel);
+        panelCache.put(ti, panel);
 
         return panel;
 

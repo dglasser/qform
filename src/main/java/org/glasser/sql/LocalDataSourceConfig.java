@@ -70,7 +70,7 @@ public class LocalDataSourceConfig implements java.io.Serializable, Cloneable {
 
 
     public final static MethodComparator DISPLAY_NAME_COMPARATOR =
-        new MethodComparator(org.glasser.sql.LocalDataSourceConfig.class, "getDisplayName");
+        new MethodComparator<LocalDataSourceConfig>(org.glasser.sql.LocalDataSourceConfig.class, "getDisplayName");
 
 
     protected String displayName = null;

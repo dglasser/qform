@@ -70,8 +70,8 @@ public class TableInfo {
 
     private String cachedString = null;
 
-    public final static MethodComparator NAME_COMPARATOR =
-        new MethodComparator(org.glasser.sql.TableInfo.class, "getTableName");
+    public final static MethodComparator<TableInfo> NAME_COMPARATOR =
+        new MethodComparator<>(org.glasser.sql.TableInfo.class, "getTableName");
 
 
     protected String tableCat = null;
@@ -96,7 +96,7 @@ public class TableInfo {
 
     protected ForeignKey[] exportedKeys = null;
 
-    protected HashMap columnMap = null;
+    protected HashMap<String, Column> columnMap = null;
 
     protected String qualifiedTableName = null;
 
@@ -195,10 +195,10 @@ public class TableInfo {
     }
 
 
-    protected synchronized HashMap getColumnMap() {
-        HashMap tempMap = columnMap; // thead safety
+    protected synchronized HashMap<String, Column> getColumnMap() {
+        HashMap<String, Column> tempMap = columnMap; // thead safety
         if(tempMap == null) {
-            tempMap = new HashMap(); 
+            tempMap = new HashMap<String, Column>(); 
             Column[] temp = columns; // thread safety
             for(int j=0; temp != null && j<temp.length; j++) {
                 tempMap.put(temp[j].getColumnName(), temp[j]);

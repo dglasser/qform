@@ -134,6 +134,7 @@ public class ListComparator<E> extends BaseComparator<List<? extends E>> {
      * the sign of the return value for descending sorts; that task will be handled within this
      * (the base) class.
      */
+    @SuppressWarnings("unchecked")
     protected int doCompare(List<? extends E> o1, List<? extends E> o2) {
 
         E val1 = o1.get(elementIndex);

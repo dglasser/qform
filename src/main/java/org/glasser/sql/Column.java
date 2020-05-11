@@ -277,11 +277,11 @@ public class Column implements java.io.Serializable {
         ,{"VARCHAR", new Integer(java.sql.Types.VARCHAR) }
     };
 
-    private final static Hashtable typeStrings = new Hashtable();
+    private final static HashMap<Integer, String> typeStrings = new HashMap<>();
 
     static {
         for(int j=0; j<sqlTypes.length; j++) { 
-            typeStrings.put(sqlTypes[1], sqlTypes[0]);
+            typeStrings.put((Integer) sqlTypes[j][1], (String) sqlTypes[j][0]);
         }
     }
 

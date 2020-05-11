@@ -117,7 +117,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
     public void replaceCurrentRow(ResultSet rs) 
         throws SQLException
     {
-        Vector<Object> newRow = readRow(rs);
+        List<Object> newRow = readRow(rs);
         set(cursor, newRow);
     }
 
@@ -306,10 +306,10 @@ public class ResultSetBuffer extends Vector<List<Object>> {
         return rowsRead;
     }
 
-    protected final Vector readRow(ResultSet rs)
+    protected final List<Object> readRow(ResultSet rs)
         throws SQLException
     {
-        Vector row = new Vector(columnCount);
+        Vector<Object> row = new Vector<>(columnCount);
         for(int col=1; col<=columnCount; col++) {
             Object val = null;
             try {
@@ -334,10 +334,10 @@ public class ResultSetBuffer extends Vector<List<Object>> {
 
 
     
-    public Vector getPreviousRow() {
+    public List<Object> getPreviousRow() {
         if(cursor < 1) return null;
         cursor--;
-        return (Vector) get(cursor);
+        return get(cursor);
     }
 
     public List<Object> getCurrentRow() {
@@ -345,6 +345,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
         return get(cursor);
     }
 
+    @SuppressWarnings("unchecked")
     public List<Object> getCurrentRowClone() {
         List<Object> v = getCurrentRow();
         if(v == null) return null;
@@ -433,6 +434,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
         return cursor;
     }
 
+    @SuppressWarnings("unchecked")
     public List<Object>[] getCurrentRowset() {
         return (List<Object>[]) toArray(new Vector[0]);
     }
