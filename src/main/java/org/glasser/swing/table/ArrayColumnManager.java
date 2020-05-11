@@ -74,7 +74,7 @@ import java.awt.*;
  * 
  * @author Dave Glasser
  */
-public class ArrayColumnManager extends AbstractColumnManager {
+public class ArrayColumnManager<E> extends AbstractColumnManager<E[]> {
 
 
     public ArrayColumnManager(String[] columnNames, Class[] columnClasses) {
@@ -86,16 +86,16 @@ public class ArrayColumnManager extends AbstractColumnManager {
      * The rowObject passed into this method is assumed to be an object array that contains
      * the data for a single row of the table.
      */
-    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, Object rowObject) {
-        ((Object[]) rowObject)[columnIndex] = newCellValue;
+    public void setValueAt(E newCellValue, int rowIndex, int columnIndex, E[] rowObject) {
+        rowObject[columnIndex] = newCellValue;
     }
 
     /**
      * The rowObject passed into this method is assumed to be an object array that contains
      * the data for a single row of the table.
      */
-    public Object getValueAt(int rowIndex, int columnIndex, Object rowObject) {
-        Object[] row = (Object[]) rowObject;
+    public E getValueAt(int rowIndex, int columnIndex, E[] rowObject) {
+        E[] row = rowObject;
         if(row == null || row.length <= columnIndex) return null;
         return row[columnIndex];
     }
@@ -116,7 +116,7 @@ public class ArrayColumnManager extends AbstractColumnManager {
 
         // each element in this list represents a row in the table,
         // and will be an Object array.
-        ArrayList list = new ArrayList();
+        ArrayList<Object[]> list = new ArrayList<>();
 
         for(int j=0; j<numRows; j++) {
             // create the array that will be the row.
@@ -131,7 +131,7 @@ public class ArrayColumnManager extends AbstractColumnManager {
         ArrayColumnManager colMgr = new ArrayColumnManager(colNames, null);
 
         // instantiate the ListTableModel
-        ListTableModel model = new ListTableModel(colMgr, list);
+        ListTableModel<Object[]> model = new ListTableModel<Object[]>(colMgr, list);
 
         JFrame frame = new JFrame();
         JPanel cp = new JPanel();

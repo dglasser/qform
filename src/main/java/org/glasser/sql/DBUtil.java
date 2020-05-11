@@ -364,7 +364,7 @@ public class DBUtil implements java.io.Serializable {
      * @param rs the ResultSet that will be read. It will NOT be closed after being read.
      * @param maxRows the maximum number of rows to read; 0 or below indicates no limit.
      */
-    public static List[] readResultSet2(ResultSet rs, int maxRows) 
+    public static List<Object>[] readResultSet2(ResultSet rs, int maxRows) 
         throws SQLException 
     {
 
@@ -380,7 +380,7 @@ public class DBUtil implements java.io.Serializable {
         ResultSetMetaData rsmd = rs.getMetaData();
         int numColumns = rsmd.getColumnCount();
 
-        ArrayList results = new ArrayList(40);
+        ArrayList<List<Object>> results = new ArrayList(40);
 
         // the first time the loop is entered, rs.next() won't get
         // called because the flag will short-circuit it.
@@ -388,7 +388,7 @@ public class DBUtil implements java.io.Serializable {
         while(flag || rs.next()) {
             flag = false;
 
-            ArrayList rowList = new ArrayList(numColumns);
+            ArrayList<Object> rowList = new ArrayList<>(numColumns);
 
             for(int j=0; j<numColumns; j++) {
                 rowList.add( rs.getObject(j+1) );
@@ -404,7 +404,7 @@ public class DBUtil implements java.io.Serializable {
 
         }
 
-        return (ArrayList[]) results.toArray(new ArrayList[results.size()]);
+        return results.toArray(new ArrayList[results.size()]);
 
     }
 
@@ -442,7 +442,7 @@ public class DBUtil implements java.io.Serializable {
         boolean hasLimit = maxRows > 0;
 
 
-        ArrayList results = new ArrayList(40);
+        ArrayList<Object> results = new ArrayList<>(40);
 
         // the first time the loop is entered, rs.next() won't get
         // called because the flag will short-circuit it.

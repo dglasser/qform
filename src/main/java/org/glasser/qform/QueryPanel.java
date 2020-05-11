@@ -315,7 +315,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     };
 
 
-    private Vector v;
+    private List<TextBox> textBoxes;
     private String tableName;
     private String tableOwner;
     private BaseForm baseForm = null;
@@ -469,7 +469,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 
             Column[] columns = ti.getColumns();
 
-            v = new Vector(columns.length);
+            textBoxes = new ArrayList<TextBox>(columns.length);
 
             columnNames = new String[columns.length];
 
@@ -497,11 +497,11 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
                 textBox.setEditableTypes(editableTypes);
 
                 textBox.setEditable(false);
-                v.addElement(textBox);
+                textBoxes.add(textBox);
             }
 
 
-            baseForm = new BaseForm(v);
+            baseForm = new BaseForm(textBoxes);
 
             JScrollPane sp = new JScrollPane(baseForm);
             formTab.setLayout(new BorderLayout());
@@ -677,7 +677,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         return state;
     }
 
-    public Vector[] getCurrentRowset() {
+    public List<Object>[] getCurrentRowset() {
         return baseForm.getCurrentRowset();
     }
 
@@ -891,9 +891,9 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             case INSERT :
                 // get only the fields that have something
                 // in them to build the insert statement with.
-                ArrayList list = new ArrayList(v.size());
-                for(int j=0; j<v.size(); j++) {
-                    TextBox textBox = (TextBox) v.get(j);
+                ArrayList list = new ArrayList(textBoxes.size());
+                for(int j=0; j<textBoxes.size(); j++) {
+                    TextBox textBox = (TextBox) textBoxes.get(j);
                     if(!Util.isNothing(textBox.getText())) {
                         list.add(textBox);
                     }
@@ -964,8 +964,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 
         String whereClause = null;
 
-        for(int j = 0; j < v.size(); j++) {
-            String condition = ((TextBox) v.elementAt(j)).getCondition();
+        for(int j = 0; j < textBoxes.size(); j++) {
+            String condition = ((TextBox) textBoxes.get(j)).getCondition();
             if(condition != null) {
                 if(whereClause == null) whereClause = condition;
                 else whereClause += (" AND " + condition);
@@ -984,8 +984,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         throws UnknownPrimaryKeyException
     {
 
-        Vector fields = v;
-        ArrayList pkFields = new ArrayList();
+        List<TextBox> fields = textBoxes;
+        ArrayList<TextBox> pkFields = new ArrayList<>();
         for(int j=0; j<fields.size(); j++) {
             TextBox field = (TextBox) fields.get(j);
             if(field.isPkComponent()) {
@@ -1009,7 +1009,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         StringBuffer buffer = new StringBuffer();
         boolean needAnd = false;
         for(int j = 0; j < pkFields.size(); j++) {
-            String condition = ((TextBox) pkFields.get(j)).getCondition();
+            String condition = pkFields.get(j).getCondition();
             if(condition != null) {
                 if(needAnd) {
                     buffer.append(" AND ");
@@ -1161,8 +1161,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     public void executeAdd() {
 
         boolean hasInput = false;
-        for(int j=0; j<v.size(); j++) {
-            TextBox textBox = (TextBox) v.get(j);
+        for(int j=0; j<textBoxes.size(); j++) {
+            TextBox textBox = (TextBox) textBoxes.get(j);
             if(!Util.isNothing(textBox.getText())) {
                 hasInput = true;
                 break;

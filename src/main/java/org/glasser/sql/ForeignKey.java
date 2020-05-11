@@ -97,7 +97,7 @@ public class ForeignKey implements java.io.Serializable {
      * This is a Vector that is used to hold the ForeignKeyColumns that participate
      * in this ForeignKey.
      */
-    private Vector foreignKeyColumns = new Vector();
+    private Vector<ForeignKeyColumn> foreignKeyColumns = new Vector<>();
 
     public ForeignKey(String foreignTableName) {
         if(Util.isNothing(foreignTableName))
@@ -142,8 +142,9 @@ public class ForeignKey implements java.io.Serializable {
         this.foreignTableName = foreignTableName;
     }
 
-    public void setForeignKeyColumns(Vector foreignKeyColumns) {
-        this.foreignKeyColumns = (Vector) foreignKeyColumns.clone();
+    @SuppressWarnings("unchecked")
+    public void setForeignKeyColumns(Vector<ForeignKeyColumn> foreignKeyColumns) {
+        this.foreignKeyColumns = (Vector<ForeignKeyColumn>) foreignKeyColumns.clone();
     }
 
     public void addForeignKeyColumn(ForeignKeyColumn col) {
@@ -187,8 +188,8 @@ public class ForeignKey implements java.io.Serializable {
     }
     
 
-    public Vector getForeignKeyColumns() {
-        return (Vector) foreignKeyColumns.clone();
+    public List<ForeignKeyColumn> getForeignKeyColumns() {
+        return (Vector<ForeignKeyColumn>) foreignKeyColumns.clone();
     }
 
 

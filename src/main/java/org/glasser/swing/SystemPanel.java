@@ -88,7 +88,7 @@ public class SystemPanel extends JPanel {
     private PushButtonTableHeader tableHeader = new PushButtonTableHeader();
 
 
-    private final ListTableModel model = new ListTableModel(new ArrayColumnManager(new String[] {"System Property", "Value"}, 
+    private final ListTableModel<Object[]> model = new ListTableModel(new ArrayColumnManager(new String[] {"System Property", "Value"}, 
                                                                            new Class[] {String.class, String.class}),
                                                     null);
 
@@ -232,7 +232,7 @@ public class SystemPanel extends JPanel {
     public void refreshSystemPropertiesTable() {
         Properties props = System.getProperties();
 
-        ArrayList list = new ArrayList(props.size());
+        ArrayList<Object[]> list = new ArrayList<>(props.size());
 
         for(Enumeration enumer = props.propertyNames(); enumer.hasMoreElements(); ) {
             String name = (String) enumer.nextElement();

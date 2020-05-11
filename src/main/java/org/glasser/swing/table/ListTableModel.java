@@ -73,15 +73,15 @@ import org.glasser.util.*;
 
 
 
-public class ListTableModel extends AbstractTableModel
+public class ListTableModel<R> extends AbstractTableModel
 {
 
     protected int[] columnMappings = null;
 
 
-    private ColumnManager columnManager = null;
+    private ColumnManager<R> columnManager = null;
 
-    private ColumnManagerComparator comparator = null;
+    private ColumnManagerComparator<R> comparator = null;
 
     /**
      * This indicates whether the last sort applied to the dataList was in 
@@ -100,16 +100,16 @@ public class ListTableModel extends AbstractTableModel
      * knows, when given an object representing a row, how to get the value
      * for a particular column within that row.
      */
-    protected List dataList = null;
+    protected List<R> dataList = null;
 
     protected SmartEventListenerList listeners = new SmartEventListenerList();
 
 
 
-    public void setColumnManager(ColumnManager columnManager) {
+    public void setColumnManager(ColumnManager<R> columnManager) {
         this.columnManager = columnManager;
         if(columnManager != null) {
-            comparator = new ColumnManagerComparator(columnManager);
+            comparator = new ColumnManagerComparator<R>(columnManager);
         }
         else {
             comparator = null;
@@ -122,12 +122,12 @@ public class ListTableModel extends AbstractTableModel
     }
 
 
-    public ListTableModel(ColumnManager columnManager, List data)
+    public ListTableModel(ColumnManager<R> columnManager, List<R> data)
     {
         super();
         this.columnManager = columnManager;
         if(columnManager != null) {
-            comparator = new ColumnManagerComparator(columnManager);
+            comparator = new ColumnManagerComparator<R>(columnManager);
         }
         else {
             comparator = null;
@@ -139,7 +139,7 @@ public class ListTableModel extends AbstractTableModel
     public ListTableModel()
     {
         super();
-        dataList = new Vector(0);
+        dataList = new ArrayList<R>();
     }
 
 
@@ -165,12 +165,12 @@ public class ListTableModel extends AbstractTableModel
 
     }
 
-    public List getDataList()
+    public List<R> getDataList()
     {
         return dataList;
     }
 
-    public synchronized void setDataList(List newData)
+    public synchronized void setDataList(List<R> newData)
     {
         if (newData != null)
         {
@@ -180,7 +180,7 @@ public class ListTableModel extends AbstractTableModel
         else
         {
             int rows = getRowCount();
-            this.dataList = new Vector(0);
+            this.dataList = new ArrayList<R>();
             if (rows > 0)
             {
                 fireTableRowsDeleted(0, rows - 1);
@@ -198,21 +198,21 @@ public class ListTableModel extends AbstractTableModel
         }
     }
 
-    public Object getObjectAtRow(int row) {
+    public R getObjectAtRow(int row) {
         if(row < 0 || row >= dataList.size()) return null;
         return dataList.get(row);
     }
 
-    public void addObject(Object obj) {
+    public void addObject(R obj) {
         if(obj == null) return;
-        if(dataList == null) dataList = new Vector();
+        if(dataList == null) dataList = new ArrayList<R>();
         dataList.add(obj);
         int newRowIndex = dataList.size() - 1;
         fireTableRowsInserted(newRowIndex, newRowIndex);
         fireDataObjectInserted(obj);
     }
 
-    public synchronized void replaceObject(Object oldObject, Object newObject) {
+    public synchronized void replaceObject(R oldObject, R newObject) {
         if(oldObject == null) return;
         int index = dataList.indexOf(oldObject);
         if(index < 0 || index >= dataList.size()) return;
@@ -222,7 +222,7 @@ public class ListTableModel extends AbstractTableModel
         fireDataObjectInserted(newObject);
     }
 
-    public void removeObject(Object obj) {
+    public void removeObject(R obj) {
         int rowToRemove = dataList.indexOf(obj);
         if(rowToRemove < 0 || rowToRemove > (getRowCount() - 1)) return;
         dataList.remove(obj);
@@ -233,7 +233,7 @@ public class ListTableModel extends AbstractTableModel
 
     public void removeObjectAtRow(int rowToRemove) {
         if(rowToRemove < 0 || rowToRemove > (getRowCount() - 1)) return;
-        Object obj = dataList.get(rowToRemove);
+        R obj = dataList.get(rowToRemove);
         if(obj == null) return;
         dataList.remove(rowToRemove);
         fireTableRowsDeleted(rowToRemove, rowToRemove);
@@ -266,8 +266,8 @@ public class ListTableModel extends AbstractTableModel
         int upperRow = row;
         int lowerRow = row + 1;
 
-        Object upperObj = getObjectAtRow(upperRow);
-        Object lowerObj = getObjectAtRow(lowerRow);
+        R upperObj = getObjectAtRow(upperRow);
+        R lowerObj = getObjectAtRow(lowerRow);
 
         dataList.set(upperRow, lowerObj);
         dataList.set(lowerRow, upperObj);
@@ -285,8 +285,8 @@ public class ListTableModel extends AbstractTableModel
         int upperRow = row - 1;
         int lowerRow = row;
 
-        Object upperObj = getObjectAtRow(upperRow);
-        Object lowerObj = getObjectAtRow(lowerRow);
+        R upperObj = getObjectAtRow(upperRow);
+        R lowerObj = getObjectAtRow(lowerRow);
 
         dataList.set(upperRow, lowerObj);
         dataList.set(lowerRow, upperObj);
@@ -300,9 +300,9 @@ public class ListTableModel extends AbstractTableModel
      * @throws UnsupportedOperationException if the underlying List does not
      * support the addAll() operation.
      */
-    public void insertObjectAtRow(Object obj, int row) {
+    public void insertObjectAtRow(R obj, int row) {
         if(obj == null || row < 0 ||  dataList == null || row > dataList.size()) return;
-        ArrayList a = new ArrayList(1);
+        ArrayList<R> a = new ArrayList<R>(1);
         a.add(obj);
         dataList.addAll(row, a);
         fireTableRowsInserted(row, row);
@@ -420,7 +420,7 @@ public class ListTableModel extends AbstractTableModel
     }
 
     public void setValueAt(Object newCellValue,  int rowIndex,  int columnIndex) {
-        Object rowObject = dataList.get(rowIndex);
+        R rowObject = dataList.get(rowIndex);
         columnManager.setValueAt(newCellValue, rowIndex, columnIndex,  rowObject);
         fireTableDataChanged();
         fireDataObjectUpdated(rowObject);
@@ -433,7 +433,7 @@ public class ListTableModel extends AbstractTableModel
      * 
      * @throws RuntimeException, if the ColumnManager for this ListTableModel is set to null.
      */
-    public void setColumnComparator(int columnIndex, Comparator columnComparator) {
+    public void setColumnComparator(int columnIndex, Comparator<? extends Object> columnComparator) {
         if(columnManager == null) {
             throw new RuntimeException("ListTableModel.setColumnComparator() cannot be called until a ColumnManager has been set.");
         }

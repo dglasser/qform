@@ -43,7 +43,7 @@ import org.glasser.swing.table.*;
 /**
  * This ColumnManager is used for the Exported Key Columns table on an Exported Keys panel.
  */
-public class ExportedKeyColumnManager extends AbstractColumnManager {
+public class ExportedKeyColumnManager extends AbstractColumnManager<ForeignKeyColumn> {
 
 
     protected final static String[] COLUMN_NAMES = {"Key Seq", "Foreign Column", "Local Column", "Data Type (Local)", "SQL Type (Local)"};
@@ -56,9 +56,9 @@ public class ExportedKeyColumnManager extends AbstractColumnManager {
         setColumnClasses(COLUMN_CLASSES);
     }
 
-    public Object getValueAt(int row, int column, Object rowObject) {
+    public Object getValueAt(int row, int column, ForeignKeyColumn rowObject) {
 
-        ForeignKeyColumn fc = (ForeignKeyColumn) rowObject;
+        ForeignKeyColumn fc = rowObject;
         if(fc == null) return null;
         Column lc = fc.getLocalColumn();
         switch(column) {

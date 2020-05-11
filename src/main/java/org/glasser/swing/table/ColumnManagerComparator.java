@@ -77,19 +77,19 @@ import java.util.Comparator;
 * 
 * @author Dave Glasser
 */
-public class ColumnManagerComparator extends BaseComparator {
+public class ColumnManagerComparator<R> extends BaseComparator<R> {
 
 
     /**
      * This is the column manager used to extract column values from row objects.
      */
-    protected ColumnManager columnManager = null;
+    protected ColumnManager<R> columnManager = null;
 
     protected int sortColumn = -1;
 
     protected Comparator[] columnComparators = null;
 
-    public ColumnManagerComparator(ColumnManager columnManager) {
+    public ColumnManagerComparator(ColumnManager<R> columnManager) {
         this.columnManager = columnManager;
     }
 
@@ -125,7 +125,7 @@ public class ColumnManagerComparator extends BaseComparator {
      * is used to get the correct column value from each row object, and compares the two
      * column values to establish an ordering for the two rows.
      */
-    protected int doCompare(Object o1, Object o2) {
+    protected int doCompare(R o1, R o2) {
         Object val1 = columnManager.getValueAt(0, sortColumn, o1);
         Object val2 = columnManager.getValueAt(0, sortColumn, o2);
 

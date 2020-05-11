@@ -66,11 +66,11 @@ import java.util.*;
 import org.glasser.util.*;
 
 
-public class ResultSetTableModel extends ListTableModel implements ResultSetBufferListener {
+public class ResultSetTableModel extends ListTableModel<List<Object>> implements ResultSetBufferListener {
 
 
     public ResultSetTableModel(ResultSetBuffer buffer) {
-        super(new ListColumnManager(buffer.getColumnNames(), buffer.getColumnClasses()), buffer);
+        super(new ListColumnManager<Object>(buffer.getColumnNames(), buffer.getColumnClasses()), buffer);
         buffer.addResultSetBufferListener(this);
     }
 
@@ -81,10 +81,10 @@ public class ResultSetTableModel extends ListTableModel implements ResultSetBuff
      */
     public ResultSetTableModel(String[] columnNames) {
         super();
-        super.setColumnManager(new ListColumnManager(columnNames, null));
+        super.setColumnManager(new ListColumnManager<Object>(columnNames, null));
     }
 
-    public void setColumnManager(ColumnManager columnManager) {
+    public void setColumnManager(ColumnManager<List<Object>> columnManager) {
         throw new UnsupportedOperationException("The ColumnManager cannot be set for this TableModel.");
     }
 
@@ -92,12 +92,12 @@ public class ResultSetTableModel extends ListTableModel implements ResultSetBuff
     private boolean[] displayableColumns = null;
 
 
-    public void setDataList(List newData) {
+    public void setDataList(List<List<Object>> newData) {
 //        if(newData instanceof ResultSetBuffer == false) {
 //            throw new IllegalArgumentException("newData argument must be a ResultSetBuffer.");
 //        }
 
-        List currentBuffer = (List) this.getDataList();
+        List<List<Object>> currentBuffer = (List<List<Object>>) this.getDataList();
         if(currentBuffer != null && currentBuffer instanceof ResultSetBuffer) {
             ((ResultSetBuffer) currentBuffer).removeResultSetBufferListener(this);
         }

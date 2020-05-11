@@ -67,7 +67,7 @@ import java.lang.reflect.*;
 import org.glasser.util.*;
 
 
-public class ReflectionColumnManager extends AbstractColumnManager {
+public class ReflectionColumnManager<R> extends AbstractColumnManager<R> {
 
 
     private Class objectClass = null;
@@ -76,7 +76,7 @@ public class ReflectionColumnManager extends AbstractColumnManager {
 
     private Method[] setters = null;
 
-    public ReflectionColumnManager(String[] columnNames, Class objectClass, String[] getterNames, String[] setterNames) 
+    public ReflectionColumnManager(String[] columnNames, Class<R> objectClass, String[] getterNames, String[] setterNames) 
         throws NoSuchMethodException
     {
         super.setColumnNames(columnNames);
@@ -112,7 +112,7 @@ public class ReflectionColumnManager extends AbstractColumnManager {
     }
 
 
-    public Object getValueAt(int rowIndex, int columnIndex, Object rowObject) {
+    public Object getValueAt(int rowIndex, int columnIndex, R rowObject) {
 
         Method getter = getters[columnIndex];
         try {
@@ -127,7 +127,7 @@ public class ReflectionColumnManager extends AbstractColumnManager {
         }
     }
 
-    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, Object rowObject) {
+    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, R rowObject) {
 
         Method setter = setters[columnIndex];
         try {
@@ -142,7 +142,7 @@ public class ReflectionColumnManager extends AbstractColumnManager {
     }
 
 
-    public boolean isCellEditable(int rowIndex, int columnIndex, Object rowObject) {
+    public boolean isCellEditable(int rowIndex, int columnIndex, R rowObject) {
         return rowObject != null && setters != null && setters[columnIndex] != null;
     }
 

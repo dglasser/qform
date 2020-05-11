@@ -67,7 +67,7 @@ package org.glasser.swing.table;
 import javax.swing.*;
 import java.util.*;
 
-public class ListColumnManager extends AbstractColumnManager {
+public class ListColumnManager<E> extends AbstractColumnManager<List<E>> {
 
 
     public ListColumnManager(String[] columnNames, Class[] columnClasses) {
@@ -75,14 +75,14 @@ public class ListColumnManager extends AbstractColumnManager {
     }
 
 
-    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, Object rowObject) {
-        ((List) rowObject).set(columnIndex, newCellValue);
+    public void setValueAt(E newCellValue, int rowIndex, int columnIndex, List<E> rowObject) {
+        rowObject.set(columnIndex, newCellValue);
     }
 
 
-    public Object getValueAt(int rowIndex, int columnIndex, Object rowObject) {
+    public E getValueAt(int rowIndex, int columnIndex, List<E>  rowObject) {
         if(rowObject == null) return null;
-        return ((List) rowObject).get(columnIndex);
+        return rowObject.get(columnIndex);
     }
 
 }

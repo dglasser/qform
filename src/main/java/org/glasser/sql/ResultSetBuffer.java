@@ -68,7 +68,7 @@ import org.glasser.util.*;
 import org.glasser.util.comparators.MutableListComparator;
 
 
-public class ResultSetBuffer extends Vector {
+public class ResultSetBuffer extends Vector<List<Object>> {
 
 
     public static boolean debug = System.getProperty("ResultSetBuffer.debug") != null;
@@ -99,13 +99,14 @@ public class ResultSetBuffer extends Vector {
 
     protected boolean readAheadEnabled = true;
 
-    protected MutableListComparator comparator = new MutableListComparator();
+    protected MutableListComparator<Object> comparator = new MutableListComparator<>();
 
     /**
      * This is the index of the last column on which the buffer was sorted. 
      * Its value is -1 if the buffer has not yet been sorted.
      */
     protected int sortColumn  = -1;
+
 
     /**
      * This indicates whether the last sort applied to the buffer was in 
@@ -116,7 +117,7 @@ public class ResultSetBuffer extends Vector {
     public void replaceCurrentRow(ResultSet rs) 
         throws SQLException
     {
-        Vector newRow = readRow(rs);
+        Vector<Object> newRow = readRow(rs);
         set(cursor, newRow);
     }
 
@@ -339,15 +340,15 @@ public class ResultSetBuffer extends Vector {
         return (Vector) get(cursor);
     }
 
-    public Vector getCurrentRow() {
+    public List<Object> getCurrentRow() {
         if(cursor < 0) return null;
-        return (Vector) get(cursor);
+        return get(cursor);
     }
 
-    public Vector getCurrentRowClone() {
-        Vector v = getCurrentRow();
+    public List<Object> getCurrentRowClone() {
+        List<Object> v = getCurrentRow();
         if(v == null) return null;
-        return (Vector) v.clone();
+        return (List<Object>) ((Vector<Object>)v).clone();
     }
 
     /**
@@ -376,7 +377,7 @@ public class ResultSetBuffer extends Vector {
     }
 
 
-    public Vector getNextRow() {
+    public List<Object> getNextRow() {
         //System.out.println("getNextRow - cursor = " + cursor + "  size = " + size());
         if(endOfResultsReached && (cursor >= (size()-1))) return null;
         int temp = cursor;
@@ -390,7 +391,7 @@ public class ResultSetBuffer extends Vector {
         }
     }
 
-    public Vector getRowAt(int row) {
+    public List<Object> getRowAt(int row) {
 //        System.out.println("getRowAt(" + row + ")");
         if(endOfResultsReached == false && (size() - readAhead) <= row) {
             try {
@@ -402,22 +403,22 @@ public class ResultSetBuffer extends Vector {
                     + row + ")");
             }
         }
-        return (Vector) super.get(row);
+        return super.get(row);
     }
 
-    public Object get(int index) {
+    public List<Object> get(int index) {
         return getRowAt(index);
     }
 
-    public Object elementAt(int index) {
+    public List<Object> elementAt(int index) {
         return getRowAt(index);
     }
 
 
-    public Vector getFirstRow() {
+    public List<Object> getFirstRow() {
         if(isEmpty()) return null;
         cursor = 0;
-        return (Vector) get(cursor);
+        return get(cursor);
     }
 
     public boolean isAtBeginning() {
@@ -432,8 +433,8 @@ public class ResultSetBuffer extends Vector {
         return cursor;
     }
 
-    public Vector[] getCurrentRowset() {
-        return (Vector[]) toArray(new Vector[0]);
+    public List<Object>[] getCurrentRowset() {
+        return (List<Object>[]) toArray(new Vector[0]);
     }
 
     public void setCursor(int value) {
@@ -507,7 +508,7 @@ public class ResultSetBuffer extends Vector {
             this.comparator.setSortDescending(sortDescending);
 
             
-            Vector selectedRow = null;
+            List<? extends Object> selectedRow = null;
             if(cursor > -1) { 
                 selectedRow = this.getRowAt(cursor);
                 if(debug) {

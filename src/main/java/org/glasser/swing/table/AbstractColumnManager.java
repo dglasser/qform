@@ -68,7 +68,7 @@ import javax.swing.table.*;
 
 
 
-public abstract class AbstractColumnManager implements ColumnManager {
+public abstract class AbstractColumnManager<R> implements ColumnManager<R> {
 
 
 
@@ -123,7 +123,7 @@ public abstract class AbstractColumnManager implements ColumnManager {
      * @see #getValueAt
      * @see #isCellEditable
      */
-    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, Object rowObject) {
+    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, R rowObject) {
         throw new RuntimeException("setValueAt() has not been implemented in " + getClass().getName() + ".");
     }
 
@@ -135,7 +135,7 @@ public abstract class AbstractColumnManager implements ColumnManager {
      * @param columnIndex the columnContaining the cell.
      * @param rowObject the object containing the row's data.
      */
-    public abstract Object getValueAt(int rowIndex, int columnIndex, Object rowObject);
+    public abstract Object getValueAt(int rowIndex, int columnIndex, R rowObject);
 
     /**
      * Returns the most specific superclass for all the cell values
@@ -161,7 +161,7 @@ public abstract class AbstractColumnManager implements ColumnManager {
      * @return  true if the cell is editable
      * @see #setValueAt
      */
-    public boolean isCellEditable(int rowIndex, int columnIndex, Object rowObject) {
+    public boolean isCellEditable(int rowIndex, int columnIndex, R rowObject) {
         if(editableColumns == null) return false;
         return editableColumns[columnIndex];
     }

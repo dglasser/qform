@@ -34,12 +34,18 @@ package org.glasser.qform;
 
 
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -1655,7 +1661,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         int[] selectedIndexes = null;
         if(selectedOnly) selectedIndexes = qp.getSelectedIndexes();
 
-        Vector[] currentRowset = qp.getCurrentRowset();
+        List<Object>[] currentRowset = qp.getCurrentRowset();
 
         try {
 
@@ -2094,9 +2100,9 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             ForeignKey[] fkeys = DBUtil.getForeignKeys(rs);
 
             for(int j=0; j<fkeys.length; j++) {
-                Vector fkeyColumns = fkeys[j].getForeignKeyColumns();
+                List<ForeignKeyColumn> fkeyColumns = fkeys[j].getForeignKeyColumns();
                 for(int k=0; fkeyColumns != null && k<fkeyColumns.size(); k++) {
-                    ForeignKeyColumn fkc = (ForeignKeyColumn) fkeyColumns.get(k);
+                    ForeignKeyColumn fkc = fkeyColumns.get(k);
                     fkc.setLocalColumn(ti.getColumn(fkc.getLocalColumnName()));
                 }
             }
@@ -2129,7 +2135,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             ForeignKey[] fkeys = DBUtil.getForeignKeys(rs);
 
             for(int j=0; j<fkeys.length; j++) {
-                Vector fkeyColumns = fkeys[j].getForeignKeyColumns();
+                List<ForeignKeyColumn> fkeyColumns = fkeys[j].getForeignKeyColumns();
                 for(int k=0; fkeyColumns != null && k<fkeyColumns.size(); k++) {
                     ForeignKeyColumn fkc = (ForeignKeyColumn) fkeyColumns.get(k);
                     fkc.setLocalColumn(ti.getColumn(fkc.getForeignColumnName()));

@@ -34,7 +34,11 @@ package org.glasser.qform;
 
 
 import java.sql.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.util.*;
@@ -94,9 +98,9 @@ public class BaseForm extends JPanel {
     }
 
     
-    public BaseForm(Vector fieldList) {
+    public BaseForm(List<TextBox> fieldList) {
 
-        fields = (TextBox[]) fieldList.toArray(new TextBox[fieldList.size()]);        
+        fields = fieldList.toArray(new TextBox[fieldList.size()]);        
 
         int vgap = 5;
 
@@ -270,7 +274,7 @@ public class BaseForm extends JPanel {
         if(resultSetBuffer == null) throw new RuntimeException("There is no current record.");
 
         // collect the indices of all of the PK fields.
-        ArrayList pkFieldIndices = new ArrayList();
+        ArrayList<Integer> pkFieldIndices = new ArrayList<>();
         for(int j=0; j<fields.length; j++) {
             if(fields[j].isPkComponent()) {
                 pkFieldIndices.add(new Integer(j));
@@ -291,12 +295,12 @@ public class BaseForm extends JPanel {
         if(pkFieldIndices.size() == 0) {
             throw new UnknownPrimaryKeyException();
         }
-        Vector row = resultSetBuffer.getCurrentRow();
+        List<Object> row = resultSetBuffer.getCurrentRow();
         StringBuffer buffer = new StringBuffer(25 + (40* pkFieldIndices.size()));
         if(includeWhere) buffer.append("WHERE ");
         for(int j=0; j<pkFieldIndices.size(); j++) {
 
-            int fieldIndex = ((Integer) pkFieldIndices.get(j)).intValue();
+            int fieldIndex = pkFieldIndices.get(j);
 
             TextBox field = fields[fieldIndex];
 
@@ -324,7 +328,7 @@ public class BaseForm extends JPanel {
 
     public String getSetClause() {
         if(resultSetBuffer == null) throw new RuntimeException("There is no current record.");
-        Vector row = resultSetBuffer.getCurrentRow();
+        List<Object> row = resultSetBuffer.getCurrentRow();
         StringBuffer buffer = new StringBuffer(fields.length * 30);
         boolean dirtyFieldFound = false;
         for(int j=0; j<fields.length; j++) {
@@ -343,7 +347,7 @@ public class BaseForm extends JPanel {
      */
     public int updateCurrentRow() {
         if(resultSetBuffer == null) return -1;
-        Vector cachedRow = resultSetBuffer.getCurrentRow();
+        List<Object> cachedRow = resultSetBuffer.getCurrentRow();
 
         if(cachedRow != null) {
             for(int j=0; j<fields.length; j++) {
@@ -370,11 +374,11 @@ public class BaseForm extends JPanel {
 
         if(resultSetBuffer == null) return -1;
 
-        Vector cachedRow = resultSetBuffer.getCurrentRow();
+        List<Object> cachedRow = resultSetBuffer.getCurrentRow();
 
         if(cachedRow != null) {
             for(int j=0; j<fields.length; j++) {
-                Object fieldValue = cachedRow.elementAt(j);
+                Object fieldValue = cachedRow.get(j);
                 fields[j].setValue(fieldValue);
             }
             return resultSetBuffer.getCursor();
@@ -392,7 +396,7 @@ public class BaseForm extends JPanel {
 
     public int next() throws SQLException {
 
-        Vector cachedRow = resultSetBuffer.getNextRow();
+        List<? extends Object> cachedRow = resultSetBuffer.getNextRow();
 
         // if we're at the end of the backbuffer...
         if(cachedRow == null) {
@@ -403,7 +407,7 @@ public class BaseForm extends JPanel {
         else {
             // if we're not at the end of the backbuffer, read in the next row from it.
             for(int j = 0; j < fields.length; j++) {
-                Object fieldValue = cachedRow.elementAt(j);
+                Object fieldValue = cachedRow.get(j);
                 fields[j].setValue(fieldValue);
             }
             return resultSetBuffer.getCursor();
@@ -437,7 +441,7 @@ public class BaseForm extends JPanel {
 
         if(resultSetBuffer.isAtBeginning()) return false;
 
-        Vector cachedRow = resultSetBuffer.getFirstRow();
+        List<Object> cachedRow = resultSetBuffer.getFirstRow();
 
         if(cachedRow != null) {
             for(int j=0; j<fields.length; j++) {
@@ -497,17 +501,17 @@ public class BaseForm extends JPanel {
         current();
     }
 
-    public Vector[] getCurrentRowset() {
+    public List<Object>[] getCurrentRowset() {
         if(resultSetBuffer == null) return null;
         return resultSetBuffer.getCurrentRowset();
     }
 
-    public Vector getCurrentRowClone() {
+    public List<Object> getCurrentRowClone() {
         if(resultSetBuffer == null) return null;
         return resultSetBuffer.getCurrentRowClone();
     }
 
-    public void populateFields(Vector v) {
+    public void populateFields(List<Object> v) {
         for(int j=0; j<fields.length; j++) {
             if(fields[j].isTypeDisplayable()) {
                 fields[j].setValue(v.get(j));
@@ -515,8 +519,8 @@ public class BaseForm extends JPanel {
         }
     }
 
-    public Vector getContentsOfFields() {
-        Vector v = new Vector();
+    public Vector<Object> getContentsOfFields() {
+        Vector<Object> v = new Vector();
         for(int j=0; j<fields.length; j++) {
             v.add(fields[j].getText());
         }

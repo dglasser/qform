@@ -41,7 +41,7 @@ import org.glasser.swing.table.*;
 /**
  * This ColumnManager is used for the Foreign Key Columns table on a Foreign Keys panel.
  */
-public class ForeignKeyColumnManager extends AbstractColumnManager {
+public class ForeignKeyColumnManager extends AbstractColumnManager<ForeignKeyColumn> {
 
 
     protected final static String[] COLUMN_NAMES = {"Key Seq", "Local Column", "Data Type", "SQL Type", "Nullable", "Foreign Column"};
@@ -54,9 +54,9 @@ public class ForeignKeyColumnManager extends AbstractColumnManager {
         setColumnClasses(COLUMN_CLASSES);
     }
     
-    public Object getValueAt(int row, int column, Object rowObject) {
+    public Object getValueAt(int row, int column, ForeignKeyColumn rowObject) {
 
-        ForeignKeyColumn fc = (ForeignKeyColumn) rowObject;
+        ForeignKeyColumn fc = rowObject;
         if(fc == null) return null;
         Column lc = fc.getLocalColumn();
         switch(column) {

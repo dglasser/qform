@@ -91,12 +91,12 @@ public class TableInfoPanel extends JPanel {
     private JPanel fkeyPanel = new JPanel();
     private JTable fkeysTable = null;
 
-    private ListTableModel fcolModel = new ListTableModel(new ForeignKeyColumnManager(), null);
+    private ListTableModel<ForeignKeyColumn> fcolModel = new ListTableModel<>(new ForeignKeyColumnManager(), null);
     private JTable fcolTable = new JTable(fcolModel);
 
 
 
-    private ListTableModel exkeyModel = null;
+    private ListTableModel<ForeignKey> exkeyModel = null;
     private JPanel exkeyPanel = new JPanel();
     private JTable exkeysTable = null;
 
@@ -140,11 +140,11 @@ public class TableInfoPanel extends JPanel {
      * the Foreign Keys tab.
      */
 	private final static MethodComparator FOREIGN_KEY_COMPARATOR =
-		new MethodComparator(ForeignKey.class, 
+		new MethodComparator<ForeignKey> (ForeignKey.class, 
 							 "getForeignTableName", 
 							 false, 
 							 false, 
-							 new MethodComparator(ForeignKey.class, "getForeignKeyName"), 
+							 new MethodComparator<ForeignKey>(ForeignKey.class, "getForeignKeyName"), 
 							 false);
 
 
@@ -152,12 +152,12 @@ public class TableInfoPanel extends JPanel {
      * This comparator is used to sort the ForeignKey objects displayed
      * on the Exported Keys tab.
      */
-	private final static MethodComparator EXPORTED_KEY_COMPARATOR =
-		new MethodComparator(ForeignKey.class, 
+	private final static MethodComparator<ForeignKey> EXPORTED_KEY_COMPARATOR =
+		new MethodComparator<ForeignKey>(ForeignKey.class, 
 							 "getLocalTableName", 
 							 false, 
 							 false, 
-							 new MethodComparator(ForeignKey.class, "getForeignKeyName"), 
+							 new MethodComparator<ForeignKey>(ForeignKey.class, "getForeignKeyName"), 
 							 false);
 
 
@@ -320,8 +320,8 @@ public class TableInfoPanel extends JPanel {
 			Arrays.sort(exkeys, EXPORTED_KEY_COMPARATOR);
     
             tabbedPane.addTab("Exported Keys", exkeyPanel);
-            exkeyModel = new ListTableModel(
-                new ReflectionColumnManager(new String[] {"Foreign Table", "Exported Key Name"},
+            exkeyModel = new ListTableModel<ForeignKey>(
+                new ReflectionColumnManager<ForeignKey>(new String[] {"Foreign Table", "Exported Key Name"},
                                             ForeignKey.class,
                                             new String[] {"getLocalTableName", "getForeignKeyName"},
                                             null), Arrays.asList(exkeys));
@@ -339,7 +339,7 @@ public class TableInfoPanel extends JPanel {
                     public void valueChanged(ListSelectionEvent e) {
                         int row = exkeysTable.getSelectedRow();
                         if(row > -1) {
-                            ForeignKey f = (ForeignKey) exkeyModel.getObjectAtRow(row);
+                            ForeignKey f = exkeyModel.getObjectAtRow(row);
                             if(f != null) {
                                 excolModel.setDataList(f.getForeignKeyColumns());
                             }

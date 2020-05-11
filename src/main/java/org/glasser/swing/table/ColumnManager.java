@@ -68,7 +68,7 @@ import javax.swing.table.*;
 
 
 
-public interface ColumnManager extends java.io.Serializable {
+public interface ColumnManager<R> extends java.io.Serializable {
 
 
     /**
@@ -89,7 +89,7 @@ public interface ColumnManager extends java.io.Serializable {
      * @param   columnIndex     the column whose value is to be queried
      * @return  the value Object at the specified cell
      */
-    public Object getValueAt(int rowIndex, int columnIndex, Object rowObject);
+    public Object getValueAt(int rowIndex, int columnIndex, R rowObject);
         
     /**
      * Returns the name of the column at <code>columnIndex</code>.  This is used
@@ -122,7 +122,7 @@ public interface ColumnManager extends java.io.Serializable {
      * @return  true if the cell is editable
      * @see #setValueAt
      */
-    public boolean isCellEditable(int rowIndex, int columnIndex, Object rowObject);        
+    public boolean isCellEditable(int rowIndex, int columnIndex, R rowObject);        
 
 
     /**
@@ -135,7 +135,7 @@ public interface ColumnManager extends java.io.Serializable {
      * @see #getValueAt
      * @see #isCellEditable
      */
-    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, Object rowObject);
+    public void setValueAt(Object newCellValue, int rowIndex, int columnIndex, R rowObject);
         
 
 
