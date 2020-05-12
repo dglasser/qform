@@ -122,7 +122,7 @@ public class Util {
 
     };
 
-    private static HashMap primitiveToWrapperClassMap = new HashMap();
+    private static HashMap<Class, Class> primitiveToWrapperClassMap = new HashMap<>();
 
     static {
 
@@ -191,7 +191,7 @@ public class Util {
         if(lines == null || lines.length() <= lineLength) return lines;
         StringTokenizer st = new StringTokenizer(lines, "\n", true);
         int j=0;
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while(st.hasMoreTokens()) {
             String s = st.nextToken();
             j++;
@@ -242,7 +242,7 @@ public class Util {
         return buffer.toString();
     }
 
-
+    @SuppressWarnings("unchecked")
     public static void addMappings(Map map, Object[][] mappings) {
         for(int j=0; j<mappings.length; j++) {
             map.put(mappings[j][0], mappings[j][1]);

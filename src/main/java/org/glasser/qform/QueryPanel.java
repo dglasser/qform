@@ -891,7 +891,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             case INSERT :
                 // get only the fields that have something
                 // in them to build the insert statement with.
-                ArrayList list = new ArrayList(textBoxes.size());
+                ArrayList<TextBox> list = new ArrayList<>(textBoxes.size());
                 for(int j=0; j<textBoxes.size(); j++) {
                     TextBox textBox = (TextBox) textBoxes.get(j);
                     if(!Util.isNothing(textBox.getText())) {
@@ -1333,11 +1333,11 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     }
 
 
-    private Stack historyList = new Stack();
+    private Stack<String> historyList = new Stack<>();
 
     private boolean lastQueryBlank = false;
 
-    public java.util.List getHistoryList() {
+    public java.util.List<String> getHistoryList() {
         return historyList;
     }
 

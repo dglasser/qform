@@ -36,7 +36,8 @@ package org.glasser.qform;
 import javax.swing.*;
 import java.util.*;
 import javax.swing.border.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Frame;
 import javax.swing.event.*;
 import java.awt.event.*;
 
@@ -51,7 +52,7 @@ public class TableSelector extends JDialog implements ActionListener {
     private static boolean debug = false;
 
 
-    private class DataSourceListItem  implements Comparable {
+    private class DataSourceListItem  implements Comparable<DataSourceListItem> {
 
         private String displayName = null;
 
@@ -86,9 +87,9 @@ public class TableSelector extends JDialog implements ActionListener {
             return sourceId.intValue();
         }
 
-        public int compareTo(Object other) {
+        public int compareTo(DataSourceListItem other) {
             try {
-                return sourceId.compareTo(((DataSourceListItem) other).getSourceId());
+                return sourceId.compareTo(other.getSourceId());
             } catch(Exception ex) {
                 return 0;
             }
@@ -97,31 +98,27 @@ public class TableSelector extends JDialog implements ActionListener {
 
 
 
-    protected JComboBox sourceList = new JComboBox();
+    protected JComboBox<DataSourceListItem> sourceList = new JComboBox<>();
 
-    protected Vector sourceVector = new Vector();
+    protected Vector<DataSourceListItem> sourceVector = new Vector<>();
 
-    protected DefaultComboBoxModel sourceModel = new DefaultComboBoxModel(sourceVector);
+    protected DefaultComboBoxModel<DataSourceListItem> sourceModel = new DefaultComboBoxModel<>(sourceVector);
 
-    private JComboBox schemaList = new JComboBox();
+    private JComboBox<String> schemaList = new JComboBox<>();
 
-    private ComboBoxModel emptySchemaListModel = schemaList.getModel();
+    private ComboBoxModel<String> emptySchemaListModel = schemaList.getModel();
 
-    private Vector emptyVector = new Vector();
+    private Vector<TableInfo> emptyVector = new Vector<>();
 
-    private JList tableList = new JList();
+    private JList<TableInfo> tableList = new JList<>();
 
     private JButton btnOK = new JButton("OK");
 
     private JButton btnCancel = new JButton("Cancel");
 
-//    HashMap tableMap = new HashMap();
-//
-//    HashMap schemaListMap = new HashMap();
+    private HashMap<Integer, DefaultComboBoxModel<String>> schemaModelMap = new HashMap<>();
 
-    private HashMap schemaModelMap = new HashMap();
-
-    private HashMap tableListMap = new HashMap();
+    private HashMap<Integer, HashMap<String, List<TableInfo>>> tableListMap = new HashMap<>();
 
     private Object[] selections = null;
 
@@ -132,22 +129,22 @@ public class TableSelector extends JDialog implements ActionListener {
     
 
 
-    public void addDataSource(Integer sourceId, String sourceName, HashMap tables) 
+    public void addDataSource(Integer sourceId, String sourceName, HashMap<String, List<TableInfo>> tables) 
     {
 
         DataSourceListItem item = new DataSourceListItem(sourceId, sourceName);
         sourceVector.add(item);
-        Collections.sort(sourceVector);
+        Collections.<DataSourceListItem>sort(sourceVector);
         sourceList.setModel(sourceModel);
 
-        Vector schemas = new Vector();
-        for(Iterator i = tables.keySet().iterator(); i.hasNext(); ) {
+        Vector<String> schemas = new Vector<String>();
+        for(Iterator<String> i = tables.keySet().iterator(); i.hasNext(); ) {
             schemas.add(i.next());
         }
 
-        Collections.sort(schemas);
+        Collections.<String>sort(schemas);
 
-        schemaModelMap.put(sourceId, new DefaultComboBoxModel(schemas));
+        schemaModelMap.put(sourceId, new DefaultComboBoxModel<String>(schemas));
 
 
         tableListMap.put(sourceId, tables);
@@ -314,7 +311,7 @@ public class TableSelector extends JDialog implements ActionListener {
             DataSourceListItem sourceItem = (DataSourceListItem) sourceList.getSelectedItem();
             if(sourceItem == null) return;
             Integer sourceId = sourceItem.getSourceId();
-            DefaultComboBoxModel schemaModel = (DefaultComboBoxModel) schemaModelMap.get(sourceId);
+            DefaultComboBoxModel<String> schemaModel = schemaModelMap.get(sourceId);
             schemaList.setModel(schemaModel);
             try {
                 schemaList.setSelectedIndex(0);
@@ -332,11 +329,14 @@ public class TableSelector extends JDialog implements ActionListener {
             if(sourceItem == null) return; // all lists are empty.
             Integer sourceId = sourceItem.getSourceId();
             String owner = (String) schemaList.getSelectedItem(); 
-            HashMap schemaTables = (HashMap) tableListMap.get(sourceId);
+            HashMap<String, List<TableInfo>> schemaTables = tableListMap.get(sourceId);
 
             if(owner != null) {
-                Vector v = (Vector) schemaTables.get(owner);
-                tableList.setListData(v);
+                List<TableInfo> v = schemaTables.get(owner);
+                if(v == null) {
+                    v = emptyVector;
+                }
+                tableList.setListData(v.toArray(new TableInfo[v.size()]));
                 tableList.requestFocus();
                 try {
                     if(v.size() > 0) {
@@ -422,7 +422,7 @@ public class TableSelector extends JDialog implements ActionListener {
                 TableInfo[] tis = DBUtil.getTableInfos(rs);
                 rs.close();
                 c.close();
-                HashMap map = DBUtil.getTableInfoLists(tis, "<DEFAULT SCHEMA>");
+                HashMap<String, List<TableInfo>> map = DBUtil.getTableInfoLists(tis, "<DEFAULT SCHEMA>");
                 ts.addDataSource(new Integer(j+1), lds[j].getDisplayName(), map);
             }
             catch(Exception ex) {

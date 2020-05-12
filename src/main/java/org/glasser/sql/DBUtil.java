@@ -155,26 +155,26 @@ public class DBUtil implements java.io.Serializable {
     }
 
 
-    public static HashMap getTableInfoLists(TableInfo[] tables, String defaultSchemaString) {
+    public static HashMap<String, List<TableInfo>> getTableInfoLists(TableInfo[] tables, String defaultSchemaString) {
 
         // first sort the list of tables by their name so the individual
         // lists will be sorted.
 //        Arrays.sort(tables, TableInfo.NAME_COMPARATOR);
 
-        HashMap map = new HashMap();
+        HashMap<String, List<TableInfo>> map = new HashMap<>();
 
         // if there are now tables in the list, we'll create
         // an empty list for the default schema
         if(tables == null || tables.length == 0) {
-            map.put(defaultSchemaString, new Vector());
+            map.put(defaultSchemaString, new ArrayList<TableInfo>());
         }
         for(int j=0; j<tables.length; j++) {
             TableInfo ti = tables[j];
             String schema = ti.getTableSchem();
             if(schema == null) schema = defaultSchemaString;
-            Vector v = (Vector) map.get(schema);
+            List<TableInfo> v = (List<TableInfo>) map.get(schema);
             if(v == null) {
-                v = new Vector();
+                v = new ArrayList<TableInfo>();
                 map.put(schema, v);
             }
             v.add(ti);

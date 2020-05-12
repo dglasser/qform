@@ -62,7 +62,11 @@
 package org.glasser.swing;
 
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Point;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -81,7 +85,7 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
 
     private LocalDataSourceConfigPanel configPanel = new LocalDataSourceConfigPanel();
 
-    private JList listbox = new JList();
+    private JList<LocalDataSourceConfig> listbox = new JList<>();
 
     private JButton btnNew = new JButton("New");
 
@@ -97,7 +101,7 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
 
     private JButton btnConnect = new JButton("Connect");
 
-    private Vector configVector = new Vector();
+    private List<LocalDataSourceConfig> configList = new ArrayList<>();
 
 
     private Object[][] buttonConfig = 
@@ -165,13 +169,13 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
                 }
                 break;
             case EDIT_EXISTING :
-                selectedConfig = (LocalDataSourceConfig) configVector.get(index);
+                selectedConfig = configList.get(index);
                 break;
             case NOTHING_SELECTED :
                 configPanel.clearFields();
                 break;
             case ITEM_SELECTED :
-                LocalDataSourceConfig ld = (LocalDataSourceConfig) configVector.get(index);
+                LocalDataSourceConfig ld = configList.get(index);
                 this.configPanel.displayObject(ld);
                 break;
 
@@ -206,8 +210,8 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
             if(reply == JOptionPane.NO_OPTION) return;
 
             int index = listbox.getSelectedIndex();
-            if(index > -1) configVector.remove(index);
-            listbox.setListData(configVector);
+            if(index > -1) configList.remove(index);
+            listbox.setListData(configList.toArray(new LocalDataSourceConfig[configList.size()]));
             configPanel.clearFields();
             setScreenState(NOTHING_SELECTED);
 
@@ -230,11 +234,11 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
             else {
                 selectedConfig = new LocalDataSourceConfig();
                 configPanel.updateObject(selectedConfig);
-                configVector.add(selectedConfig);
+                configList.add(selectedConfig);
             }
 
-            Collections.sort(configVector, LocalDataSourceConfig.DISPLAY_NAME_COMPARATOR);
-            listbox.setListData(configVector);
+            Collections.<LocalDataSourceConfig>sort(configList, LocalDataSourceConfig.DISPLAY_NAME_COMPARATOR);
+            listbox.setListData(configList.toArray(new LocalDataSourceConfig[configList.size()]));
             listbox.setSelectedValue(selectedConfig, true);
             
             selectedConfig = null;
@@ -308,16 +312,16 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
     }
 
 
-    public void setList(Vector configs) {
+    public void setList(List<LocalDataSourceConfig> configs) {
 
         Collections.sort(configs, LocalDataSourceConfig.DISPLAY_NAME_COMPARATOR);
-        configVector = configs;
-        listbox.setListData(configs);
+        configList = configs;
+        listbox.setListData((LocalDataSourceConfig[]) configs.toArray(new LocalDataSourceConfig[configList.size()]));
 
     }
 
-    public Vector getList() {
-        return configVector;
+    public List<LocalDataSourceConfig> getList() {
+        return configList;
     }
 
 

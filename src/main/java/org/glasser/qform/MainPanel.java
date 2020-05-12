@@ -713,7 +713,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     }
 
-    private HashMap lafMenuItems = new HashMap();
+    private HashMap<String, JRadioButtonMenuItem> lafMenuItems = new HashMap<>();
 
 
     /**
@@ -1011,9 +1011,9 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     private int nextDataSourceId = 1;
 
-    private HashMap dsMap = new HashMap();
+    private HashMap<Integer, DataSource> dsMap = new HashMap<>();
 
-    private HashMap localConfigMap = new HashMap();
+    private HashMap<Integer, LocalDataSourceConfig> localConfigMap = new HashMap<>();
 
     private HashSet<Integer> pkeysNotSupported = new HashSet<>();
 
@@ -1021,11 +1021,11 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     private HashSet<Integer> exkeysNotSupported = new HashSet<>();
 
-    private HashSet establishedConnections = new HashSet();
+    private HashSet<LocalDataSourceConfig> establishedConnections = new HashSet<>();
 
     private Properties editableTypes = new Properties();
 
-    private HashMap driverClassToEditableTypeMap = new HashMap();
+    private HashMap<String, Set<Integer>> driverClassToEditableTypeMap = new HashMap<>();
 
 
     {
@@ -1107,13 +1107,13 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         if(command == null) command = "";
         if(command.equals("DATA_SOURCE_DIALOG")) {
             setStatusMessage(tooltip);
-            Vector configs = new Vector(Arrays.asList(config.getLocalDataSourceConfigs()));
+            List<LocalDataSourceConfig> configs = new ArrayList<>(Arrays.asList(config.getLocalDataSourceConfigs()));
             this.configDialog.setList(configs);
             configDialog.setVisible(true);
             LocalDataSourceConfig ld = configDialog.getSelectedItem();
 //            System.out.println("SELECTED DATASOURCE: " + ld);
             configs = configDialog.getList();
-            ArrayList list = new ArrayList(configs.size());
+            ArrayList<LocalDataSourceConfig> list = new ArrayList<>(configs.size());
             list.addAll(configs);
             config.setLocalDataSourceConfigs(list);
             if(ld != null) {
@@ -1759,10 +1759,10 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
             
             rs.close();
-            HashMap map = DBUtil.getTableInfoLists(tis, DEFAULT_SCHEMA);
+            HashMap<String, List<TableInfo>> map = DBUtil.getTableInfoLists(tis, DEFAULT_SCHEMA);
             this.tableSelector.addDataSource(id, config.getDisplayName(), map);
             this.dsMap.put(id, ds);
-            this.localConfigMap.put(id, config.clone());
+            this.localConfigMap.put(id, (LocalDataSourceConfig) config.clone());
             setStatusMessage("Connected to " + config.getDisplayName() + ".");
 
             // put the original (uncloned) config in a set se we'll know we're already
@@ -2181,13 +2181,13 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     private Set getEditableTypes(String driverClassName) {
 
-        Set set = (Set) driverClassToEditableTypeMap.get(driverClassName);
+        Set<Integer> set = driverClassToEditableTypeMap.get(driverClassName);
         if(set != null) return set;
 
 
         // see if the DriverClassList class knows anything about this driver type.
         set = DriverClassList.getEditableTypes(driverClassName);
-        if(set == null) set = new HashSet();
+        if(set == null) set = new HashSet<Integer>();
         driverClassToEditableTypeMap.put(driverClassName, set);
 
         // see if any editable types were configured in the file for this driver type

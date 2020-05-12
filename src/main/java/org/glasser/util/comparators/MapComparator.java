@@ -109,7 +109,7 @@ public class MapComparator<K, V> extends BaseComparator<Map<? super K, ? extends
         this.valueComparator = valueComparator;
     }
 
-
+    @SuppressWarnings("unchecked")
     public int doCompare(Map<? super K, ? extends V> o1, Map<? super K, ? extends V> o2) {
 
         V val1 = o1.get(key);

@@ -68,7 +68,7 @@ import org.glasser.sql.*;
 import java.awt.*;
 
 
-public class DriverClassSelector extends JComboBox {
+public class DriverClassSelector extends JComboBox<String> {
 
 
     protected static String[] availableDrivers = DriverClassList.getAvailableDriverClassNames();

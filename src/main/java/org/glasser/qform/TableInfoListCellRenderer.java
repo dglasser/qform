@@ -34,6 +34,7 @@ package org.glasser.qform;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import org.glasser.sql.*;
 
 
@@ -41,7 +42,7 @@ import org.glasser.sql.*;
 public class TableInfoListCellRenderer extends DefaultListCellRenderer {
 
 
-	private java.util.HashMap italicFontMap = new java.util.HashMap();
+	private HashMap<Font, Font> italicFontMap = new HashMap<>();
 
     public Component getListCellRendererComponent(JList list,
                                               Object value,

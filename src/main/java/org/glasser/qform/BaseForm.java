@@ -66,8 +66,6 @@ public class BaseForm extends JPanel {
 
     protected boolean endReached = false;
 
-    int minWidth = 0;
-
     public ResultSetBuffer getResultSetBuffer() {
         return resultSetBuffer;
     }
@@ -198,19 +196,13 @@ public class BaseForm extends JPanel {
             fields[fields.length - 1].setNextFocusableComponent(fields[0]);
         }
 
-        // constrain the width to make sure the scrollpane does not let the
+        // This will constrain the width to make sure the scrollpane does not let the
         // this panel grow to a huge width, and it will also
         // make it so that vertical scrolling occurs (instead of clipping).
-        minWidth = gbLayout.minimumLayoutSize(this).width;
-    }
-
-
-    /**
-     * Overriden to constrain the preferred width.
-     */
-    public Dimension getPreferredSize() {
-        Dimension d = super.getPreferredSize();
-        return new Dimension(minWidth, d.height);
+        // The height in this dimension will also be slightly larger than 
+        // the default calculated height, which is too small and causes the top and bottom fields
+        // to be unreachable by scrolling.
+        this.setPreferredSize(gbLayout.minimumLayoutSize(this));
     }
 
     public boolean getHasPK() {

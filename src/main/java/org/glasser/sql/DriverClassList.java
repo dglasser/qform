@@ -120,7 +120,7 @@ public class DriverClassList {
         ClassLoader extensionLoader = ExtensionClassLoader.getSingleton();
         
         if(availableDrivers == null) {
-            ArrayList foundDriverClasses = new ArrayList();
+            ArrayList<String> foundDriverClasses = new ArrayList<>();
             for(int j=0; j<driverList.length; j++) {
                 try {
                     extensionLoader.loadClass(driverList[j]);
@@ -151,7 +151,7 @@ public class DriverClassList {
         {"oracle.jdbc.driver.OracleDriver", "1111"}
     };
 
-    private final static HashMap driverClassToEditableTypeMap = new HashMap();
+    private final static HashMap<String, Set<Integer>> driverClassToEditableTypeMap = new HashMap<>();
 
     static {
 
@@ -159,7 +159,7 @@ public class DriverClassList {
             String[] row = driverClassToEditableTypeMappings[j];
             String types = row[1];
             StringTokenizer st = new StringTokenizer(types);
-            HashSet setForDriverClass = new HashSet();
+            HashSet<Integer> setForDriverClass = new HashSet<>();
             while(st.hasMoreTokens()) {
                 setForDriverClass.add(new Integer(st.nextToken()));
             }
@@ -167,8 +167,8 @@ public class DriverClassList {
         }
     }
 
-    public static Set getEditableTypes(String driverClassName) {
-        return (Set) driverClassToEditableTypeMap.get(driverClassName);
+    public static Set<Integer> getEditableTypes(String driverClassName) {
+        return driverClassToEditableTypeMap.get(driverClassName);
     }
 
 }
