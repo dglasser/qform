@@ -83,11 +83,11 @@ public class TableInfoPanel extends JPanel {
         ,"getColumnDefaultValue"
     };
 
-    private ListTableModel columnTableModel = null;
+    private ListTableModel<Column> columnTableModel = null;
 
     private JTable columnTable = null;
 
-    private ListTableModel fkeyModel = null;
+    private ListTableModel<ForeignKey> fkeyModel = null;
     private JPanel fkeyPanel = new JPanel();
     private JTable fkeysTable = null;
 
@@ -100,7 +100,7 @@ public class TableInfoPanel extends JPanel {
     private JPanel exkeyPanel = new JPanel();
     private JTable exkeysTable = null;
 
-    private ListTableModel excolModel = new ListTableModel(new ExportedKeyColumnManager(), null);
+    private ListTableModel<ForeignKeyColumn> excolModel = new ListTableModel<>(new ExportedKeyColumnManager(), null);
     
     private JTable excolTable = new JTable(excolModel);
 
@@ -139,7 +139,7 @@ public class TableInfoPanel extends JPanel {
      * This comparator is used to sort the ForeignKey objects displayed on
      * the Foreign Keys tab.
      */
-	private final static MethodComparator FOREIGN_KEY_COMPARATOR =
+	private final static MethodComparator<ForeignKey> FOREIGN_KEY_COMPARATOR =
 		new MethodComparator<ForeignKey> (ForeignKey.class, 
 							 "getForeignTableName", 
 							 false, 
@@ -214,12 +214,12 @@ public class TableInfoPanel extends JPanel {
 
         add(tabbedPane, BorderLayout.CENTER);
 
-        ColumnManager cm = new ReflectionColumnManager(columnNames, Column.class, getters, null);
+        ColumnManager<Column> cm = new ReflectionColumnManager<Column>(columnNames, Column.class, getters, null);
 
         Column[] columns = (Column[]) tableInfo.getColumns();
         if(columns != null) columns = (Column[]) columns.clone();
 
-        columnTableModel = new ListTableModel(cm, Arrays.asList(columns));
+        columnTableModel = new ListTableModel<Column>(cm, Arrays.asList(columns));
 
         columnTable = new JTable(columnTableModel);
 
@@ -244,8 +244,8 @@ public class TableInfoPanel extends JPanel {
     		Arrays.sort(fkeys, FOREIGN_KEY_COMPARATOR);
 
             tabbedPane.addTab("Foreign Keys", fkeyPanel);
-            fkeyModel = new ListTableModel(
-                new ReflectionColumnManager(new String[] {"Foreign Table", "Foreign Key Name"},
+            fkeyModel = new ListTableModel<>(
+                new ReflectionColumnManager<ForeignKey>(new String[] {"Foreign Table", "Foreign Key Name"},
                                             ForeignKey.class,
                                             new String[] {"getForeignTableName", "getForeignKeyName"},
                                             null), Arrays.asList(fkeys));

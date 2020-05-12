@@ -128,7 +128,7 @@ public class ArrayColumnManager<E> extends AbstractColumnManager<E[]> {
         }
 
         // instantiate the ColumnManager
-        ArrayColumnManager colMgr = new ArrayColumnManager(colNames, null);
+        ArrayColumnManager<Object> colMgr = new ArrayColumnManager<>(colNames, null);
 
         // instantiate the ListTableModel
         ListTableModel<Object[]> model = new ListTableModel<Object[]>(colMgr, list);

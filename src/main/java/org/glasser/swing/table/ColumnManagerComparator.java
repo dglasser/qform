@@ -125,6 +125,7 @@ public class ColumnManagerComparator<R> extends BaseComparator<R> {
      * is used to get the correct column value from each row object, and compares the two
      * column values to establish an ordering for the two rows.
      */
+    @SuppressWarnings("unchecked")
     protected int doCompare(R o1, R o2) {
         Object val1 = columnManager.getValueAt(0, sortColumn, o1);
         Object val2 = columnManager.getValueAt(0, sortColumn, o2);
@@ -135,7 +136,6 @@ public class ColumnManagerComparator<R> extends BaseComparator<R> {
 
         if(retVal != 0) return retVal;
 
-
         if(columnComparators != null && columnComparators[sortColumn] != null) {
             return columnComparators[sortColumn].compare(val1, val2);
         }
@@ -145,8 +145,6 @@ public class ColumnManagerComparator<R> extends BaseComparator<R> {
         }
 
         return val1.toString().compareTo(val2.toString());
-
-
     }
 
     /**
