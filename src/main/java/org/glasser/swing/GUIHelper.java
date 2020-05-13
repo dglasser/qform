@@ -508,12 +508,12 @@ public class GUIHelper {
      * the given JMenu. It does not recurse through submenus.
      */
     public static JMenuItem[] getMenuItems(JMenu menu) {
-        ArrayList list = new ArrayList();
+        ArrayList<JMenuItem> list = new ArrayList<>();
         for(int j=0; j<menu.getItemCount(); j++) {
             JMenuItem mi = menu.getItem(j);
             if(mi != null) list.add(mi);
         }
-        return (JMenuItem[]) list.toArray(new JMenuItem[list.size()]);
+        return list.toArray(new JMenuItem[list.size()]);
     }
 
 
@@ -522,14 +522,14 @@ public class GUIHelper {
      * the given JPopupMenu. It does not recurse through submenus.
      */
     public static JMenuItem[] getMenuItems(JPopupMenu menu) {
-        ArrayList list = new ArrayList();
+        ArrayList<JMenuItem> list = new ArrayList<>();
         MenuElement[] elements = menu.getSubElements();
         for(int j=0; j<elements.length; j++) {
             if(elements[j] instanceof JMenuItem) {
-                list.add(elements[j]);
+                list.add((JMenuItem) elements[j]);
             }
         }
-        return (JMenuItem[]) list.toArray(new JMenuItem[list.size()]);
+        return list.toArray(new JMenuItem[list.size()]);
     }
 
 

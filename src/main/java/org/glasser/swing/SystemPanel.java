@@ -88,7 +88,7 @@ public class SystemPanel extends JPanel {
     private PushButtonTableHeader tableHeader = new PushButtonTableHeader();
 
 
-    private final ListTableModel<Object[]> model = new ListTableModel(new ArrayColumnManager(new String[] {"System Property", "Value"}, 
+    private final ListTableModel<Object[]> model = new ListTableModel<>(new ArrayColumnManager<Object>(new String[] {"System Property", "Value"}, 
                                                                            new Class[] {String.class, String.class}),
                                                     null);
 

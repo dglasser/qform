@@ -108,7 +108,7 @@ public class DataSourceManager {
 
         DriverConnectionFactory connFactory = new DriverConnectionFactory(driver, config.getUrl(), props); 
         
-        GenericObjectPool genericPool = new GenericObjectPool(null, maxConnections);
+        GenericObjectPool<Connection> genericPool = new GenericObjectPool<>(null, maxConnections);
         genericPool.setWhenExhaustedAction(genericPool.WHEN_EXHAUSTED_FAIL);
 //        genericPool.setMaxWait(1);
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connFactory, genericPool,null, null, false, true);

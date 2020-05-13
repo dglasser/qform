@@ -208,7 +208,7 @@ public class DBUtil implements java.io.Serializable {
     public static ForeignKey[] getForeignKeys(ResultSet fk) 
         throws SQLException
     {
-        Hashtable fKeys = new Hashtable(); 
+        HashMap<String, ForeignKey> fKeys = new HashMap<>(); 
         while(fk != null && fk.next()) {
 
             // we're supposed to read the result set in column-order
@@ -257,9 +257,7 @@ public class DBUtil implements java.io.Serializable {
             
             // add it to this fk's collection of columns.
             fkey.addForeignKeyColumn(fcol);
-
         }
-
 
         ForeignKey[] results = new ForeignKey[fKeys.size()];
         Iterator i = fKeys.values().iterator();
@@ -293,16 +291,18 @@ public class DBUtil implements java.io.Serializable {
      * @param rs the ResultSet that will be read. It will NOT be closed after being read.
      * @param maxRows the maximum number of rows to read; 0 or below indicates no limit.
      */
-    public static Map[] readResultSet(ResultSet rs, int maxRows) 
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object>[] readResultSet(ResultSet rs, int maxRows) 
         throws SQLException 
     {
-
 
         // handle the trival case of an empty ResultSet quickly.
         boolean flag = rs.next();
 
         // if ResultSet is empty, return a zero-length array.
-        if(flag == false) return new HashMap[0];
+        if(flag == false) {
+            return (HashMap<String, Object>[]) new HashMap[0];
+        }
 
         boolean hasLimit = maxRows > 0;
 
@@ -316,7 +316,7 @@ public class DBUtil implements java.io.Serializable {
             columnNames[j] = columnName;
         }
 
-        ArrayList results = new ArrayList(40);
+        ArrayList<HashMap<String, Object>> results = new ArrayList<>(40);
 
         // the first time the loop is entered, rs.next() won't get
         // called because the flag will short-circuit it.
@@ -324,7 +324,7 @@ public class DBUtil implements java.io.Serializable {
         while(flag || rs.next()) {
             flag = false;
 
-            HashMap map = new HashMap(columnNames.length + 10);
+            HashMap<String, Object> map = new HashMap<>(columnNames.length + 10);
 
             for(int j=0; j<columnNames.length; j++) {
                 map.put(columnNames[j], rs.getObject(j+1));
@@ -340,15 +340,14 @@ public class DBUtil implements java.io.Serializable {
 
         }
 
-        return (HashMap[]) results.toArray(new HashMap[results.size()]);
-
+        return (HashMap<String, Object>[]) results.toArray(new HashMap[results.size()]);
     }
 
     /**
      * This reads each row of a ResultSet and stores it in an List object, with each element
      * of the list representing the corresponding column from the ResultSet row.      
      */
-    public static List[] readResultSet2(ResultSet rs) 
+    public static List<Object>[] readResultSet2(ResultSet rs) 
         throws SQLException 
     {
         return readResultSet2(rs, -1);
@@ -363,23 +362,25 @@ public class DBUtil implements java.io.Serializable {
      * @param rs the ResultSet that will be read. It will NOT be closed after being read.
      * @param maxRows the maximum number of rows to read; 0 or below indicates no limit.
      */
+    @SuppressWarnings("unchecked")
     public static List<Object>[] readResultSet2(ResultSet rs, int maxRows) 
         throws SQLException 
     {
-
 
         // handle the trival case of an empty ResultSet quickly.
         boolean flag = rs.next();
 
         // if ResultSet is empty, return a zero-length array.
-        if(flag == false) return new ArrayList[0];
+        if(flag == false) {
+            return new ArrayList[0];
+        }
 
         boolean hasLimit = maxRows > 0;
 
         ResultSetMetaData rsmd = rs.getMetaData();
         int numColumns = rsmd.getColumnCount();
 
-        ArrayList<List<Object>> results = new ArrayList(40);
+        ArrayList<List<Object>> results = new ArrayList<>(40);
 
         // the first time the loop is entered, rs.next() won't get
         // called because the flag will short-circuit it.
