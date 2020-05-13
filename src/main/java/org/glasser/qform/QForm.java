@@ -125,7 +125,7 @@ public class QForm {
 
                 // truncate just after ".jar"
                 // the "decode" is needed in 1.4 but not 1.3
-                String jarpath = java.net.URLDecoder.decode( path.substring(0, i+4) );
+                String jarpath = java.net.URLDecoder.decode( path.substring(0, i+4), "UTF-8");
                 jarpath = new URL(jarpath).getPath();
                 
                 // if this is a Windows machine, the jarpath will look like

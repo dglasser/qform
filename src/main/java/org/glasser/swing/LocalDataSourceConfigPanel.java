@@ -177,6 +177,7 @@ public class LocalDataSourceConfigPanel extends JPanel {
         txtLoginTimeout.setText(null);
     }
 
+    @SuppressWarnings("deprecation")
     public void updateObject(LocalDataSourceConfig config) {
 
         config.setDisplayName(Util.trimToNull(txtDisplayName.getText()));

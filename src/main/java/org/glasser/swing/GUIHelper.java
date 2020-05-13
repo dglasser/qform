@@ -267,13 +267,7 @@ public class GUIHelper {
             gc.ipadx = 0;
             gc.insets = labelInsets;
 
-            // adding a tooltip to a label seems to add it to the focus
-            // cycle, which we don't want, so we'll make sure the labels
-            // we instantiate can't get the focus by overriding their
-            // isFocusTraversable() method.
-            JLabel label = new JLabel((String) fields[row][1]) {
-                public boolean isFocusTraversable() {return false;}
-            };
+            JLabel label = new JLabel((String) fields[row][1]);
             if(labelFont != null) label.setFont(labelFont);
             if(labelForeground != null) label.setForeground(labelForeground);
             panel.add(label, gc);

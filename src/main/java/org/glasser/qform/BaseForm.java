@@ -188,14 +188,6 @@ public class BaseForm extends JPanel {
         gc.insets = fieldInsets;
         this.add(new JLabel("  "), gc);
 
-        for(int k=0; k<fields.length - 1; k++) {
-            fields[k].setNextFocusableComponent(fields[k+1]);
-        }
-
-        if(fields.length > 0) {
-            fields[fields.length - 1].setNextFocusableComponent(fields[0]);
-        }
-
         // This will constrain the width to make sure the scrollpane does not let the
         // this panel grow to a huge width, and it will also
         // make it so that vertical scrolling occurs (instead of clipping).

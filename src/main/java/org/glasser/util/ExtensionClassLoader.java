@@ -135,7 +135,7 @@ public class ExtensionClassLoader extends java.net.URLClassLoader {
         File[] archives = directory.listFiles(archiveFilter);
         for(int j=0; archives != null && j<archives.length; j++) {
             if(debug) System.out.println("Adding " + archives[j] + " to ExtensionClassLoader classpath.");
-            this.addURL(archives[j].toURL());
+            this.addURL(archives[j].toURI().toURL());
         }
     }
 
