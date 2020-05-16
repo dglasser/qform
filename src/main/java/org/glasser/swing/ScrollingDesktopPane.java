@@ -98,6 +98,13 @@ public class ScrollingDesktopPane extends JDesktopPane {
             JInternalFrame jif = frames[j];
             Rectangle r = null;
 
+            // maximized frames will be fitted to the
+            // available space. Their bounds will be
+            // whatever is available.
+            if(jif.isMaximum()) {
+                continue;
+            }
+
             // if this internal frame is iconified, we need
             // to use the bounds for its desktop icon.
             if(jif.isIcon()) {
