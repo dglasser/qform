@@ -55,6 +55,20 @@ repositories {
     }
 }
 
+tasks.compileJava {
+    var compilerArgs = mutableListOf<String>()
+    if("true".equals(System.getProperty("deprecation"))) {
+        compilerArgs.add("-Xlint:deprecation")
+    }
+    if("true".equals(System.getProperty("unchecked"))) {
+        compilerArgs.add("-Xlint:unchecked")
+    }
+    if(compilerArgs.size > 0) {
+        println ("Compiler Args: " + compilerArgs)
+        getOptions().setCompilerArgs(compilerArgs)
+    }
+}
+
 dependencies {
     implementation("commons-collections:commons-collections:3.2.2")
     implementation("commons-pool:commons-pool:1.6")
@@ -140,5 +154,17 @@ tasks.register<Zip>("srcZip") {
     include("gradlew.bat")
     exclude("build/**")
 }
+
+tasks.register<Zip>("binZip") {
+    getArchiveClassifier().set("bin")
+    getArchiveVersion().set(project.version.toString())
+    from("build/libs")
+    include("qform.jar")
+    from("docs")
+    include("instructions.html")
+
+    dependsOn(":assemble")
+}
+
 
 
