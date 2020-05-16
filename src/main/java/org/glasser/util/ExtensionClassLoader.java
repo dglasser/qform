@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/util/ExtensionClassLoader.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/02/02 14:35:11 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.util;
 

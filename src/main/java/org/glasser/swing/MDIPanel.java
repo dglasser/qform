@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/MDIPanel.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/07/13 04:36:58 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

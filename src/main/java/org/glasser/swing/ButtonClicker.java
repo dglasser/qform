@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/ButtonClicker.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/06/08 19:30:20 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

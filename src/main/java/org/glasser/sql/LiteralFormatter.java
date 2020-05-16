@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/LiteralFormatter.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2005/04/29 04:54:48 $
- * 
- * --------------------------------------------------------------------
  */
 
 

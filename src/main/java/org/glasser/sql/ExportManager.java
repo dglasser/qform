@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/ExportManager.java,v $
- * $Revision: 1.4 $
- * $Author: dglasser $
- * $Date: 2005/05/23 01:55:36 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

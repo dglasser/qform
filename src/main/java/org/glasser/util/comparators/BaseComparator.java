@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/util/comparators/BaseComparator.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/01/25 18:11:14 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.util.comparators;
 

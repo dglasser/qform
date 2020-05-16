@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/ResultSetBufferListener.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/05/01 00:46:33 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

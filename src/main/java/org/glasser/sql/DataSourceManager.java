@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/DataSourceManager.java,v $
- * $Revision: 1.4 $
- * $Author: dglasser $
- * $Date: 2003/04/26 13:19:06 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

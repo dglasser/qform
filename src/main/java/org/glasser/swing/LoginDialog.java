@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/LoginDialog.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/08/11 00:59:24 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/GUIHelper.java,v $
- * $Revision: 1.9 $
- * $Author: dglasser $
- * $Date: 2005/01/26 02:55:43 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

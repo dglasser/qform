@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/BlankIcon.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/04/30 02:41:58 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

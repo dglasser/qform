@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/util/comparators/MapComparator.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/01/25 18:08:20 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.util.comparators;
 

@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/DBUtil.java,v $
- * $Revision: 1.3 $
- * $Author: dglasser $
- * $Date: 2005/04/29 05:02:45 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

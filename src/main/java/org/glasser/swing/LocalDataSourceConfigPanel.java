@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/LocalDataSourceConfigPanel.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/08/23 16:15:31 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

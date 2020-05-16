@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/table/PushButtonTableHeaderListener.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/05/18 23:36:35 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing.table;
 

@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/DriverClassList.java,v $
- * $Revision: 1.6 $
- * $Author: dglasser $
- * $Date: 2005/06/06 03:04:43 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

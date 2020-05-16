@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/XInternalFrame.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/05/29 00:43:45 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

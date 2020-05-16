@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/table/ResultSetTableModel.java,v $
- * $Revision: 1.4 $
- * $Author: dglasser $
- * $Date: 2003/07/11 03:16:57 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing.table;
 

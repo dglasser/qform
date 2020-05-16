@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/table/ColumnManagerComparator.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/07/16 02:32:47 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing.table;
 

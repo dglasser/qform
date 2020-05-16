@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/util/comparators/MethodComparator.java,v $
- * $Revision: 1.4 $
- * $Author: dglasser $
- * $Date: 2005/06/06 14:56:53 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.util.comparators;
 

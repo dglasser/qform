@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/table/FormattedCellRenderer.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2004/10/20 23:20:43 $
- * 
- * --------------------------------------------------------------------
  */
 
 package org.glasser.swing.table;

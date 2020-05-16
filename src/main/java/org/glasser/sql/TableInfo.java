@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/TableInfo.java,v $
- * $Revision: 1.7 $
- * $Author: dglasser $
- * $Date: 2005/01/26 02:22:58 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

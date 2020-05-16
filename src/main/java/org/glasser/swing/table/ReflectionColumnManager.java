@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/table/ReflectionColumnManager.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2005/05/23 02:02:00 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing.table;
 

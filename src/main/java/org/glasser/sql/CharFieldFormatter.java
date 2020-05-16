@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/CharFieldFormatter.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2005/04/29 04:59:03 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

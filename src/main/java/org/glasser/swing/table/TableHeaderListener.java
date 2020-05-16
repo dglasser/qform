@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/table/TableHeaderListener.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/05/31 15:34:27 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing.table;
 

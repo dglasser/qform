@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/ResultSetBufferEvent.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2003/05/01 00:47:41 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/ScrollingDesktopManager.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/01/26 01:02:15 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

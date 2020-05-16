@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/swing/SystemPanel.java,v $
- * $Revision: 1.4 $
- * $Author: dglasser $
- * $Date: 2005/05/23 01:59:28 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.swing;
 

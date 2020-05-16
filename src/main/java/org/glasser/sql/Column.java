@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/sql/Column.java,v $
- * $Revision: 1.2 $
- * $Author: dglasser $
- * $Date: 2004/09/28 01:37:57 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.sql;
 

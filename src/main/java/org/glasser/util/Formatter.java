@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/util/Formatter.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/01/25 23:17:02 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.util;
 

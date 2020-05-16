@@ -51,13 +51,6 @@
  * Apache Software Foundation (http://www.apache.org/).
  *
  * ==================================================================== 
- *
- * $Source: /cvsroot/qform/qform/src/org/glasser/util/comparators/MutableListComparator.java,v $
- * $Revision: 1.1 $
- * $Author: dglasser $
- * $Date: 2003/05/01 00:36:19 $
- * 
- * --------------------------------------------------------------------
  */
 package org.glasser.util.comparators;
 
