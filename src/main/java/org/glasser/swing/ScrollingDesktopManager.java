@@ -54,43 +54,90 @@
  */
 package org.glasser.swing;
 
-
-
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyVetoException;
 
-
-
 public class ScrollingDesktopManager extends DefaultDesktopManager {
 
+    /**
+     * Searches up the ancestor hierarchy for the given JInternalFrame until
+     * it finds a JDesktopPane, and then returns it.
+     */
+    private JDesktopPane getJDesktopPaneAncestor(JComponent f) {
+
+        Component parent = f;
+        while((parent = parent.getParent()) != null) {
+            if(parent instanceof JDesktopPane) {
+                return (JDesktopPane) parent;
+            }
+        }
+        return null;
+    }
 
     /**
      * Searches up the ancestor hierarchy for the given JInternalFrame until
      * it finds a JScrollPane, and then calls validate() on that scrollpane.
      */
     private void validateScrollPane(JComponent f) {
-
-        Component parent = f;
-        while((parent = parent.getParent()) != null) {
-            if(parent instanceof JScrollPane) {
-//                System.out.println("About to validate scrollpane");
-                parent.validate();
-                break;
-            }
+        JDesktopPane jdp = getJDesktopPaneAncestor(f);
+        if(jdp != null) {
+            jdp.validate();
         }
     }
+
+    /** 
+     * This is set to true while a call to the minimizeFrame method 
+     * is in process. 
+     */  
+    private boolean minimizeFrameCalled = false;
 
 
     /** Generally, this indicates that the frame should be restored to it's
       * size and position prior to a maximizeFrame() call.
       */
     public void minimizeFrame(JInternalFrame f) {
-       
+
+        boolean recursive = minimizeFrameCalled;
+        try {
+            minimizeFrameCalled = true; 
+//            System.out.println("minimizeFrame(): Called. recursive=" + recursive + ", isIcon=" + f.isIcon() 
+//                               + " " + f.getTitle());
+            if(!recursive) {
+                JDesktopPane owner = getJDesktopPaneAncestor(f);
+                if(owner != null) {
+                    JInternalFrame[] frames = owner.getAllFrames();
+                    for(int j=0; j<frames.length; j++) {
+                        JInternalFrame jif = frames[j];
+                        if(jif == f) {
+                            continue;
+                        }
+                        try {
+                            if(jif.isMaximum()) {
+                                // Before this returns, a recursive call to this method will
+                                // be made for this frame. 
+                                jif.setMaximum(false);
+                                if(wasIcon(jif)) {
+                                    jif.setIcon(true);
+                                }
+                            }
+                        }
+                        catch(Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+            _minimizeFrame(f);
+        }
+        finally {
+            minimizeFrameCalled = recursive;
+        }
+    }
+
+    private void _minimizeFrame(JInternalFrame f) {
         super.minimizeFrame(f);
-        validateScrollPane(f);
-        
     }
 
 
@@ -120,12 +167,54 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
     }
 
 
+    private boolean maximizeFrameCalled = false;
+
     /** Generally, the frame should be resized to match it's parents bounds. */
     /**
      * Resizes the frame to fill its parents bounds.
      * @param the frame to be resized
      */
+
     public void maximizeFrame(JInternalFrame f) {
+
+        boolean recursive = maximizeFrameCalled;
+        
+        try {
+            
+            maximizeFrameCalled = true; 
+
+            System.out.println("maximizeFrame(): Called. recursive=" + recursive + ", isIcon=" + f.isIcon() + " " + f.getTitle());
+
+            if(!recursive) {
+                JDesktopPane owner = getJDesktopPaneAncestor(f);
+                if(owner != null) {
+                    JInternalFrame[] frames = owner.getAllFrames();
+                    
+                    for(int j=0; j<frames.length; j++) {
+                        JInternalFrame jif = frames[j];
+                        if(jif == f) {
+                            continue;
+                        }
+                        try {
+                            if(!jif.isMaximum()) {
+                                frames[j].setMaximum(true);
+                            }
+                        }
+                        catch(Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+            _maximizeFrame(f, !recursive);
+        }
+        finally {
+            maximizeFrameCalled = recursive;
+        }
+    }
+
+    private void _maximizeFrame(JInternalFrame f, boolean setSelected) {
+        System.out.println("_maximizeFrame(): Called. " + setSelected);
     
         Rectangle p;
         if(!f.isIcon()) {
@@ -147,14 +236,15 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
         f.setNormalBounds(f.getBounds());
         setBoundsForFrame(f, 0, 0, p.width, p.height);
         try {
-            f.setSelected(true);
+            if(setSelected) {
+                f.setSelected(true);
+            }
         } 
         catch(PropertyVetoException e2) {
         }
     
         removeIconFor(f);
     }
-
 
 
 //    /**
