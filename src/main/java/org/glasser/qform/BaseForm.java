@@ -343,7 +343,6 @@ public class BaseForm extends JPanel {
         }
 
         else {
-//            System.out.println("cachedRow is null.");
             clearFields();
             return -1;
         }
@@ -369,7 +368,6 @@ public class BaseForm extends JPanel {
         }
 
         else {
-//            System.out.println("cachedRow is null.");
             clearFields();
             return -1;
         }
@@ -444,7 +442,6 @@ public class BaseForm extends JPanel {
 
         resultSetBuffer.removeCurrentRow();
         int cur = resultSetBuffer.getCursor();
-//        System.out.println("CURSOR IS NOW " + cur);
         return cur;
 
     }

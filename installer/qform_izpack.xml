@@ -47,6 +47,9 @@
             <file targetdir="$INSTALL_PATH" src="../build/libs/commons-collections-3.2.2.jar"/>
             <file targetdir="$INSTALL_PATH" src="../build/libs/commons-pool-1.6.jar"/>
             <file targetdir="$INSTALL_PATH" src="../build/libs/commons-dbcp-1.4.jar"/>
+            <file targetdir="$INSTALL_PATH" src="../build/libs/slf4j-api-1.7.25.jar"/>
+            <file targetdir="$INSTALL_PATH" src="../build/libs/logback-core-1.2.3.jar"/>
+            <file targetdir="$INSTALL_PATH" src="../build/libs/logback-classic-1.2.3.jar"/>
             <singlefile src="../build/libs/qform.jar" target="$INSTALL_PATH/qform.jar" />
             <file targetdir="$INSTALL_PATH/drivers" src="../installer/README_DRIVERS.TXT"/>
             <parsable targetfile="$INSTALL_PATH/drivers/README_DRIVERS.TXT"/>  

@@ -45,12 +45,13 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import java.net.*;
 import java.awt.*;
+import org.slf4j.*;
 
 
 
 public class QForm {
 
-    private final static boolean debug = System.getProperty("QForm.debug") != null;
+    private final static Logger logger = LoggerFactory.getLogger(QForm.class);
 
     private final static String WSDP = "http://java.sun.com as part of the Java Web Services Developer Pack";
 
@@ -77,6 +78,8 @@ public class QForm {
     public static void main(String[] args) 
         throws Exception
     {
+
+        LogHelper.initLogging();
 
         // this will be the default title for message boxes when one isn't supplied
         GUIHelper.defaultMessageTitle = "QueryForm";
@@ -119,7 +122,7 @@ public class QForm {
             ClassLoader cl = QForm.class.getClassLoader();
             URL url = cl.getResource("org/glasser/qform/QForm.class");
             String path = url.getPath();
-            if(debug) System.out.println("QForm.class URL is " + path);
+            logger.debug("main(): QForm.class URL is {}", path);
             int i = path.indexOf(".jar!/org/glasser/qform/QForm.class");
             if(i > 0) { 
 
@@ -132,19 +135,20 @@ public class QForm {
                 // "/C:/dir1/dir2..." with a leading slash. It works on some
                 // systems, but not on others, so remove it.
                 if(jarpath.indexOf(':') == 2) jarpath = jarpath.substring(1);
-                if(debug) System.out.println("Jar path is " + jarpath);
+                logger.debug("main(): Jar path is {}", jarpath);
                 File jarFile = new File(jarpath);
                 File jarDir =  jarFile.getParentFile();
                 File driverDir = new File(jarDir, "drivers");
                 if(driverDir.exists()) {
-                    if(debug) System.out.println(driverDir.getAbsolutePath() + " exists.");
+                    logger.debug("main(): {} exists.", driverDir.getAbsolutePath());
                     ExtensionClassLoader.getSingleton().addArchivesInDirectory(driverDir);
                 }
                 else {
                     // make sure we translated the jar directory correctly before showing the
                     // error message.
                     if(jarDir.exists()) {
-                        if(debug) System.out.println(driverDir.getAbsolutePath() + " not found.");
+
+                        logger.debug("main(): {} not found.", driverDir.getAbsolutePath());
 
                         GUIHelper.infoMsg(null,
                             "The JDBC drivers directory, " + driverDir 
@@ -159,7 +163,7 @@ public class QForm {
                             "Drivers Directory Missing");
                     }
                     else {
-                        System.out.println("WARNING: Invalid jar path: " + jarpath);
+                        logger.warn("main(): WARNING: Invalid jar path: {}", jarpath );
                     }
                 }
             }
@@ -181,8 +185,7 @@ public class QForm {
                 UIManager.setLookAndFeel(laf);
                 UIManager.getDefaults().put("ClassLoader", laf.getClass().getClassLoader());
                 UIManager.getLookAndFeelDefaults().put("ClassLoader", laf.getClass().getClassLoader());
-                System.out.println("Look and Feel set to " + laf.getName());
-
+                logger.info("main(): Look and Feel set to {}", laf.getName());
             }
             catch(Exception ex) {
                 GUIHelper.errMsg(null, "There was an error setting the application's look-and-feel to "

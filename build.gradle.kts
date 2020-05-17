@@ -73,10 +73,14 @@ dependencies {
     implementation("commons-collections:commons-collections:3.2.2")
     implementation("commons-pool:commons-pool:1.6")
     implementation("commons-dbcp:commons-dbcp:1.4")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("org.slf4j:slf4j-api:1.7.25")
 
     runtimeOnly("commons-collections:commons-collections:3.2.2")
     runtimeOnly("commons-pool:commons-pool:1.6")
     runtimeOnly("commons-dbcp:commons-dbcp:1.4")
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
+    runtimeOnly("org.slf4j:slf4j-api:1.7.25")
 
     // JDBC drivers
     runtimeOnly("mysql:mysql-connector-java:8.0.19")
@@ -109,7 +113,9 @@ tasks.jar {
     manifest {
         attributes("Main-Class" to application.mainClassName,
                    "Class-Path" to "commons-collections-3.2.2.jar commons-dbcp-1.4.jar commons-pool-1.6.jar " +
-                   "libs/commons-collections-3.2.2.jar libs/commons-dbcp-1.4.jar libs/commons-pool-1.6.jar")
+				                   "logback-core-1.2.3.jar logback-classic-1.2.3.jar slf4j-api-1.7.25.jar " +
+                   "libs/commons-collections-3.2.2.jar libs/commons-dbcp-1.4.jar libs/commons-pool-1.6.jar " +
+				   "libs/logback-core-1.2.3.jar libs/logback-classic-1.2.3.jar libs/slf4j-api-1.7.25.jar")
     }
     getArchiveVersion().set("")
 }
