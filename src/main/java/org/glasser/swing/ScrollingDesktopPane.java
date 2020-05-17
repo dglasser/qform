@@ -108,8 +108,8 @@ public class ScrollingDesktopPane extends JDesktopPane {
             }
             
             jif.getBounds();
-            minX = (int) Math.min(minX, r.x);
-            minY = (int) Math.min(minY, r.y);
+//            minX = (int) Math.min(minX, r.x);
+//            minY = (int) Math.min(minY, r.y);
             maxX = (int) Math.max(maxX, (r.x + r.width));
             maxY = (int) Math.max(maxY, (r.y + r.height));
 
