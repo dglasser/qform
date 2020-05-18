@@ -73,8 +73,7 @@ import javax.swing.*;
 
 public class Config {
 
-
-    private final static boolean debug = System.getProperty("Config.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Config.class);
 
     protected final static String DOCUMENT_TAG = "qform-config";
 
@@ -266,7 +265,7 @@ public class Config {
 
             localDataSourceConfigs.add(config);
 
-            if(debug) System.out.println("Connection: " + config);
+            logger.debug("init(): Connection: {}", config);
         }
 
         NodeList lafs = root.getElementsByTagName(THIRD_PARTY_LAFS_TAG);
@@ -305,15 +304,15 @@ public class Config {
         throws IOException, ParserConfigurationException, TransformerException {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        if(debug) System.out.println("DocumentBuilderFactory is " + dbf.getClass().getName());
+        logger.debug("writeConfig(): DocumentBuilderFactory is {}", dbf.getClass().getName());
 
         DocumentBuilder db = dbf.newDocumentBuilder();
 
-        if(debug) System.out.println("DocumentBuilder is " + db.getClass().getName());
+        logger.debug("writeConfig(): DocumentBuilder is {}", db.getClass().getName());
 
         Document doc = db.newDocument();
 
-        if(debug) System.out.println("Document is " + doc.getClass().getName());
+        logger.debug("writeConfig(): Document is {}", doc.getClass().getName());
 
         Element root = doc.createElement(DOCUMENT_TAG);
 
@@ -330,7 +329,7 @@ public class Config {
             LocalDataSourceConfig config = conns[j];
             Element con = doc.createElement(LOCAL_DATASOURCE_TAG);
             con.setAttribute("display-name", trim(config.getDisplayName()) );
-            if(debug) System.out.println("DISPLAY NAME = " + config.getDisplayName());
+            logger.debug("writeConfig(): DISPLAY NAME = {}", config.getDisplayName());
             con.setAttribute("driver-class", trim(config.getDriverClassName()) );
             con.setAttribute("url", trim(config.getUrl()) );
             con.setAttribute("login-required", String.valueOf(config.isLoginRequired()) );
@@ -376,13 +375,10 @@ public class Config {
 
         OutputStream ostream = sr.getOutputStream(); 
         if(ostream != os) {
-//            System.out.println("Closing StreamResult's output stream.");
             ostream.close();
         }
 
         os.close();
-
-
     }
 
     private static final String trimToNull(String s) {
@@ -407,7 +403,6 @@ public class Config {
             for(int k=0; k<7; k++) {
                 Connection conn = ds.getConnection();
                 System.out.println("DONE.");
-//                conn.close();
             }
         }
 

@@ -45,13 +45,10 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import java.net.*;
 import java.awt.*;
-import org.slf4j.*;
-
-
 
 public class QForm {
 
-    private final static Logger logger = LoggerFactory.getLogger(QForm.class);
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(QForm.class);
 
     private final static String WSDP = "http://java.sun.com as part of the Java Web Services Developer Pack";
 
