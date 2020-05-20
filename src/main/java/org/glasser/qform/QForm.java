@@ -238,7 +238,7 @@ public class QForm {
                 frame.setIconImage(Toolkit.getDefaultToolkit().getImage(imageUrl));
             }
             catch(Throwable t) {
-                t.printStackTrace();
+                logger.error("main(): Error setting frame icon: " + t, t );
             }
     
             frame.pack();
@@ -249,11 +249,11 @@ public class QForm {
             frame.setVisible(true);
         }
         catch(Throwable ex) {
-            ex.printStackTrace();
             String msg = "An error occurred during program startup, which was probably due to missing libraries or class files:\n\n" + ex.getClass().getName()
                 + "\n\n" + ex.getMessage()
                 + "\n\nPlease see the console output for more information.";
             GUIHelper.errMsg(null, msg, "Unrecoverable Application Error");
+            logger.error("main(): " + msg, ex );
             System.exit(13);
         }
 

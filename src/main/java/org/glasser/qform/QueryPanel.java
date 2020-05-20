@@ -56,7 +56,7 @@ import org.glasser.util.*;
 
 public class QueryPanel extends JPanel implements ResultSetBufferListener, ActionListener {
 
-    private static boolean isJava1point3 = !Util.isCurrentJavaVersionAtLeast("1.4");
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(QueryPanel.class);
 
     public static final int NO_RESULTSET = MainPanel.QUERY_PANEL_NO_RESULTSET;
     public static final int HAS_RESULTSET = MainPanel.QUERY_PANEL_HAS_RESULTSET;
@@ -573,11 +573,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
                            && selection != baseForm.getCursorVal() 
                            && state == HAS_RESULTSET) {
 
-//                          if(selection == lastSelection) {
-////                                new Throwable().printStackTrace();
-//                              return;
-//                          }
-                            if(debug) System.out.println("SELECTED ROW " + selection);
+                            logger.debug("valueChanged(): SELECTED ROW {}", selection);
                             lastSelection = selection;
                             baseForm.showRow(selection);
                             displayRowNum(selection+1);
@@ -653,10 +649,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 
 
         } catch(Exception ex) {
-            if(debug) System.out.println("Exception in QueryPanel constructor: " + ex.toString());
-            ex.printStackTrace();
+            logger.error("QueryPanel(): Exception in QueryPanel constructor: " + ex, ex );
             GUIHelper.exceptionMsg(ex);
-
         }
     }
 
@@ -705,8 +699,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     private boolean formTabFrozen = false;
 
     public void freezeFormTab(boolean b) {
-        if(debug) System.out.println("TRC: " + getClass().getName() + ".freezeFormTab("
-            + b + ")");
+
+        logger.debug("freezeFormTab(): {}", b);
 
         if(formTabFrozen == b) return;
 
@@ -724,7 +718,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     public void setState(int state)  {
         this.state = state;
 
-        if(debug) System.out.println("QueryPanel.setState(" + stateNames[state] + ")");
+        logger.debug("setState(): {}", stateNames[state]);
 
         boolean focusFirstField = false;
 
@@ -839,21 +833,6 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         return baseForm.hasCurrentResultSet();
     }
 
-//    protected void finalize() throws Throwable {
-//        if(debug) System.out.println("QueryPanel.finalize() called.");
-//        try {
-////              baseForm.setResultSetBuffer(null);
-//        } catch(Exception ex) {
-//            ex.printStackTrace();
-//            GUIHelper.exceptionMsg(ex);
-//        }
-//    }
-
-    public void showState() {
-//          if(debug) System.out.println("Scrollpane: " + toString());
-//          if(debug) System.out.println("JPanel: " + baseForm.toString());
-//          if(debug) System.out.println("backBuffer: size = " + backBuffer.size() + ", cursor = " + backBuffer.cursor);
-    }
 
     /**
      * Toggle the editable state of all textboxes on the form.        
@@ -941,8 +920,6 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         }
 
         String SQL = header + getFromClause() + " " + getWhereClause();
-
-        if(debug) System.out.println("SQL: " + SQL);
 
         return SQL;
     }
@@ -1081,13 +1058,12 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         }
         catch(Exception ex) {
             String msg = "This record cannot be deleted because the primary key for this table is unknown, and could not be adequately surmised by the application.";
-                
             GUIHelper.errMsg(this, msg, "Application Error");
+            logger.error("deleteCurrentRow(): " + msg, ex );
             return;
         }
 
-
-        if(debug) System.out.println(SQL);
+        logger.debug("deleteCurrentRow(): SQL={}", SQL);
         int rowsDeleted = -1;
         Connection conn = null;
         Statement s = null;
@@ -1099,7 +1075,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             saveAutoCommit = conn.getAutoCommit();            
             if(saveAutoCommit) conn.setAutoCommit(false);
             rowsDeleted = s.executeUpdate(SQL);
-            if(debug) System.out.println("Num rows deleted: " + rowsDeleted);
+            logger.debug("deleteCurrentRow(): rowsDeleted={}", rowsDeleted);
             if(rowsDeleted < 1) {
                 GUIHelper.errMsg(this, "The current row was not deleted because it has "
                                  + "been deleted or modified by another user.", 
@@ -1116,7 +1092,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             success = true;
 
             int rowNum = baseForm.removeCurrentRow();
-            if(debug) System.out.println("rowNum is " + rowNum);
+            logger.debug("deleteCurrentRow(): rowNum={}", rowNum);
 
             ResultSetTableModel model = (ResultSetTableModel) gridTable.getModel();
             model.fireTableDataChanged();
@@ -1136,22 +1112,18 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             String msg = "The following error occurred while attempting to delete the current record:\n\n" +
                          ex.getMessage();
             GUIHelper.errMsg(this, msg, "Database Error");
+            logger.error("deleteCurrentRow(): " + msg, ex );
         }
         finally {
-            if(success == false && conn != null) {
-                try {
-                    conn.rollback();
-                }
-                catch(Exception ex) {
-                    ex.printStackTrace();
-                }
+            if(success == false) {
+                DBUtil.rollback(conn);
             }
             DBUtil.closeStatement(s);
             try {
                 if(saveAutoCommit) conn.setAutoCommit(true);
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+                logger.error("deleteCurrentRow(): Error calling setAutoCommit: " + ex, ex );
             }
             DBUtil.closeConnection(conn);
         }
@@ -1178,7 +1150,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         try {
 
             String sql = getSQL(INSERT);
-            if(debug) System.out.println(sql);
+            logger.debug("executeAdd(): sql={}", sql);
 
             // this call was added to work around an apparent bug in Access, where
             // if a current resultset was still open with unread records,
@@ -1209,7 +1181,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             }
         } 
         catch(Exception ex) {
-           ex.printStackTrace();
+           logger.error("executeAdd(): " + ex, ex );
            this.clearCurrentResultSet();
            GUIHelper.errMsg(this, "The following database error occurred:\n"
                    + ex.getClass().getName() + "\n"
@@ -1256,7 +1228,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 
         try {
             
-            if(debug) System.out.println(sql);
+            logger.debug("executeUpdate(): sql={}", sql);
             if(sql == null) return;
 
             conn = dataSource.getConnection();
@@ -1269,9 +1241,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             s = conn.createStatement();
             int rowsUpdated = s.executeUpdate(sql);
             if(rowsUpdated > 1) {
-                System.err.println("Too many rows updated: " + rowsUpdated 
-                    + ". SQL: " + sql);
-                conn.rollback();
+                logger.error("executeUpdate(): Too many rows updated: {}. sql={}", rowsUpdated, sql);
+                DBUtil.rollback(conn);
                 GUIHelper.errMsg(this,
                     "The update has been rolled back because " 
                     + rowsUpdated + " rows would have been modified.", "Database Error");
@@ -1295,20 +1266,14 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
 
         } 
         catch(Exception ex) { 
-            ex.printStackTrace();
-            try {
-                System.err.print("DATABASE ERROR, ROLLING BACK.");
-                if(conn != null) conn.rollback();
-            }
-            catch(Exception ex2) {
-                ex2.printStackTrace();
-            }
+            logger.error("executeUpdate(): " + ex, ex );
+            DBUtil.rollback(conn);
 
             try {
                 if(autoCommitChanged) conn.setAutoCommit(saveAutoCommit);
             }
             catch(Exception ex2) {
-                ex2.printStackTrace();
+                logger.error("executeUpdate(): Error calling setAutoCommit: " + ex2, ex2 );
             }
             GUIHelper.errMsg(this, "The following database error occurred:\n"
                    + ex.getClass().getName() + "\n"
@@ -1348,21 +1313,21 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     private void maybeCloseCurrentConnection() {
 
         if(currentResultSet != null) {
-            if(debug) System.out.println("QUERYPANEL: CLOSING RESULTSET");
+            logger.debug("maybeCloseCurrentConnection(): Closing currentResultSet.");
             DBUtil.closeResultSet(currentResultSet);
             currentResultSet = null;
         }
         else {
-            if(debug) System.out.println("QUERYPANEL: CURRENT RESULTSET IS NULL");
+            logger.debug("maybeCloseCurrentConnection(): currentResultSet is null");
         }
     
         if(currentConn != null) {
-            if(debug) System.out.println("QUERYPANEL: CLOSING CONNECTION");
+            logger.debug("maybeCloseCurrentConnection(): closing connection.");
             DBUtil.closeConnection(currentConn);
             currentConn = null;
         }
         else {
-            if(debug) System.out.println("QUERYPANEL: CURRENT RESULTSET IS NULL");
+            logger.debug("maybeCloseCurrentConnection(): currentConn is null.");
         }
 
     }
@@ -1374,14 +1339,15 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     }
 
     public void dispose() {
-        if(debug) System.out.println("QueryPanel.dispose(), closing connection.");
+        logger.debug("dispose(): Closing connection.");
         this.clearCurrentResultSet();
     }
 
 
 
     public void runQuery(String whereClause, int noResultsTabState) {
-        if(debug) System.out.println(whereClause);
+
+        logger.debug("runQuery(): whereClause={}, noResultsTabState={}", whereClause, noResultsTabState);
 
         // close any currently open resultsets and connections.
         maybeCloseCurrentConnection();
@@ -1397,7 +1363,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             SQL = SQL + " WHERE " + whereClause;
         }
 
-        if(debug) System.out.println("SQL: " + SQL);
+        logger.debug("runQuery(): SQL={}", SQL);
 
         try {
             queryConn = dataSource.getConnection();
@@ -1469,13 +1435,12 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
             }
         } 
         catch(SQLException ex) {
-            ex.printStackTrace();
+            logger.error("runQuery(): " + ex, ex );
             DBUtil.closeResultSet(rs);
             DBUtil.closeConnection(queryConn);
             GUIHelper.errMsg(this, "The following database error occurred:\n"
                    + ex.getClass().getName() + "\n"
                    + ex.getMessage(), "Database Error");
-            if(debug) System.out.println("Query exception: " + ex.toString());
 
             if(noResultsTabState != -1) setState(noResultsTabState);
         }
@@ -1536,12 +1501,12 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
                     current();
                 }
             }
-        } catch(Exception ex) {
+        } 
+        catch(Exception ex) {
+            logger.error("next(): " + ex, ex );
             GUIHelper.errMsg(this, "An unexpected error occurred:\n"
                     + ex.getClass().getName() + "\n"
                     + ex.getMessage(), "Application Error");
-            if(debug) System.out.println("next() exception: " + ex.getMessage());
-            ex.printStackTrace();
 
         }
 
@@ -1635,7 +1600,7 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
     }
 
     public void showRowNum(int rowNum) {
-        if(debug) System.out.println("TRACE:" + getClass().getName() + ".showRowNum()");
+        logger.debug("showRowNum(): rowNum={}", rowNum);
         displayRowNum(rowNum+1); 
 
         // select the row for this record in the table.
@@ -1688,8 +1653,8 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
                 if(rst.next()) rowCount = rst.getInt(1);
             } 
             catch(Exception ex) {
+                logger.error("run(): " + ex, ex );
                 rowCount = -100;
-                ex.printStackTrace();
                 GUIHelper.exceptionMsg(ex);
             }
             finally {
@@ -1755,15 +1720,6 @@ public class QueryPanel extends JPanel implements ResultSetBufferListener, Actio
         baseForm.showRow(rowNum);
         this.showRowNum(rowNum);
         displayRowNum();
-
-        // this works around an apparent bug in JDK 1.3
-        // that causes garbage to appear in the area of the JScrollPane
-        // not covered by the JTable, when the JTable is narrower
-        // than the JScrollPane.
-        if(isJava1point3 && isHorizontalScrollBarVisible()) {
-            gridScrollPane.repaint();
-        }
-    
     }
 
 
