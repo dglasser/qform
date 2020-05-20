@@ -78,8 +78,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
     private static ResourceBundle bundle = ResourceBundle.getBundle("org.glasser.qform.Resources");
 
-
-    private boolean debug = System.getProperty("MainPanel.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MainPanel.class);
 
     private boolean showSystemTables = System.getProperty("show.system.tables") != null;
 
@@ -523,25 +522,25 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 config = new Config(configFile);
             }
             catch(IOException ex) {
-                ex.printStackTrace();
                 String msg = "An error occurred while reading your configuration file: " + configFile 
                     + ". The program can still run, but preexisting configuration information will not be available.";
+                logger.error("MainPanel(): " + msg, ex );
                 GUIHelper.errMsg(parent,msg,"Application Error");
                 config = new Config();
             }
             catch(Exception ex) {
-                ex.printStackTrace();
                 String msg = "An error occurred while parsing your configuration file: " + configFile 
                     + ". The program can still run, but preexisting configuration information will not be available.";
+                logger.error("MainPanel(): " + ex, ex );
                 GUIHelper.errMsg(parent,msg,"Application Error");
                 config = new Config();
             }
             catch(FactoryConfigurationError er) {
-                er.printStackTrace();
                 String msg = "A Factory Configuration Error occurred while reading your configuration file: " + configFile 
                     + ". This probably occurred because no suitable XML parser could be located in your classpath. "
                     +"The program can still run, but preexisting configuration information will not be available.";
-                GUIHelper.errMsg(parent,msg,"Application Error");
+                GUIHelper.errMsg(parent, msg, "Application Error");
+                logger.error("MainPanel(): " + msg, er );
                 config = new Config();
             }
 
@@ -703,7 +702,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             if(Util.isNothing(lafName)) lafName = "Unknown";
             String className = info.getClassName();
             if(Util.isNothing(className)){
-                System.err.println("Error in configuration file: A third-party-laf element is missing its laf-class attribute.");
+                logger.error("MainPanel(): Error in configuration file: A third-party-laf element is missing its laf-class attribute.");
                 continue;
             }
             this.addOrUpdateLafMenuItem(lafName, className);
@@ -753,7 +752,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             public void actionPerformed(ActionEvent e) {
                 JRadioButtonMenuItem menuItem = (JRadioButtonMenuItem) e.getSource();
                 String lafClassName = e.getActionCommand();
-                if(debug) System.out.println("Changing look-and-feel: " + lafClassName);
+                logger.debug("actionPerformed(): Changing look-and-feel: {}", lafClassName);
                 try {
                     LookAndFeel laf = null;
                     try {
@@ -816,7 +815,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                     }
                 }
                 catch(Throwable err) {
-                    err.printStackTrace();
+                    logger.error("actionPerformed(): " + err, err );
                     handleSevereLafError(err);
                 }
             }
@@ -834,7 +833,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             setLookAndFeel(defaultLAF);
         }
         catch(Throwable ex) {
-            ex.printStackTrace();
+            logger.error("restoreDefaultLaf(): " + ex, ex );
             GUIHelper.errMsg(parent, "The attempt to restore the default Look-and-Feel was unsuccessful. QueryForm will now terminate.",
                 "Unrecoverable Error");
             System.exit(9);
@@ -849,7 +848,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     private void selectCurrentLafMenuItem() {
         LookAndFeel currentLAF = UIManager.getLookAndFeel();
         if(currentLAF == null) {
-            System.err.println("WARNING: Could not select menu item for current look-and-feel. UIManager.getLookAndFeel() returned null.");
+            logger.warn("selectCurrentLafMenuItem(): Could not select menu item for current look-and-feel. UIManager.getLookAndFeel() returned null.");
             return;
         }
 
@@ -859,7 +858,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             menuItem.setSelected(true);
         }
         else {
-            System.err.println("WARNING: Menu item not found for Look-and-Feel: " + currentLAF.getName());
+            logger.warn("selectCurrentLafMenuItem(): Menu item not found for Look-and-Feel: " + currentLAF.getName());
         }
     }
 
@@ -965,7 +964,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             if(contentPane instanceof QueryPanel) {
                 QueryPanel qp = (QueryPanel) contentPane;
                 int qpState = qp.getState();
-//                System.out.println("QueryPanel state is " + qpState);
                 setScreenState(qpState);
             }
             else if(contentPane instanceof TableInfoPanel) {
@@ -1056,13 +1054,13 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             else {
                 // if the System property was used, warn the user that the file wasn't found.
                 if(filepath != null) {
-                    System.err.println("WARNING: Editable types file not found: " + filepath);
+                    logger.warn("MainPanel(): Editable types file not found: " + filepath );
                 }
             }
 
         }
         catch(Throwable t) {
-            t.printStackTrace();
+            logger.error("MainPanel(): " + t, t );
         }
     }
 
@@ -1077,14 +1075,13 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             return;
         }
         catch(Throwable ex) {
-            ex.printStackTrace();
+            logger.error("actionPerformed(): " + ex, ex);
             GUIHelper.errMsg(parent, "An unexpected error occurred:\n\n" + ex, null);
         }
     }
         
 
     public void _actionPerformed(ActionEvent e) {
-//        System.out.println(e.getActionCommand());
         Object src = e.getSource();
 
         // read the tooltip for this component because for some
@@ -1097,7 +1094,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             tooltip = ((JComponent) src).getToolTipText();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("_actionPerformed(): " + ex, ex );
         }
 
         // clear away any existing status message.
@@ -1111,7 +1108,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             this.configDialog.setList(configs);
             configDialog.setVisible(true);
             LocalDataSourceConfig ld = configDialog.getSelectedItem();
-//            System.out.println("SELECTED DATASOURCE: " + ld);
             configs = configDialog.getList();
             ArrayList<LocalDataSourceConfig> list = new ArrayList<>(configs.size());
             list.addAll(configs);
@@ -1167,7 +1163,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                     return;
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("_actionPerformed(): " + ex, ex );
                     GUIHelper.errMsg(parent, "Login failed: " + ex.getMessage(), "Login Failed");
                     setStatusMessage("Login failed.");
                     return;
@@ -1209,7 +1205,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                     noConnectionAvailableMessage(sourceId);
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("_actionPerformed(): " + ex, ex );
                     GUIHelper.exceptionMsg(this,ex);
                     setStatusMessage("");
                 }
@@ -1320,71 +1316,45 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 frames[j].setIcon(true);
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("_actionPerformed(): " + ex, ex );
                 }
-//                dm.iconifyFrame(frames[j]);
             }
         }
         else if(command.equals("MAXIMIZE_ALL")) {
             JInternalFrame[] frames = desktop.getAllFrames();
             DesktopManager dm = desktop.getDesktopManager();
             for(int j=0; j<frames.length; j++) {
-//                System.out.println("\n\nframe " + j + ": " + frames[j]);
-
                 try {
                     JInternalFrame jif = frames[j];
                     if(jif.isIcon()) {
                         jif.setIcon(false);
                     }
-
-
-//                frames[j].setIcon(false);
                     frames[j].setMaximum(true);
-//                    dm.maximizeFrame(frames[j]);
-                
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("_actionPerformed(): " + ex, ex );
                 }
-                
             }
         }
         else if(command.equals("RESTORE_ALL")) {
             JInternalFrame[] frames = desktop.getAllFrames();
             DesktopManager dm = desktop.getDesktopManager();
             for(int j=0; j<frames.length; j++) {
-//                System.out.println("\n\nframe " + j + ": " + frames[j]);
 
                 try {
                     JInternalFrame jif = frames[j];
                     if(jif.isIcon()) {
-//                        System.out.println("frame " + j + " is an icon.");
                         jif.setIcon(false);
                     }
                     else if(jif.isMaximum()) {
-//                        System.out.println("FRAME " + j + " is maximum.");
                         jif.setMaximum(false);
                         Rectangle r = jif.getNormalBounds();
                         if(r != null) jif.setBounds(r);
-//                        else System.out.println("normal bounds is null");
                     }
-//                    else {
-//                        System.out.println("frame " + j + " is already restored.");
-//                    }
-                    
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("_actionPerformed(): " + ex, ex );
                 }
-                
-//                dm.maximizeFrame(frames[j]);
-
-//                if(frames[j].getParent() != null) {
-//                    dm.maximizeFrame(frames[j]);
-//                }
-//                else {
-//                    System.out.println("PARENT IS NULL");
-//                }
             }
         }
         else if(command.equals("CASCADE")) {
@@ -1430,7 +1400,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
             }
             catch(Throwable t) {
-                t.printStackTrace();
+                logger.error("_actionPerformed(): " + t, t );
                 handleSevereLafError(t);
             }
         }
@@ -1482,7 +1452,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 return;
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+                logger.error("_actionPerformed(): " + ex, ex );
                 GUIHelper.exceptionMsg(this,ex);
                 return;
             }
@@ -1505,7 +1475,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+                logger.error("_actionPerformed(): " + ex, ex );
                 GUIHelper.exceptionMsg(this,ex);
                 return;
             }
@@ -1520,12 +1490,8 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             qp.setSelectedTab(1);
 
             int[] visibleGridColumns = qp.getVisibleGridColumns();
-//            System.out.println("VisibleGridColumns is " + visibleGridColumns);
-
 
             String[] columnNames = qp.getColumnNames();
-//            System.out.println("columnNames is " + columnNames);
-
 
             columnMapDialog.openDialog(columnNames, visibleGridColumns);
             int selections[] = columnMapDialog.getSelections();
@@ -1640,8 +1606,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
         }
 
-        //System.out.println("Exporting to " + f.getAbsolutePath());
-
         TableInfo tableInfo = qp.getTableInfo();
 
         exportDialog.openDialog(tableInfo, exportType);
@@ -1676,7 +1640,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             GUIHelper.infoMsg(this, "Results saved successfully.", "QueryForm");
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("exportResultSet(): " + ex, ex );
             GUIHelper.exceptionMsg(this,ex);
         }
     }
@@ -1845,7 +1809,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
             File f = configFile;
 
-//            System.out.println("Parent directory is " + f.getParent());
             if(f.exists() && f.canWrite() == false) {
                 GUIHelper.warningMsg(this, "The configuration file, " + f.getCanonicalPath()
                     + ", is read-only. Configuration changes will not be saved.", "QueryForm");
@@ -1854,7 +1817,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             setStatusMessage("Saving configuration to " + f.getAbsolutePath() + ".");
 
             File tempfile = File.createTempFile("qformxml", null);
-//            System.out.println("tempfile is " + tempfile.getAbsolutePath());
             config.writeConfig(tempfile);
 //            f.delete();
             
@@ -1868,14 +1830,10 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             fos.close();
             tempfile.deleteOnExit();
 
-//            System.out.println("Now tempfile is " + tempfile.getAbsolutePath());
-
-
             System.exit(0);
         }
         catch(Throwable ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
+            logger.error("maybeExitProgram(): " + ex, ex );
             GUIHelper.errMsg(this, "An error occurred while saving the configuration. Changes to the configuration file have not been saved.", "Application Error");
             System.exit(-1);
         }
@@ -1886,7 +1844,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
 
     public void setStatusMessage(String msg) {
-//        System.out.println("STATUS: " + msg);
         super.setStatusMessage(msg);
     }
 
@@ -1898,7 +1855,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
      * @see javax.swing.JInternalFrame#show
      */
     public void internalFrameOpened(InternalFrameEvent e) {
-//        System.out.println("TRC: " + getClass().getName() + ".internalFrameOpened()");
         setScreenState();
     }
 
@@ -1909,7 +1865,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
      * @see javax.swing.JInternalFrame#setSelected
      */
     public void internalFrameActivated(InternalFrameEvent e) {
-//        System.out.println("TRC: " + getClass().getName() + ".internalFrameActivated()");
         setScreenState();
         
     }
@@ -1922,7 +1877,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
      * @see javax.swing.JInternalFrame#setDefaultCloseOperation
      */
     public void internalFrameClosing(InternalFrameEvent e) {
-//        System.out.println("TRC: " + getClass().getName() + ".internalFrameClosing()");
         setScreenState();
 
     }
@@ -1933,17 +1887,10 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
      * @see javax.swing.JInternalFrame#setSelected
      */
     public void internalFrameDeactivated(InternalFrameEvent e) {
-//        System.out.println("TRC: " + getClass().getName() + ".internalFrameDeactivated()");
         setScreenState();
     }
 
-    /**
-     * Invoked when an internal frame has been closed.
-     * This is an empty implementation which can be overriden by subclasses.
-     * @see javax.swing.JInternalFrame#setClosed
-     */
     public void internalFrameClosed(InternalFrameEvent e) {
-        if(debug) System.out.println("TRC: " + getClass().getName() + ".internalFrameClosed()");   
         JInternalFrame f = (JInternalFrame) e.getSource();
         Container c = f.getContentPane();
         if(c instanceof QueryPanel) {
@@ -1968,7 +1915,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
      * @see javax.swing.JInternalFrame#setIcon
      */
     public void internalFrameIconified(InternalFrameEvent e) {
-//        System.out.println("TRC: " + getClass().getName() + ".internalFrameIconified()");
         setScreenState();
     }
 
@@ -1978,7 +1924,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
      * @see javax.swing.JInternalFrame#setIcon
      */
     public void internalFrameDeiconified(InternalFrameEvent e) {
-//        System.out.println("TRC: " + getClass().getName() + ".internalFrameDeiconified()");
         setScreenState();
     }
 
@@ -1998,7 +1943,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 setPrimaryKeys(sourceId, ti);
             }
             catch(SQLException ex) {
-                System.err.println("WARNING: Primary keys could not be read for data source ID = " + sourceId);
+                logger.error("setColumnsAndKeys(): WARNING: Primary keys could not be read for data source ID = " + sourceId, ex);
                 pkeysNotSupported.add(sourceId);
             }
         }
@@ -2008,7 +1953,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 setForeignKeys(sourceId, ti);
             }
             catch(SQLException ex) {
-                System.err.println("WARNING: Foreign keys could not be read for data source ID = " + sourceId);
+                logger.error("setColumnsAndKeys(): WARNING: Foreign keys could not be read for data source ID = " + sourceId, ex);
                 fkeysNotSupported.add(sourceId);
             }
         }
@@ -2018,7 +1963,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 setExportedKeys(sourceId, ti);
             }
             catch(SQLException ex) {
-                System.err.println("WARNING: Exported keys could not be read for data source ID = " + sourceId);
+                logger.error("setColumnsAndKeys(): WARNING: Exported keys could not be read for data source ID = " + sourceId, ex);
                 exkeysNotSupported.add(sourceId);
             }
         }
@@ -2030,9 +1975,6 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     public void setColumns(Integer sourceId, TableInfo ti) 
         throws SQLException, NoSuchElementException
     {
-//        System.out.println("TRC: " + getClass().getName() + ".setColumns("
-//            + sourceId + ", " + ti.getTableName());
-
         DataSource ds = (DataSource) dsMap.get(sourceId);
         Connection conn = null;
         ResultSet rs = null;
@@ -2067,7 +2009,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 String colName = rs.getString("COLUMN_NAME");
                 Column col = ti.getColumn(colName);
                 if(col == null) {
-                    System.err.println("WARNING: NO COLUMN FOUND MATCHING PK COLUMN " + colName);
+                    logger.warn("setPrimaryKeys(): NO COLUMN FOUND MATCHING PK COLUMN " + colName);
                 }
                 else {
                     col.setPkComponent(true);
@@ -2198,14 +2140,11 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 while(st.hasMoreTokens()) {
                     Integer i = new Integer(st.nextToken());
                     set.add(i);
-                    if(debug) {
-                        System.out.println("Adding editable type " + i + 
-                                           " for driver " + driverClassName);
-                    }
+                    logger.debug("getEditableTypes(): Adding editable type {} for driver {}", i, driverClassName);
                 }
             }
             catch(Exception ex) {
-                System.err.println("Error parsing editable types for driver class: " + driverClassName);
+                logger.error("getEditableTypes(): Error parsing editable types for driver class: " + driverClassName, ex);
             }
         }
 

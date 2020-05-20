@@ -232,14 +232,7 @@ public class Config {
             config.setDriverClassName(trimToNull(con.getAttribute("driver-class")));
             config.setUrl(trimToNull(con.getAttribute("url")));
             String s = trimToNull(con.getAttribute("login-required"));
-            if(s != null) {
-                try {
-                    config.setLoginRequired(new Boolean(s).booleanValue());
-                }
-                catch(Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
+            config.setLoginRequired("true".equalsIgnoreCase(s));
             config.setUser(trimToNull(con.getAttribute("user")));
             config.setPassword(trimToNull(con.getAttribute("password")));
 
@@ -249,7 +242,7 @@ public class Config {
                     config.setMaxConnections(new Integer(s));
                 }                
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("init(): Invalid max-connections property: " + s, ex );
                 }
             }
 
@@ -259,7 +252,7 @@ public class Config {
                     config.setLoginTimeout(new Integer(s));
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("init(): Invalid login-timeout property: " + s, ex );
                 }
             }
 
