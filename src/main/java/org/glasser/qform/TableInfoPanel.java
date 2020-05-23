@@ -52,7 +52,8 @@ import javax.swing.event.*;
 
 public class TableInfoPanel extends JPanel {
 
-   
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TableInfoPanel.class);
+
     private TableInfo tableInfo = null;
 
     private JTabbedPane tabbedPane = new JTabbedPane();
@@ -268,7 +269,7 @@ public class TableInfoPanel extends JPanel {
                                 fcolModel.setDataList(f.getForeignKeyColumns());
                             }
                             else {
-                                System.out.println("FOREIGN KEY OBJECT IS NULL AT ROW " + row);
+                                logger.debug("valueChanged(): FOREIGN KEY OBJECT IS NULL AT ROW {}", row);
                             }
                         }
                     }
@@ -344,7 +345,7 @@ public class TableInfoPanel extends JPanel {
                                 excolModel.setDataList(f.getForeignKeyColumns());
                             }
                             else {
-                                System.out.println("FOREIGN KEY OBJECT IS NULL AT ROW " + row);
+                                logger.debug("valueChanged(): FOREIGN KEY OBJECT IS NULL AT ROW {}", row);
                             }
                         }
                     }

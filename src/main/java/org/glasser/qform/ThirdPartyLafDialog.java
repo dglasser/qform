@@ -46,7 +46,7 @@ import org.glasser.swing.*;
  */
 public class ThirdPartyLafDialog extends JDialog implements ActionListener {
 
-    public static boolean debug = System.getProperty("ThirdPartyLafDialog.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ThirdPartyLafDialog.class);
     
     private JTextField txtInput = new JTextField();
 
@@ -95,16 +95,16 @@ public class ThirdPartyLafDialog extends JDialog implements ActionListener {
                     super.updateUI();
                     Color background = UIManager.getColor("Panel.background");
                     if(background != null) {
-                        if(debug) System.out.println("promptDisplay: using Panel.background.");
+                        logger.debug("updateUI(): promptDisplay: using Panel.background.");
                         setBackground(background);
                     }
                     else {
                         Container parent = getParent();
                         if(parent != null) {
-                            System.out.println("Parent class is " + parent.getClass());
+                            logger.debug("updateUI(): parent class is {}", parent.getClass());
                             background = parent.getBackground();
                             if(background != null) {
-                                if(debug) System.out.println("promptDisplay: using parent.getBackground(): " + background);
+                                logger.debug("updateUI(): promptDisplay: using parent.getBackground(): {}", background);
                                 setBackground(background);
                             }
                         }

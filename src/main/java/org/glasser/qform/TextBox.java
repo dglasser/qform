@@ -44,7 +44,7 @@ import org.glasser.sql.DBUtil;
 
 public class TextBox extends JTextArea {
 
-    private static boolean debug = System.getProperty("TextBox.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TextBox.class);
 
     private Set editableTypes = null;
 
@@ -89,11 +89,11 @@ public class TextBox extends JTextArea {
         try {
             if(dbEncoding == null) return s;
             String decoded = new String( s.getBytes(dbEncoding), APP_ENCODING);
-            if(debug) System.out.println("encoded: " + s + "\ndecoded: " + decoded);
+            logger.debug("decode(): encoded: {}\ndecoded: {}", s, decoded);
             return decoded;
         }
         catch(java.io.UnsupportedEncodingException ex) {
-            ex.printStackTrace();
+            logger.error("decode(): " + ex, ex );
             return s;
         }
     }
@@ -102,12 +102,11 @@ public class TextBox extends JTextArea {
         try {
             if(dbEncoding == null) return s;
             String encoded = new String( s.getBytes(APP_ENCODING), dbEncoding);
-            if(debug) System.out.println("decoded: " + s + "\nencoded: " + encoded);
+            logger.debug("decode(): decoded: {}\nencoded: {}", s, encoded);
             return encoded;
-
         }
         catch(java.io.UnsupportedEncodingException ex) {
-            ex.printStackTrace();
+            logger.error("encode(): " + ex, ex );
             return s;
         }
     }

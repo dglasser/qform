@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 
 public abstract class ExportPanel extends JPanel implements ActionListener {
 
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ExportPanel.class);
 
     private String[] columnNames = null;
 
@@ -133,9 +134,7 @@ public abstract class ExportPanel extends JPanel implements ActionListener {
                         int selectedIndex = combo.getSelectedIndex();
                         Object o = combo.getSelectedItem();
 
-                        System.out.println("--ActionEvent:"
-                                           + selectedIndex + "/" + o);
-
+                        logger.debug("actionPerformed(): {}/{}", selectedIndex, o);
                         
                         if(selectedIndex < 0) {
                             return;
@@ -157,7 +156,6 @@ public abstract class ExportPanel extends JPanel implements ActionListener {
             formatterSelectors[j] = cmb;
             add(cmb, gc2);
         }
-
     }
 
     /**
