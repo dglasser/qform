@@ -48,8 +48,7 @@ import org.glasser.sql.*;
 
 public class TableSelector extends JDialog implements ActionListener {
 
-
-    private static boolean debug = false;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TableSelector.class);
 
 
     private class DataSourceListItem  implements Comparable<DataSourceListItem> {
@@ -157,24 +156,20 @@ public class TableSelector extends JDialog implements ActionListener {
         for(int j=sourceVector.size()-1; j>=0; j--) {
             DataSourceListItem li = (DataSourceListItem) sourceVector.get(j);
             if(sourceId.equals(li.getSourceId())) {
-                if(debug) System.out.println("GOT IT.");
                 sourceVector.remove(j);
             }
         }
 
-        if(debug) System.out.println("new sourceModel size is " + sourceModel.getSize());
-
+        logger.debug("removeDataSource(): New sourceModel size is {}", sourceModel.getSize());
         Object o = schemaModelMap.remove(sourceId);
-        if(debug) System.out.println("schemaModel removed: " + o);
         o = tableListMap.remove(sourceId);
-        if(debug) System.out.println("tableList removed : " + (o != null));
 
         sourceList.setModel(sourceModel);
         try {
             sourceList.setSelectedIndex(-1);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("removeDataSource(): " + ex, ex );
         }
         schemaList.setModel(this.emptySchemaListModel);
         tableList.setListData(emptyVector);
@@ -317,7 +312,7 @@ public class TableSelector extends JDialog implements ActionListener {
                 schemaList.setSelectedIndex(0);
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+                logger.error("actionPerformed(): " + ex, ex );
             }
             return;
         }
@@ -343,7 +338,7 @@ public class TableSelector extends JDialog implements ActionListener {
                         tableList.setSelectedIndex(0);
                     }
                 } catch(Exception ex) {
-                    ex.printStackTrace();
+                    logger.error("actionPerformed(): " + ex, ex );
                 }
             }
         } 
@@ -426,7 +421,7 @@ public class TableSelector extends JDialog implements ActionListener {
                 ts.addDataSource(new Integer(j+1), lds[j].getDisplayName(), map);
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+                logger.error("main(): " + ex, ex );
             }
         }
 
@@ -434,32 +429,17 @@ public class TableSelector extends JDialog implements ActionListener {
         ts.setVisible(true);
 
         Object[] sels = ts.getSelection();
-        if(debug) {
-            for(int j=0; sels != null && j<sels.length; j++) {
-                System.out.println("---" + sels[j]);
-            }
-        }
 
         ts.removeDataSource(new Integer(1));
         ts.setVisible(true);
 
         sels = ts.getSelection();
-        if(debug) {
-            for(int j=0; sels != null && j<sels.length; j++) {
-                System.out.println("---" + sels[j]);
-            }
-        }
 
 
         ts.removeDataSource(new Integer(2));
         ts.setVisible(true);
 
         sels = ts.getSelection();
-        if(debug) {
-            for(int j=0; sels != null && j<sels.length; j++) {
-                System.out.println("---" + sels[j]);
-            }
-        }
 
     } 
     
