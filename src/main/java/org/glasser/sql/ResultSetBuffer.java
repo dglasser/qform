@@ -309,7 +309,6 @@ public class ResultSetBuffer extends Vector<List<Object>> {
             }
             catch(SQLException ex) {
                 logger.error("readRow(): col=" + col, ex );
-                ex.printStackTrace();
                 val = null;
 //                throw ex;
             }
@@ -431,9 +430,10 @@ public class ResultSetBuffer extends Vector<List<Object>> {
 
     public void setCursor(int value) {
         if(value > size() - 1) {
-            new Throwable().printStackTrace();
-            throw new ArrayIndexOutOfBoundsException("ResultSetBuffer.setCursor(): Cursor value "
-                + value + " is out of range. (Size is " + size() + ".)");
+            String msg = "Cursor value "
+                + value + " is out of range. (Size is " + size() + ".)";
+            logger.error("setCursor(): " + msg, new Exception("STACKTRACE") );
+            throw new ArrayIndexOutOfBoundsException("ResultSetBuffer.setCursor(): " + msg);
         }
         cursor = value;
     }
