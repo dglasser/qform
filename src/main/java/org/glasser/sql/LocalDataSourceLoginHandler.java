@@ -63,6 +63,7 @@ import org.glasser.swing.*;
 
 public class LocalDataSourceLoginHandler implements LoginHandler {
 
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(LocalDataSourceLoginHandler.class);
 
     private LocalDataSourceConfig config = null;
 
@@ -75,12 +76,12 @@ public class LocalDataSourceLoginHandler implements LoginHandler {
             return DataSourceManager.getLocalDataSource(temp,userName,password);
         }
         catch(ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error("login(): " + ex, ex );
             throw new LoginHandlerException("The JDBC driver class ("
                 + temp.getDriverClassName() + ") was not found in the classpath.");
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("login(): " + ex, ex );
             throw new LoginHandlerException(ex.getMessage());
         }
         

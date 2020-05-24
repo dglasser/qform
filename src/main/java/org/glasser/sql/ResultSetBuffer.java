@@ -63,8 +63,7 @@ import org.glasser.util.comparators.MutableListComparator;
 
 public class ResultSetBuffer extends Vector<List<Object>> {
 
-
-    public static boolean debug = System.getProperty("ResultSetBuffer.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ResultSetBuffer.class);
 
     protected final static int DEFAULT_READAHEAD = 200;
 
@@ -174,10 +173,10 @@ public class ResultSetBuffer extends Vector<List<Object>> {
                 String columnClassName = null;
                 try {
                     columnClassName = rsmd.getColumnClassName(j+1);
-                    if(debug) System.out.println("columnClassName for " + columnNames[j] + " is " + columnClassName);
+                    logger.debug("ResultSetBuffer(): columnClassName for {} is {}", columnNames[j], columnClassName);
                 }
                 catch(SQLException sqlex) {
-                    System.out.println("WARNING: ResultSetMetaData.getColumnClassName() failed for column " + (j+1) + ", SQL Type = " + columnTypes[j] + ": " + sqlex);
+                    logger.error("ResultSetBuffer(): ResultSetMetaData.getColumnClassName() failed for column " + (j+1) + ", SQL Type = " + columnTypes[j] + ": " + sqlex, sqlex );
                     columnClassName = this.getClassForSqlType(columnTypes[j]).getName();
                 }
 
@@ -185,11 +184,11 @@ public class ResultSetBuffer extends Vector<List<Object>> {
                 boolean classNotFound = false; 
                 try {
                     columnClasses[j] = Class.forName(columnClassName);
-                    if(debug) System.out.println("column class for " + columnNames[j] + " found: " + columnClasses[j].getName());
+                    logger.debug("ResultSetBuffer(): column class for {} found: {}", columnNames[j], columnClasses[j].getName());
                 }
                 catch(Exception ex) {
-                    System.err.println("column class ("
-                        + columnClassName + ") for " + columnNames[j] + " NOT FOUND.");
+                    logger.error("ResultSetBuffer(): column class ("
+                        + columnClassName + ") for " + columnNames[j] + " NOT FOUND.", ex );
                     if(DBUtil.isDisplayableType(columnTypes[j])) {
                         columnClasses[j] = getClassForSqlType(columnTypes[j]);
                     }
@@ -212,7 +211,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
 
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+                logger.error("ResultSetBuffer(): " + ex, ex );
                 columnClasses[j] = Object.class;
             }
         }
@@ -286,7 +285,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
             }
         }
         double end = System.currentTimeMillis();
-        if(debug) System.out.println("Reading ahead " + j + " records took " + ((end - begin) / 1000.0d) + " seconds.");
+        logger.debug("readMoreRows(): Reading ahead {} recoreds took {} seconds.", j, ((end - begin) / 1000.0d));
         if(rowsRead > 0) {
             ResultSetBufferEvent e = new ResultSetBufferEvent(this, ResultSetBufferEvent.MORE_ROWS_READ);
             listeners.fireSmartEvent(e);
@@ -309,7 +308,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
             val = rs.getObject(col);
             }
             catch(SQLException ex) {
-                System.out.println("COL: " + col);
+                logger.error("readRow(): col=" + col, ex );
                 ex.printStackTrace();
                 val = null;
 //                throw ex;
@@ -372,7 +371,6 @@ public class ResultSetBuffer extends Vector<List<Object>> {
 
 
     public List<Object> getNextRow() {
-        //System.out.println("getNextRow - cursor = " + cursor + "  size = " + size());
         if(endOfResultsReached && (cursor >= (size()-1))) return null;
         int temp = cursor;
         try {
@@ -386,13 +384,12 @@ public class ResultSetBuffer extends Vector<List<Object>> {
     }
 
     public List<Object> getRowAt(int row) {
-//        System.out.println("getRowAt(" + row + ")");
         if(endOfResultsReached == false && (size() - readAhead) <= row) {
             try {
                 readMoreRows();
             }
             catch(SQLException ex) {
-                ex.printStackTrace();
+                logger.error("getRowAt(): " + ex, ex );
                 throw new RuntimeException("An SQLException occurred in ResultSetBuffer.getRowAt("
                     + row + ")");
             }
@@ -484,7 +481,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
             }
         }
         catch(SQLException ex) {
-            ex.printStackTrace();
+            logger.error("maybeSetCursor(): " + ex, ex );
             throw new RuntimeException("An SQLException occurred in ResultSetBuffer.maybeSetCusror("
                 + value + ")");
         }
@@ -492,7 +489,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
 
     public void sort(int columnIndex, boolean sortDescending) {
 
-        if(debug) System.out.println("sort(" + columnIndex + ", " + sortDescending + ")");
+        logger.debug("sort(): columnIndex={}, sortDescending={}", columnIndex, sortDescending);
 
         boolean saveReadAheadEnabled = readAheadEnabled;
 
@@ -506,10 +503,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
             List<? extends Object> selectedRow = null;
             if(cursor > -1) { 
                 selectedRow = this.getRowAt(cursor);
-                if(debug) {
-                    System.out.println("Before sort, selected row is " + cursor);
-                }
-
+                logger.debug("sort(): Befor sort, selected row is {}");
             }
             Collections.sort(this, comparator);
 
@@ -517,9 +511,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
                 int newCursor = indexOf(selectedRow);
                 if(newCursor > -1) {
                     cursor = newCursor;
-                    if(debug) {
-                        System.out.println("After sort, selected row is " + cursor);
-                    }
+                    logger.debug("sort(): After sort, selected row is {}", cursor);
                 }
             }
 

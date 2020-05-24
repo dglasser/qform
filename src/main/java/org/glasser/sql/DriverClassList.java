@@ -62,6 +62,8 @@ import org.glasser.util.ExtensionClassLoader;
 
 public class DriverClassList {
 
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DriverClassList.class);
+
 
     /**
      * This is a list of driver class names that were collected through a google 
@@ -135,7 +137,7 @@ public class DriverClassList {
     public static void main(String[] args) throws Exception {
         String[] availableDrivers = getAvailableDriverClassNames();
         for(int j=0; j<availableDrivers.length; j++) {
-            System.out.println("--" + availableDrivers[j]);
+            logger.debug("main(): {}", availableDrivers[j]);
         }
     } 
 

@@ -61,6 +61,7 @@ import java.util.*;
 
 public class DBUtil implements java.io.Serializable {
 
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DBUtil.class);
 
     public static class COLUMN {
 
@@ -171,7 +172,7 @@ public class DBUtil implements java.io.Serializable {
                 map.put(schema, v);
             }
             v.add(ti);
-//            System.out.println(ti.debugString());
+//            logger.debug("getTableInfoLists(): {}", ti.debugString());
         }
 
         return map;
@@ -463,7 +464,7 @@ public class DBUtil implements java.io.Serializable {
             conn.close();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("closeConnection(): " + ex, ex );
         }
     }
 
@@ -473,7 +474,7 @@ public class DBUtil implements java.io.Serializable {
             conn.rollback();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("rollback(): " + ex, ex );
         }
     }
 
@@ -484,7 +485,7 @@ public class DBUtil implements java.io.Serializable {
             conn.setAutoCommit(autoCommit);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("setAutoCommit(): " + ex, ex );
         }
     }
 
@@ -495,7 +496,7 @@ public class DBUtil implements java.io.Serializable {
             rs.close();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("closeResultSet(): " + ex, ex );
         }
     }
 
@@ -506,7 +507,7 @@ public class DBUtil implements java.io.Serializable {
             s.close();
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("closeStatement(): " + ex, ex );
         }
     }
 
