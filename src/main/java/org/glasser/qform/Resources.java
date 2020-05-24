@@ -131,7 +131,7 @@ public class Resources extends ResourceBundle {
         ,{"menu.GRID_VIEW_SUB.COLUMN_MAP_DIALOG.label",			"Select visible columns..."}
         ,{"menu.GRID_VIEW_SUB.COLUMN_MAP_DIALOG.mnemonic",		"V"}
         ,{"menu.GRID_VIEW_SUB.COLUMN_MAP_DIALOG.tooltip",		"Select which columns will be displayed in this table."}
-        ,{"menu.GRID_VIEW_SUB.TOGGLE_HORIZONTAL_SCROLLBAR.label",	"CHECKBOX_Horizontal scrollbar"}
+        ,{"menu.GRID_VIEW_SUB.TOGGLE_HORIZONTAL_SCROLLBAR.label",	"Horizontal scrollbar"}
         ,{"menu.GRID_VIEW_SUB.TOGGLE_HORIZONTAL_SCROLLBAR.mnemonic","H"}
         ,{"menu.GRID_VIEW_SUB.TOGGLE_HORIZONTAL_SCROLLBAR.tooltip",	"Show or hide the horizontal scrollbar."}
 
