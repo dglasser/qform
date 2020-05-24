@@ -69,8 +69,7 @@ import java.io.*;
  */
 public class ExtensionClassLoader extends java.net.URLClassLoader {
 
-
-    public static boolean debug = System.getProperty("ExtensionClassLoader.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ExtensionClassLoader.class);
 
     /**
      * This is not a Singleton class in the strict sense that only one instance
@@ -123,11 +122,11 @@ public class ExtensionClassLoader extends java.net.URLClassLoader {
         if(directory.isDirectory() == false) {
             throw new IllegalArgumentException("directory argument is not a directory.");
         }
-        if(debug) System.out.println("Adding archives in " + directory + " to ExtensionClassLoader classpath." );
+        logger.debug("addArchivesInDirectory(): Adding archives in {} to ExtensionClassLoader classpath.", directory);
 
         File[] archives = directory.listFiles(archiveFilter);
         for(int j=0; archives != null && j<archives.length; j++) {
-            if(debug) System.out.println("Adding " + archives[j] + " to ExtensionClassLoader classpath.");
+            logger.debug("addArchivesInDirectory(): Adding {} to ExtensionClassLoader classpath.", archives[j]);
             this.addURL(archives[j].toURI().toURL());
         }
     }

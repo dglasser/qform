@@ -62,6 +62,7 @@ import org.glasser.util.*;
 
 public class ReflectionColumnManager<R> extends AbstractColumnManager<R> {
 
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ReflectionColumnManager.class);
 
     private Class objectClass = null;
 
@@ -113,7 +114,7 @@ public class ReflectionColumnManager<R> extends AbstractColumnManager<R> {
             return getter.invoke(rowObject, (Object[]) null);
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("getValueAt(): " + ex, ex );
             throw new RuntimeException("Caught " + ex.getClass().getName() + ": Object class is " 
                 + objectClass.getName()
                 + ", method is " + getter.getName());
@@ -127,7 +128,7 @@ public class ReflectionColumnManager<R> extends AbstractColumnManager<R> {
             setter.invoke(rowObject, new Object[] { newCellValue });
         }
         catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("setValueAt(): " + ex, ex );
             throw new RuntimeException("Caught " + ex.getClass().getName() + ": Object class is " 
                 + objectClass.getName()
                 + ", setter method is " + setter.getName());

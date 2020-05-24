@@ -173,7 +173,6 @@ public class ResultSetBuffer extends Vector<List<Object>> {
                 String columnClassName = null;
                 try {
                     columnClassName = rsmd.getColumnClassName(j+1);
-                    logger.debug("ResultSetBuffer(): columnClassName for {} is {}", columnNames[j], columnClassName);
                 }
                 catch(SQLException sqlex) {
                     logger.error("ResultSetBuffer(): ResultSetMetaData.getColumnClassName() failed for column " + (j+1) + ", SQL Type = " + columnTypes[j] + ": " + sqlex, sqlex );
@@ -184,7 +183,6 @@ public class ResultSetBuffer extends Vector<List<Object>> {
                 boolean classNotFound = false; 
                 try {
                     columnClasses[j] = Class.forName(columnClassName);
-                    logger.debug("ResultSetBuffer(): column class for {} found: {}", columnNames[j], columnClasses[j].getName());
                 }
                 catch(Exception ex) {
                     logger.error("ResultSetBuffer(): column class ("
@@ -285,7 +283,7 @@ public class ResultSetBuffer extends Vector<List<Object>> {
             }
         }
         double end = System.currentTimeMillis();
-        logger.debug("readMoreRows(): Reading ahead {} recoreds took {} seconds.", j, ((end - begin) / 1000.0d));
+        logger.debug("readMoreRows(): Reading ahead {} records took {} seconds.", j, ((end - begin) / 1000.0d));
         if(rowsRead > 0) {
             ResultSetBufferEvent e = new ResultSetBufferEvent(this, ResultSetBufferEvent.MORE_ROWS_READ);
             listeners.fireSmartEvent(e);

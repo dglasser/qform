@@ -116,7 +116,6 @@ public class ScrollingDesktopPane extends JDesktopPane {
         }
 
         Dimension d = new Dimension(Math.abs(minX) + maxX, Math.abs(minY) + maxY);
-        //System.out.println("TRC: " + getClass().getName() + ".getPreferredSize() returning " + d);
         return d;
 
 

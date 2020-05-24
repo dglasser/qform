@@ -93,13 +93,11 @@ public class MenuItemListener implements ChangeListener, ItemListener {
             JMenuItem menuItem = (JMenuItem) src;
             String statusMsg = menuItem.getToolTipText();
             boolean isArmed = menuItem.isSelected();
-//            System.out.println("JMenu STATE_CHANGED: (" + menuItem.isArmed() + "/" + menuItem.isSelected() + ") " + menuItem.getText());
             if(isArmed && (menuItem != lastItem || isArmed != lastArmed)) {
                 display.setStatusMessage(statusMsg);
             }
             else {
                 String currentStatusMessage = display.getStatusMessage();
-//                System.out.println(statusMsg + "|" + currentStatusMessage);
                 if(statusMsg != null && statusMsg.equals(currentStatusMessage)) {
                     display.setStatusMessage(null);
                 }
@@ -112,13 +110,11 @@ public class MenuItemListener implements ChangeListener, ItemListener {
             JMenuItem menuItem = (JMenuItem) src;
             String statusMsg = menuItem.getToolTipText();
             boolean isArmed = menuItem.isArmed();
-//            System.out.println("STATE_CHANGED: (" + menuItem.isArmed() + "/" + menuItem.isSelected() + ") " + menuItem.getText());
             if(isArmed && (menuItem != lastItem || isArmed != lastArmed)) {
                 display.setStatusMessage(statusMsg);
             }
             else {
                 String currentStatusMessage = display.getStatusMessage();
-//                System.out.println(statusMsg + "|" + currentStatusMessage);
                 if(statusMsg != null && statusMsg.equals(currentStatusMessage)) {
                     display.setStatusMessage(null);
                 }
@@ -135,13 +131,11 @@ public class MenuItemListener implements ChangeListener, ItemListener {
         if(src instanceof JMenuItem) {
             JMenuItem menuItem = (JMenuItem) src;
             String statusMsg = menuItem.getToolTipText();
-//            System.out.println("ITEM_STATE_CHANGED: (" + menuItem.isArmed() + ") " + menuItem.getText());
             if(menuItem.isArmed() && ! menuItem.isSelected()) {
                 display.setStatusMessage(statusMsg);
             }
             else {
                 String currentStatusMessage = display.getStatusMessage();
-//                System.out.println(statusMsg + "|" + currentStatusMessage);
                 if(statusMsg != null && statusMsg.equals(currentStatusMessage)) {
                     display.setStatusMessage(null);
                 }

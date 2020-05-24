@@ -69,9 +69,7 @@ public class XInternalFrame extends JInternalFrame implements ActionListener {
 
     private ImageIcon deselectedIcon = null;
 
-    public static boolean debug = System.getProperty("XInternalFrame.debug") != null
-        || System.getProperty("DEBUG") != null;
-
+    private final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(XInternalFrame.class);
 
     private class Listener implements InternalFrameListener {
         /**
@@ -94,7 +92,6 @@ public class XInternalFrame extends JInternalFrame implements ActionListener {
          * @see javax.swing.JInternalFrame#setDefaultCloseOperation
          */
         public void internalFrameClosing(InternalFrameEvent e) {
-            if(debug) System.out.println("TRC: " + getClass().getName() + ".internalFrameClosing()");
         }
         /**
          * Invoked when an internal frame is de-activated.
@@ -110,7 +107,6 @@ public class XInternalFrame extends JInternalFrame implements ActionListener {
          * @see javax.swing.JInternalFrame#setClosed
          */
         public void internalFrameClosed(InternalFrameEvent e) {
-            if(debug) System.out.println("TRC: " + getClass().getName() + ".internalFrameClosed()");
             Container c = menuItem.getParent();
             if(c != null) c.remove(menuItem);
             menuItem.removeActionListener(XInternalFrame.this);
@@ -138,9 +134,6 @@ public class XInternalFrame extends JInternalFrame implements ActionListener {
         addInternalFrameListener(new Listener());
 
     }
-
-
-
 
     public XInternalFrame() {
         super();
@@ -185,7 +178,7 @@ public class XInternalFrame extends JInternalFrame implements ActionListener {
                 }
             }
             catch(Exception ex) {
-                ex.printStackTrace();
+                logger.error("actionPerformed(): " + ex, ex );
             }
         }
     }
@@ -210,9 +203,7 @@ public class XInternalFrame extends JInternalFrame implements ActionListener {
     }
 
     public void finalize() {
-        if(debug) {
-            System.out.println("XInternalFrame.finalize(): " + getTitle());
-        }
+        logger.debug("finalize(): {}", getTitle());
     }
 
 }

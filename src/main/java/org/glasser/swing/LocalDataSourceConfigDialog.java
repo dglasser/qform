@@ -73,8 +73,7 @@ import org.glasser.util.*;
 public class LocalDataSourceConfigDialog extends JDialog implements ActionListener, ListSelectionListener {
 
 
-
-    public static boolean debug = System.getProperty("LocalDataSourceConfigDialog.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(LocalDataSourceConfigDialog.class);
 
     private LocalDataSourceConfigPanel configPanel = new LocalDataSourceConfigPanel();
 
@@ -386,10 +385,10 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
                                                public void mouseClicked(MouseEvent e) {
                                                    if(e.getClickCount() == 2) {
                                                        Point p = e.getPoint();
-                                                       if(debug) System.out.println("clickpoint = " + p);
+                                                       logger.debug("mouseClicked(): clickpoint={}", p);
                                                        int clickedIndex = listbox.locationToIndex(p);
 
-                                                       if(debug) System.out.println("clickedindex = " + clickedIndex);
+                                                       logger.debug("mouseClicked(): clickedIndex={}", clickedIndex);
                                                        if(clickedIndex > -1 && btnConnect.isEnabled()) {
                                                            btnConnect.doClick(0);
                                                        }

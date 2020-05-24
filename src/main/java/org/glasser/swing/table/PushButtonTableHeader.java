@@ -315,9 +315,6 @@ public class PushButtonTableHeader extends JTableHeader {
      */
     public static void main(String[] args) throws Exception {
 
-        System.out.println("Java version: "
-            + System.getProperty("java.version"));
-
         JFrame frame = new JFrame("PushButtonTableHeader Demo");
         JPanel cp = new JPanel();
         cp.setLayout(new BorderLayout());

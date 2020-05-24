@@ -48,7 +48,7 @@ import java.awt.*;
 
 public class QForm {
 
-    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(QForm.class);
+    private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(QForm.class);
 
     private final static String WSDP = "http://java.sun.com as part of the Java Web Services Developer Pack";
 
@@ -81,10 +81,10 @@ public class QForm {
         // this will be the default title for message boxes when one isn't supplied
         GUIHelper.defaultMessageTitle = "QueryForm";
 
-        // make sure we're running at least JRE 1.3
-        if(!Util.isCurrentJavaVersionAtLeast("1.3")) {
+        // make sure we're running at least JRE 1.8
+        if(!Util.isCurrentJavaVersionAtLeast("1.8")) {
             String version = System.getProperty("java.version");
-            GUIHelper.errMsg(null, "This application requires Java 1.3 or later. You are currently running version "
+            GUIHelper.errMsg(null, "This application requires Java 1.8 or later. You are currently running version "
                 + version + ".", null);
             System.exit(1);
         }

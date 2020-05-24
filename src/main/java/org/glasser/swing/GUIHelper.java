@@ -71,7 +71,7 @@ public class GUIHelper {
 
     private GUIHelper() {}
 
-    private static boolean debug = System.getProperty("GUIHelper.debug") != null;
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(GUIHelper.class);
 
     public static String defaultMessageTitle = null;
 
@@ -382,7 +382,7 @@ public class GUIHelper {
             Object[] row = menuConfig[j];
 
             String label = (String) row[0];
-            if(debug) System.out.println("label " + label);
+//            logger.debug("buildMenu(): label {}", label);
 
             // if the label text is "SEPARATOR", then this is a menu separator. That means
             // that you can't have an actual menu item called "SEPARATOR unless you're using
@@ -617,7 +617,7 @@ public class GUIHelper {
                     numSeps = Integer.parseInt((String) toolBarConfig[j][4]);
                 }
                 catch(Exception ex) {
-                    ex.printStackTrace();   
+                    logger.error("configureToolbar(): " + ex, ex );
                 }
             }
 
@@ -653,11 +653,11 @@ public class GUIHelper {
         URL url = cl.getResource(imageFilePath);
 
         if(url != null) {
-            if(debug) System.out.println("GOT URL: " + url);
+//            logger.debug("getImageIconFromClasspath(): Image icon URL: {}", url);
             return new ImageIcon(url);
         }
         else {
-            System.err.println("Icon image not found: " + imageFilePath);
+            logger.error("getImageIconFromClasspath(): Icon image not found: " + imageFilePath);
             return null;
         }
     }

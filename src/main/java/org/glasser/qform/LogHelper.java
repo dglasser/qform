@@ -44,27 +44,43 @@ public class LogHelper {
 
     private LogHelper(){}
 
-    public static void initLogging() {
+    private static boolean loggingInitialized = false;
 
-      LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-      PatternLayoutEncoder ple = new PatternLayoutEncoder();
+    public static synchronized boolean initLogging() {
 
-      ple.setPattern("[%-5p][%d][%logger{0}] %m%n");
-      ple.setContext(loggerContext);
-      ple.start();
-      FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
-      File logFile = getLogFile();
-      System.out.println("log file is " + logFile.getAbsolutePath());
-      fileAppender.setFile(logFile.getAbsolutePath());
-      fileAppender.setAppend(false);
-      fileAppender.setEncoder(ple);
-      fileAppender.setContext(loggerContext);
-      fileAppender.start();
+      if(loggingInitialized) {
+          return true;
+      }
 
-      Logger logger = (Logger) LoggerFactory.getLogger("org.glasser.qform");
-      logger.addAppender(fileAppender);
-      logger.setLevel(Level.DEBUG);
-      logger.setAdditive(false);
+      try {
+
+          LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+          PatternLayoutEncoder ple = new PatternLayoutEncoder();
+
+          ple.setPattern("[%-5p][%d][%logger{0}] %m%n");
+          ple.setContext(loggerContext);
+          ple.start();
+          FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
+          File logFile = getLogFile();
+          System.out.println("log file is " + logFile.getAbsolutePath());
+          fileAppender.setFile(logFile.getAbsolutePath());
+          fileAppender.setAppend(false);
+          fileAppender.setEncoder(ple);
+          fileAppender.setContext(loggerContext);
+          fileAppender.start();
+
+          Logger logger = (Logger) LoggerFactory.getLogger("org.glasser");
+          logger.addAppender(fileAppender);
+          logger.setLevel(Level.DEBUG);
+          logger.setAdditive(false);
+          loggingInitialized = true;
+          return true;
+      }
+      catch(Exception ex) {
+          System.err.println("Error intializing the logging framework: " + ex);
+          ex.printStackTrace();
+          return false;
+      }
 
     }
 

@@ -61,6 +61,8 @@ import java.beans.PropertyVetoException;
 
 public class ScrollingDesktopManager extends DefaultDesktopManager {
 
+    private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ScrollingDesktopManager.class);
+
     /**
      * Searches up the ancestor hierarchy for the given JInternalFrame until
      * it finds a JDesktopPane, and then returns it.
@@ -94,16 +96,18 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
     private boolean minimizeFrameCalled = false;
 
 
-    /** Generally, this indicates that the frame should be restored to it's
-      * size and position prior to a maximizeFrame() call.
+    /** Generally, this indicates that the frame should be restored
+      * to its size and position prior to a maximizeFrame() call. 
       */
     public void minimizeFrame(JInternalFrame f) {
 
         boolean recursive = minimizeFrameCalled;
         try {
-            minimizeFrameCalled = true; 
-//            System.out.println("minimizeFrame(): Called. recursive=" + recursive + ", isIcon=" + f.isIcon() 
-//                               + " " + f.getTitle());
+            minimizeFrameCalled = true;
+            if(logger.isDebugEnabled()) { 
+                logger.debug("minimizeFrame(): Called. recursive=" + recursive + ", isIcon=" + f.isIcon() 
+                                   + " " + f.getTitle());
+            }
             if(!recursive) {
                 JDesktopPane owner = getJDesktopPaneAncestor(f);
                 if(owner != null) {
@@ -124,7 +128,7 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
                             }
                         }
                         catch(Exception ex) {
-                            ex.printStackTrace();
+                            logger.error("minimizeFrame(): " + ex, ex );
                         }
                     }
                 }
@@ -181,9 +185,11 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
         
         try {
             
-            maximizeFrameCalled = true; 
-
-            System.out.println("maximizeFrame(): Called. recursive=" + recursive + ", isIcon=" + f.isIcon() + " " + f.getTitle());
+            maximizeFrameCalled = true;
+            
+            if(logger.isDebugEnabled()) {
+                logger.debug("maximizeFrame(): Called. recursive=" + recursive + ", isIcon=" + f.isIcon() + " " + f.getTitle());
+            }
 
             if(!recursive) {
                 JDesktopPane owner = getJDesktopPaneAncestor(f);
@@ -201,7 +207,7 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
                             }
                         }
                         catch(Exception ex) {
-                            ex.printStackTrace();
+                            logger.error("maximizeFrame(): " + ex, ex );
                         }
                     }
                 }
@@ -214,7 +220,7 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
     }
 
     private void _maximizeFrame(JInternalFrame f, boolean setSelected) {
-        System.out.println("_maximizeFrame(): Called. " + setSelected);
+        logger.debug("_maximizeFrame(): Called. setSelected={}", setSelected);
     
         Rectangle p;
         if(!f.isIcon()) {
@@ -305,7 +311,6 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
       */
     public void endResizingFrame(JComponent f) {
         super.endResizingFrame(f);
-//        System.out.println("END RESIZING " + f.getBounds());
         if(f instanceof JInternalFrame) {
             validateScrollPane((JInternalFrame) f);
         }
@@ -315,22 +320,19 @@ public class ScrollingDesktopManager extends DefaultDesktopManager {
       */
     public void endDraggingFrame(JComponent f) {
         super.endDraggingFrame(f);
-//        System.out.println("END DRAGGING " + f.getBounds());
-//        if(f instanceof JInternalFrame) {
-            validateScrollPane(f);
-//        }    
+        validateScrollPane(f);
     }
     /** The user has resized the component. Calls to this method will be preceded by calls
       * to beginResizingFrame().
       *  Normally <b>f</b> will be a JInternalFrame.
       */
     public void resizeFrame(JComponent f, int newX, int newY, int newWidth, int newHeight) {
-//        System.out.println("TRC: " + getClass().getName() + ".resizeFrame()");
+//        logger.debug("resizeFrame(): " + getClass().getName());
         super.resizeFrame(f, newX, newY, newWidth, newHeight);
     }
     /** This is a primitive reshape method.*/
     public void setBoundsForFrame(JComponent f, int newX, int newY, int newWidth, int newHeight) {
-//        System.out.println("TRC: " + getClass().getName() + ".setBoundsForFrame()");
+//        logger.debug("setBoundsForFrame(): " + getClass().getName());
         super.setBoundsForFrame(f, newX, newY, newWidth, newHeight);
     }
 
