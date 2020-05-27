@@ -82,6 +82,10 @@ public class LocalDataSourceConfig implements java.io.Serializable, Cloneable {
 
     protected Integer loginTimeout = null;
 
+    protected String selectedSchema = null;
+
+    public LocalDataSourceConfig clonedFrom = null;
+
 
     // setters
 
@@ -115,6 +119,11 @@ public class LocalDataSourceConfig implements java.io.Serializable, Cloneable {
 
     public void setLoginTimeout(Integer loginTimeout) {
         this.loginTimeout = loginTimeout;
+    }
+
+
+    public void setSelectedSchema(String selectedSchema) {
+        this.selectedSchema = selectedSchema;
     }
 
 
@@ -152,6 +161,9 @@ public class LocalDataSourceConfig implements java.io.Serializable, Cloneable {
         return loginTimeout;
     }
 
+    public String getSelectedSchema() {
+        return selectedSchema;
+    }
 
     public String toString() {
         if(displayName == null) return "";

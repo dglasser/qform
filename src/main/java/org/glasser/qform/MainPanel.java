@@ -75,7 +75,6 @@ import org.xml.sax.*;
 
 public class MainPanel extends MDIPanel implements ActionListener, InternalFrameListener, QueryPanelListener {
 
-
     private static ResourceBundle bundle = ResourceBundle.getBundle("org.glasser.qform.Resources");
 
     private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(MainPanel.class);
@@ -572,6 +571,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         GUIHelper.centerWindowOnScreen(configDialog);
 
         tableSelector = new TableSelector(parent);
+        tableSelector.setMainPanel(this);
         GUIHelper.centerWindowOnScreen(tableSelector);
 
         loginDialog = new LoginDialog(parent);
@@ -1185,7 +1185,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 return;
             }
             else {
-                
+                saveSchemaSelection(sourceId.intValue(), ti.getTableSchem());
                 try {
                     if(ti.getColumns() == null) {
                         this.setColumnsAndKeys(sourceId, ti);
@@ -1440,6 +1440,9 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 TableInfo ti = tableSelector.getSelectedTableInfo();
                 
                 if(ti  == null) return;
+
+                saveSchemaSelection(sourceId.intValue(), ti.getTableSchem());
+
                 if(ti.getColumns() == null) {
                     this.setColumnsAndKeys(sourceId, ti);
                 }
@@ -1704,6 +1707,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             // to again, and we want to keep the original information associated
             // with this connection intact.
             LocalDataSourceConfig config = (LocalDataSourceConfig) ld.clone();
+            config.clonedFrom = ld;
             conn = ds.getConnection();
             setStatusMessage("Fetching table list...");
             DatabaseMetaData dbmd = conn.getMetaData();
@@ -1724,12 +1728,12 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             
             rs.close();
             HashMap<String, List<TableInfo>> map = DBUtil.getTableInfoLists(tis, DEFAULT_SCHEMA);
-            this.tableSelector.addDataSource(id, config.getDisplayName(), map);
+            this.tableSelector.addDataSource(id, config.getDisplayName(), map, config.getSelectedSchema());
             this.dsMap.put(id, ds);
             this.localConfigMap.put(id, (LocalDataSourceConfig) config.clone());
             setStatusMessage("Connected to " + config.getDisplayName() + ".");
 
-            // put the original (uncloned) config in a set se we'll know we're already
+            // put the original (uncloned) config in a set so we'll know we're already
             // connected to it.
             establishedConnections.add(ld);
 
@@ -2149,6 +2153,39 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         }
 
         return set;
+    }
+
+
+    private void saveSchemaSelection(int sourceId,  String schema) {
+         logger.debug("saveSchemaSelection(): sourceId={}, schema={}", sourceId, schema);
+         LocalDataSourceConfig localConfig = this.localConfigMap.get(sourceId);
+         if(localConfig == null) {
+              logger.warn("saveSchemaSelection(): LocalDataSourceConfig not found for id {}", sourceId );
+              return;
+         }
+         localConfig.clonedFrom.setSelectedSchema(schema);
+
+    }
+
+    public void dataSourceSelected(int sourceId) {
+         logger.debug("dataSourceSelected(): {}", sourceId);
+         LocalDataSourceConfig localConfig = localConfigMap.get(sourceId);
+         if(localConfig != null) {
+              String schema = localConfig.clonedFrom.getSelectedSchema();
+              if(schema != null) {
+                   tableSelector.setSelectedSchema(schema);
+              }
+         }
+
+    }
+
+    public void schemaSelected(int sourceId, String schema) {
+         logger.debug("schemaSelected(): {}, {}", sourceId, schema);
+
+         LocalDataSourceConfig localConfig = localConfigMap.get(sourceId);
+         if(localConfig != null) {
+              localConfig.clonedFrom.setSelectedSchema(schema);
+         }
     }
 
 

@@ -125,30 +125,49 @@ public class TableSelector extends JDialog implements ActionListener {
 
     private Integer selectedSourceId = null;
 
-    
+    private MainPanel mainPanel = null;
 
+    private boolean blockNotifications = false;
 
-    public void addDataSource(Integer sourceId, String sourceName, HashMap<String, List<TableInfo>> tables) 
+    public void setMainPanel(MainPanel mainPanel) {
+        this.mainPanel = mainPanel;
+    }
+
+    public MainPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    public void addDataSource(Integer sourceId, String sourceName, HashMap<String, List<TableInfo>> tables, String schema) 
     {
+        blockNotifications = true;
 
-        DataSourceListItem item = new DataSourceListItem(sourceId, sourceName);
-        sourceVector.add(item);
-        Collections.<DataSourceListItem>sort(sourceVector);
-        sourceList.setModel(sourceModel);
+        try {
+            DataSourceListItem item = new DataSourceListItem(sourceId, sourceName);
+            sourceVector.add(item);
+            Collections.<DataSourceListItem>sort(sourceVector);
+            sourceList.setModel(sourceModel);
 
-        Vector<String> schemas = new Vector<String>();
-        for(Iterator<String> i = tables.keySet().iterator(); i.hasNext(); ) {
-            schemas.add(i.next());
+            Vector<String> schemas = new Vector<String>();
+            for(Iterator<String> i = tables.keySet().iterator(); i.hasNext(); ) {
+                schemas.add(i.next());
+            }
+
+            Collections.<String>sort(schemas);
+
+            schemaModelMap.put(sourceId, new DefaultComboBoxModel<String>(schemas));
+
+
+            tableListMap.put(sourceId, tables);
+            sourceList.setSelectedItem(item);
+
+            if(schema != null) {
+                schemaList.setSelectedItem(schema);
+            }
+
         }
-
-        Collections.<String>sort(schemas);
-
-        schemaModelMap.put(sourceId, new DefaultComboBoxModel<String>(schemas));
-
-
-        tableListMap.put(sourceId, tables);
-        sourceList.setSelectedItem(item);
-
+        finally {
+            blockNotifications = false;
+        }
     }
 
     public void removeDataSource(Integer sourceId) {
@@ -308,11 +327,20 @@ public class TableSelector extends JDialog implements ActionListener {
             Integer sourceId = sourceItem.getSourceId();
             DefaultComboBoxModel<String> schemaModel = schemaModelMap.get(sourceId);
             schemaList.setModel(schemaModel);
+            boolean save = blockNotifications;
+            blockNotifications = true;
             try {
                 schemaList.setSelectedIndex(0);
             }
             catch(Exception ex) {
                 logger.error("actionPerformed(): " + ex, ex );
+            }
+            finally {
+                blockNotifications = save;
+            }
+
+            if(mainPanel != null && !blockNotifications) {
+                mainPanel.dataSourceSelected(sourceId.intValue());
             }
             return;
         }
@@ -339,6 +367,9 @@ public class TableSelector extends JDialog implements ActionListener {
                     }
                 } catch(Exception ex) {
                     logger.error("actionPerformed(): " + ex, ex );
+                }
+                if(mainPanel != null && !blockNotifications) {
+                    mainPanel.schemaSelected(sourceId, owner);
                 }
             }
         } 
@@ -402,6 +433,20 @@ public class TableSelector extends JDialog implements ActionListener {
         return selectedSourceId;
     }
 
+    public void setSelectedSchema(String schema) {
+        boolean save = blockNotifications;
+        try {
+            blockNotifications = true;
+            schemaList.setSelectedItem(schema);
+        }
+        catch(Exception ex) {
+            logger.error("setSelectedSchema(): schema=" + schema, ex );
+        }
+        finally {
+            blockNotifications = save;
+        }
+    }
+
 
     public static void main(String[] args) throws Exception {
         TableSelector ts = new TableSelector();
@@ -418,7 +463,7 @@ public class TableSelector extends JDialog implements ActionListener {
                 rs.close();
                 c.close();
                 HashMap<String, List<TableInfo>> map = DBUtil.getTableInfoLists(tis, "<DEFAULT SCHEMA>");
-                ts.addDataSource(new Integer(j+1), lds[j].getDisplayName(), map);
+                ts.addDataSource(new Integer(j+1), lds[j].getDisplayName(), map, null);
             }
             catch(Exception ex) {
                 logger.error("main(): " + ex, ex );

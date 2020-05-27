@@ -235,6 +235,7 @@ public class Config {
             config.setLoginRequired("true".equalsIgnoreCase(s));
             config.setUser(trimToNull(con.getAttribute("user")));
             config.setPassword(trimToNull(con.getAttribute("password")));
+            config.setSelectedSchema(trimToNull(con.getAttribute("selected-schema")));
 
             s = trimToNull(con.getAttribute("max-connections"));
             if(s != null) {
@@ -330,6 +331,7 @@ public class Config {
             con.setAttribute("password", trim(config.getPassword()) );
             con.setAttribute("max-connections", trim(config.getMaxConnections()) );
             con.setAttribute("login-timeout", trim(config.getLoginTimeout()) );
+            con.setAttribute("selected-schema", trim(config.getSelectedSchema()) );
 
             localConns.appendChild(doc.createTextNode(ENDL + TAB2));
             localConns.appendChild(con);
@@ -383,9 +385,6 @@ public class Config {
         if(o == null) return "";
         return o.toString().trim();
     }   
-
-
-
 
     public static void main(String[] args) throws Exception {
         Config c = new Config(new File("C:/0/qform.xml"));
