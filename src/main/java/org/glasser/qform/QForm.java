@@ -50,17 +50,11 @@ public class QForm {
 
     private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(QForm.class);
 
-    private final static String WSDP = "http://java.sun.com as part of the Java Web Services Developer Pack";
-
-    private final static String COMMONS = "http://jakarta.apache.org as part of the Commons project";
+    private final static String COMMONS = "http://commons.apache.org as part of the Commons project";
 
     private final static String[][] checkClasses =
     {
-         {"javax.sql.DataSource", "javax.sql", "jdbc2_0-stdext.jar", WSDP, "1.4.0"}
-        ,{"javax.xml.parsers.DocumentBuilderFactory", "javax.xml", "jaxp-api.jar", WSDP, "1.4.0"}
-        ,{"org.w3c.dom.Node", "org.w3c.dom", "dom.jar", WSDP, "1.4.0"}
-        ,{"org.xml.sax.SAXException", "org.xml.sax", "sax.jar", WSDP, "1.4.0"}
-        ,{"org.apache.commons.dbcp.DriverManagerConnectionFactory", "org.apache.commons.dbcp", "commons-dbcp.jar", COMMONS}
+         {"org.apache.commons.dbcp.DriverManagerConnectionFactory", "org.apache.commons.dbcp", "commons-dbcp.jar", COMMONS}
         ,{"org.apache.commons.pool.impl.GenericObjectPool", "org.apache.commons.pool", "commons-pool.jar", COMMONS}
         ,{"org.apache.commons.collections.Bag", "org.apache.commons.collections", "commons-collections.jar", COMMONS}
         
@@ -77,6 +71,7 @@ public class QForm {
     {
 
         LogHelper.initLogging();
+        SystemPanel.setLogFilePath(LogHelper.getLogFilePath());
 
         // this will be the default title for message boxes when one isn't supplied
         GUIHelper.defaultMessageTitle = "QueryForm";

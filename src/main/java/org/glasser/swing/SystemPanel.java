@@ -90,6 +90,7 @@ public class SystemPanel extends JPanel {
     private JLabel lblRunningSince = new JLabel();
     private JLabel lblTotalMem = new JLabel();
     private JLabel lblFreeMem = new JLabel();
+    private JLabel lblLogPath = new JLabel();
 
     private NumberFormat bytesFormatter = NumberFormat.getInstance();
 
@@ -99,14 +100,8 @@ public class SystemPanel extends JPanel {
          {lblTotalMem, "Total program memory (bytes): "}
         ,{lblFreeMem, "Free program memory (bytes): "}
         ,{lblRunningSince, "Up since: "}
+        ,{lblLogPath, "Log File: "}
     };
-
-    private Object[][] formConfig2 =
-    {
-         {"Total program memory (bytes): ", lblTotalMem}
-        ,{"Free program memory (bytes): ", lblFreeMem}
-    };
-
 
     /**
      * This is the Thread that updates the memory usage stats every half-second.
@@ -164,13 +159,6 @@ public class SystemPanel extends JPanel {
         model.setColumnComparator(0, String.CASE_INSENSITIVE_ORDER);
         model.setColumnComparator(1, String.CASE_INSENSITIVE_ORDER);
 
-        // this code is needed for Java 1.2 and earlier.
-        TableColumnModel tcm = propsTable.getColumnModel();
-        for(int j=0; j<tcm.getColumnCount(); j++) {
-            TableColumn tc = tcm.getColumn(j);
-            tc.setHeaderRenderer(tableHeader.getDefaultRenderer());
-        }
-
         tableHeader.addMouseListener(new ListTableModelSorter());
 
         add(new JScrollPane(propsTable), BorderLayout.CENTER);
@@ -179,9 +167,7 @@ public class SystemPanel extends JPanel {
         if(runningSince != null) {
             lblRunningSince.setText(runningSince.toString());
         }
-        else {
-            formConfig = formConfig2;
-        }
+        lblLogPath.setText(logPath);
 
         lblTotalMem.setText(bytesFormatter.format(Runtime.getRuntime().totalMemory()));
         lblFreeMem.setText(bytesFormatter.format(Runtime.getRuntime().freeMemory()));
@@ -189,6 +175,7 @@ public class SystemPanel extends JPanel {
         lblRunningSince.setHorizontalAlignment(JLabel.RIGHT);
         lblTotalMem.setHorizontalAlignment(JLabel.RIGHT);
         lblFreeMem.setHorizontalAlignment(JLabel.RIGHT);
+        lblLogPath.setHorizontalAlignment(JLabel.RIGHT);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
@@ -252,6 +239,14 @@ public class SystemPanel extends JPanel {
     }
 
 
+
+    private static String logPath = null;
+
+    public static void setLogFilePath(String s) {
+        logPath = s;
+    }
+
+
     /**
      * Returns a String containing all of the displayed information, for logging
      * or other purposes. The platform-specific line-separator is used.
@@ -284,6 +279,8 @@ public class SystemPanel extends JPanel {
         buffer.append(lblFreeMem.getText()).append(newline);
         buffer.append("Up since: ");
         buffer.append(lblRunningSince.getText()).append(newline);
+        buffer.append("Log File: ");
+        buffer.append(lblLogPath.getText()).append(newline);
 
         return buffer.toString();
     }

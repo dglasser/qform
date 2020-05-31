@@ -87,4 +87,8 @@ public class LogHelper {
     public static File getLogFile() {
         return new File("qform.log");
     }
+
+    public static String getLogFilePath() {
+        return getLogFile().getAbsolutePath();
+    }
 }

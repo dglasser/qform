@@ -598,8 +598,8 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         GUIHelper.centerWindowOnScreen(sysInfoDialog);
 
         // configure the about dialog.
-        String msg = "<center><h1>QueryForm</h1><h3>Version " + VersionNumber.VERSION_NUMBER + "</h3><h3>Copyright © 1998 - 2004, David F. Glasser (dglasser@pobox.com)"
-            + "</h3><h3><u><font color='blue'>http://qform.sourceforge.net</font><u></h3><p>This product includes software developed by<br>the Apache Software Foundation "
+        String msg = "<center><h1>QueryForm</h1><h3>Version " + VersionNumber.VERSION_NUMBER + "</h3><h3>Copyright © 1998 - 2020, David F. Glasser (dglasser@pobox.com)"
+            + "</h3><h3><u><font color='blue'>https://github.com/dglasser/qform</font><u></h3><p>This product includes software developed by<br>the Apache Software Foundation "
             + "(http://www.apache.org/).<p>"
             + "Toolbar Icons Copyright © 1998 Dean S. Jones (dean@gallant.com).</center>";
         javax.swing.JEditorPane jep = new JEditorPane();
