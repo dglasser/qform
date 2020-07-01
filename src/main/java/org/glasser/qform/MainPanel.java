@@ -37,6 +37,7 @@ package org.glasser.qform;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Rectangle;
@@ -44,29 +45,17 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Vector;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
-import java.util.Properties;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.StringTokenizer;
+import java.util.*;
 import javax.sql.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.xml.parsers.*;
-
 import org.glasser.sql.*;
 import org.glasser.swing.*;
+import org.glasser.util.ExtensionClassLoader;
 import org.glasser.util.Formatter;
 import org.glasser.util.Util;
-import org.glasser.util.ExtensionClassLoader;
 import org.glasser.util.comparators.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -1065,6 +1054,27 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     }
 
 
+    private boolean showingBusyCursor = false;
+    private Cursor busyCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+    private Cursor normalCursor =  Cursor.getDefaultCursor();
+
+    public void showBusyCursor() {
+        if(showingBusyCursor) {
+            return;
+        }
+        showingBusyCursor = true;
+        this.setCursor(busyCursor);
+    }
+
+    public void showNormalCursor() {
+        if(!showingBusyCursor) {
+            return;
+        }
+        showingBusyCursor = false;
+        this.setCursor(normalCursor);
+    }
+
+
     public void actionPerformed(ActionEvent e) {
         try {
             _actionPerformed(e);
@@ -1077,6 +1087,9 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         catch(Throwable ex) {
             logger.error("actionPerformed(): " + ex, ex);
             GUIHelper.errMsg(parent, "An unexpected error occurred:\n\n" + ex, null);
+        }
+        finally {
+            showNormalCursor();
         }
     }
         
@@ -1121,6 +1134,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                         return;
                     }
                 }
+                showBusyCursor();
                 setStatusMessage("Connecting to " + ld.getDisplayName() + "...");
                 try { 
 
@@ -1198,8 +1212,10 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                         return;
                     }
 
-                    
+                    showBusyCursor();
                     this.newQueryForm(sourceId, ti);
+                    
+                    
                 }
                 catch(NoSuchElementException ex) {
                     noConnectionAvailableMessage(sourceId);
@@ -1245,6 +1261,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
 
             QueryPanel qp = getCurrentQueryPanel();
             try {
+                showBusyCursor();
                 switch(qp.getState()) {
                     case QueryPanel.OPEN_FOR_ADD :
                     case QueryPanel.OPEN_FOR_CLONE :
