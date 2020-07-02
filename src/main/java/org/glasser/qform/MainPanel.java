@@ -1439,7 +1439,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
             }
         
 
-
+            showBusyCursor();
             // if a where-clause query returns no data, we want to make
             // sure any existing resultsets are cleared from the form.
             qp.runQuery(whereClause, qp.NO_RESULTSET);
@@ -1458,6 +1458,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 
                 if(ti  == null) return;
 
+                showBusyCursor();
                 saveSchemaSelection(sourceId.intValue(), ti.getTableSchem());
 
                 if(ti.getColumns() == null) {
