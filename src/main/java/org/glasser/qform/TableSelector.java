@@ -33,18 +33,19 @@
 package org.glasser.qform;
 
 
-import javax.swing.*;
-import java.util.*;
-import javax.swing.border.*;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Frame;
-import javax.swing.event.*;
 import java.awt.event.*;
-
-import org.glasser.swing.*;
 import java.sql.*;
+import java.util.*;
 import javax.sql.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
 import org.glasser.sql.*;
+import org.glasser.swing.*;
 
 public class TableSelector extends JDialog implements ActionListener {
 
@@ -115,6 +116,8 @@ public class TableSelector extends JDialog implements ActionListener {
 
     private JButton btnCancel = new JButton("Cancel");
 
+    private JButton btnRefresh = new JButton();
+
     private HashMap<Integer, DefaultComboBoxModel<String>> schemaModelMap = new HashMap<>();
 
     private HashMap<Integer, HashMap<String, List<TableInfo>>> tableListMap = new HashMap<>();
@@ -137,7 +140,10 @@ public class TableSelector extends JDialog implements ActionListener {
         return mainPanel;
     }
 
-    public void addDataSource(Integer sourceId, String sourceName, HashMap<String, List<TableInfo>> tables, String schema) 
+    public void addDataSource(Integer sourceId, 
+                              String sourceName, 
+                              HashMap<String, List<TableInfo>> tables, 
+                              String schema) 
     {
         blockNotifications = true;
 
@@ -228,7 +234,7 @@ public class TableSelector extends JDialog implements ActionListener {
         centerPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
         panel.setLayout(new BorderLayout());
         topPanel.setLayout(new BorderLayout());
-        centerPanel.setLayout(new BorderLayout());
+        centerPanel.setLayout(new BorderLayout(0, 10));
 
         JPanel p2 = new JPanel();
         p2.setLayout(new BorderLayout());
@@ -241,7 +247,15 @@ public class TableSelector extends JDialog implements ActionListener {
 
         panel.add(topPanel, BorderLayout.NORTH);
         centerPanel.add(new JScrollPane(tableList), BorderLayout.CENTER);
-        centerPanel.add(new JLabel("Tables/Views (Views in ITALICS)"), BorderLayout.NORTH);
+        JPanel hdrPanel = new JPanel();
+        hdrPanel.setLayout(new BorderLayout());
+        centerPanel.add(hdrPanel, BorderLayout.NORTH);
+        hdrPanel.add(new JLabel("Tables/Views (Views in ITALICS)"), BorderLayout.WEST);
+        
+        btnRefresh.setToolTipText("Refresh this list.");
+        btnRefresh.addActionListener(this);
+        btnRefresh.setPreferredSize(new Dimension(20, 20));
+        hdrPanel.add(btnRefresh, BorderLayout.EAST);
         panel.add(centerPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
@@ -313,6 +327,25 @@ public class TableSelector extends JDialog implements ActionListener {
 
 
     }
+    private boolean showingBusyCursor = false;
+    private Cursor busyCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+    private Cursor normalCursor =  Cursor.getDefaultCursor();
+
+    public void showBusyCursor() {
+        if(showingBusyCursor) {
+            return;
+        }
+        showingBusyCursor = true;
+        this.setCursor(busyCursor);
+    }
+
+    public void showNormalCursor() {
+        if(!showingBusyCursor) {
+            return;
+        }
+        showingBusyCursor = false;
+        this.setCursor(normalCursor);
+    }
 
 
 //    protected void handleSchemaChange
@@ -381,6 +414,31 @@ public class TableSelector extends JDialog implements ActionListener {
             setSelections();
             setVisible(false);
         }
+        else if(source == btnRefresh) {
+            setSelections();
+            Integer sourceId = getSelectedSourceId();
+            if(sourceId == null) { // shouldn't happen.
+                return;
+            }
+
+            try {
+                showBusyCursor();
+                TableInfo[] tis = mainPanel.readTableInfos(sourceId);
+                HashMap<String, List<TableInfo>> map = DBUtil.getTableInfoLists(tis, mainPanel.DEFAULT_SCHEMA);
+
+                tableListMap.put(sourceId, map);
+                String schema = (String) schemaList.getSelectedItem();
+                if(schema != null) {
+                    schemaList.setSelectedItem(schema);
+                }
+            }
+            catch(SQLException ex) {
+                logger.error("actionPerformed(): " + ex, ex );
+            }
+            finally {
+                showNormalCursor();
+            }
+        }
 
     }
 
@@ -409,7 +467,6 @@ public class TableSelector extends JDialog implements ActionListener {
         selections[2] = selectedTableInfo;
 
     }
-
 
 
     public void setVisible(boolean b) {

@@ -1199,6 +1199,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                 return;
             }
             else {
+                showBusyCursor();
                 saveSchemaSelection(sourceId.intValue(), ti.getTableSchem());
                 try {
                     if(ti.getColumns() == null) {
@@ -1706,7 +1707,7 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
     }
 
 
-    private final static String DEFAULT_SCHEMA = "<DEFAULT SCHEMA>";
+    public final static String DEFAULT_SCHEMA = "<DEFAULT SCHEMA>";
 
     MethodComparator<TableInfo> tableTypeComparator =
         new MethodComparator<>(org.glasser.sql.TableInfo.class, "getTableType", false, false, TableInfo.NAME_COMPARATOR, false);
@@ -1720,34 +1721,18 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         try {
 
             Integer id = new Integer(nextDataSourceId++);
+            this.dsMap.put(id, ds);
 
             // we'll clone this config because it may be modified and connected
             // to again, and we want to keep the original information associated
             // with this connection intact.
             LocalDataSourceConfig config = (LocalDataSourceConfig) ld.clone();
             config.clonedFrom = ld;
-            conn = ds.getConnection();
-            setStatusMessage("Fetching table list...");
-            DatabaseMetaData dbmd = conn.getMetaData();
+            TableInfo[] tis = readTableInfos(id);
 
-            ResultSet rs = null;
-            if(showSystemTables) {
-                rs = dbmd.getTables(null, null, "%", null);
-            }
-            else {
-                rs = dbmd.getTables(null, null, "%", new String[] {"VIEW", "TABLE"});
-            }
-
-            TableInfo[] tis = DBUtil.getTableInfos(rs);
-
-            Arrays.<TableInfo>sort(tis, tableTypeComparator);
-
-
-            
-            rs.close();
             HashMap<String, List<TableInfo>> map = DBUtil.getTableInfoLists(tis, DEFAULT_SCHEMA);
             this.tableSelector.addDataSource(id, config.getDisplayName(), map, config.getSelectedSchema());
-            this.dsMap.put(id, ds);
+            
             this.localConfigMap.put(id, (LocalDataSourceConfig) config.clone());
             setStatusMessage("Connected to " + config.getDisplayName() + ".");
 
@@ -1761,6 +1746,38 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
         }
         finally {
             DBUtil.closeConnection(conn);
+        }
+
+    }
+
+    public TableInfo[] readTableInfos(Integer dsId) throws SQLException {
+        Connection conn = null;
+        ResultSet rs = null;
+        try {
+             setStatusMessage("Fetching table list...");
+             showBusyCursor();
+             
+             DataSource ds = this.dsMap.get(dsId);
+             conn = ds.getConnection();
+             
+             DatabaseMetaData dbmd = conn.getMetaData();
+
+             if(showSystemTables) {
+                 rs = dbmd.getTables(null, null, "%", null);
+             }
+             else {
+                 rs = dbmd.getTables(null, null, "%", new String[] {"VIEW", "TABLE"});
+             }
+
+             TableInfo[] tis = DBUtil.getTableInfos(rs);
+             Arrays.<TableInfo>sort(tis, tableTypeComparator);
+             return tis;
+        }
+        finally {
+            setStatusMessage(null);
+            DBUtil.closeResultSet(rs);
+            DBUtil.closeConnection(conn);
+            showNormalCursor();
         }
 
     }
