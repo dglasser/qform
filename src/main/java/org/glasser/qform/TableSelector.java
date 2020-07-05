@@ -47,7 +47,7 @@ import javax.swing.event.*;
 import org.glasser.sql.*;
 import org.glasser.swing.*;
 
-public class TableSelector extends JDialog implements ActionListener {
+public class TableSelector extends JDialog implements ActionListener, ListSelectionListener {
 
     private final static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(TableSelector.class);
 
@@ -275,6 +275,7 @@ public class TableSelector extends JDialog implements ActionListener {
 
         sourceList.addActionListener(this);
         schemaList.addActionListener(this);
+        tableList.addListSelectionListener(this);
         tableList.addMouseListener(new MouseAdapter() {
                                        public void mouseClicked(MouseEvent e) {
                                            if(e.getClickCount() == 2) {
@@ -397,6 +398,7 @@ public class TableSelector extends JDialog implements ActionListener {
                 try {
                     if(v.size() > 0) {
                         tableList.setSelectedIndex(0);
+                        tableList.ensureIndexIsVisible(0);
                     }
                 } catch(Exception ex) {
                     logger.error("actionPerformed(): " + ex, ex );
@@ -405,9 +407,11 @@ public class TableSelector extends JDialog implements ActionListener {
                     mainPanel.schemaSelected(sourceId, owner);
                 }
             }
-        } 
+        }
         else if(source == btnCancel) {
             selections = null;
+            selectedTableInfo = null;
+            selectedSourceId = null;
             setVisible(false);
         } 
         else if(source == btnOK) {
@@ -415,11 +419,9 @@ public class TableSelector extends JDialog implements ActionListener {
             setVisible(false);
         }
         else if(source == btnRefresh) {
-            setSelections();
-            Integer sourceId = getSelectedSourceId();
-            if(sourceId == null) { // shouldn't happen.
-                return;
-            }
+            DataSourceListItem dsListItem = (DataSourceListItem) sourceList.getSelectedItem();
+            if(dsListItem == null) return;  // shouldn't happen.
+            Integer sourceId = dsListItem.getSourceId();
 
             try {
                 showBusyCursor();
@@ -442,11 +444,18 @@ public class TableSelector extends JDialog implements ActionListener {
 
     }
 
-    /**
-     * If a selection was made, returns an Object[3] array. The first element
-     * is an Integer representing the DataSource id, the second element is
-     * a String representing the schema, or table owner, and the third
-     * element is the name of the table.
+    public void valueChanged(ListSelectionEvent evt) {
+        Object source = evt.getSource();
+        if(source == tableList) {
+            btnOK.setEnabled(tableList.getSelectedValue() != null);
+        }
+    }
+
+    /** 
+     * This is called when the user has selected a a table, 
+     * either by clicking the OK button when a table has been 
+     * selected, or double-clicking a table in the list. 
+     *  
      */
     protected void setSelections() {
 
@@ -457,15 +466,14 @@ public class TableSelector extends JDialog implements ActionListener {
         selectedTableInfo = (TableInfo) tableList.getSelectedValue();
         selectedSourceId = (Integer) source.getSourceId();
         if(selectedTableInfo == null) {
+            logger.debug("setSelections(): No table is selected.");
             return;
         }
-            
 
         selections = new Object[3];
         selections[0] = source.getSourceId();
         selections[1] = schemaList.getSelectedItem();
         selections[2] = selectedTableInfo;
-
     }
 
 
@@ -474,6 +482,7 @@ public class TableSelector extends JDialog implements ActionListener {
             selections = null;
             selectedTableInfo = null;
             selectedSourceId = null;
+            btnOK.setEnabled(tableList.getSelectedValue() != null);
         }
         super.setVisible(b);
     }
