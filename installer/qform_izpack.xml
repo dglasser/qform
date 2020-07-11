@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<installation version="1.0">
+<izpack:installation version="5.0"
+                     xmlns:izpack="http://izpack.org/schema/installation"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
     <info>
         <appname>QueryForm</appname>
         <appversion>1.4.1</appversion>
@@ -9,6 +12,10 @@
         <javaversion>1.8</javaversion>
         <url>https://github.com/dglasser/qform</url>
     </info>
+    <variables>
+      <variable name="TargetPanel.dir.windows" value="C:${SYSTEM_file_separator}qform"/>
+      <variable name="TargetPanel.dir.unix" value="/usr/local/qform"/>
+    </variables>
     <guiprefs height="480" resizable="yes" width="640"/>
     <locale>
         <langpack iso3="eng"/>
@@ -22,16 +29,16 @@
         <langpack iso3="ukr"/>
         <langpack iso3="fin"/>
         <langpack iso3="cat"/>
-        <langpack iso3="por"/>
-        <langpack iso3="ned"/>
         <langpack iso3="spa"/>
     </locale>
     <resources>
         <res src="./GNU_General_Public_License.txt" id="LicencePanel.licence"/>
         <res src="./qform-shortcuts.xml" id="shortcutSpec.xml"/>
     </resources>
-    <native name="ShellLink_x64.dll" type="izpack"/>
-    <native name="ShellLink.dll" type="izpack"/>
+    <natives>
+      <native name="ShellLink_x64.dll" type="izpack"/>
+      <native name="ShellLink.dll" type="izpack"/>
+    </natives>
     <panels>
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
@@ -69,4 +76,4 @@
             <parsable targetfile="$INSTALL_PATH/qform.sh" os="unix"/>
         </pack>
     </packs>
-</installation>
+</izpack:installation>

@@ -100,8 +100,7 @@ dependencies {
 
     implementation("com.bmuschko:gradle-izpack-plugin:3.0")
 
-    izpack("org.codehaus.izpack:izpack-standalone-compiler:4.3.5")
-
+    izpack("org.codehaus.izpack:izpack-ant:5.1.3")
     
 }
 
