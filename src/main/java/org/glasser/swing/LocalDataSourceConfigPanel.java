@@ -190,6 +190,10 @@ public class LocalDataSourceConfigPanel extends JPanel {
         else config.setLoginTimeout(null);
     }
 
+    public void focusDisplayNameField() {
+        txtDisplayName.requestFocus();
+    }
+
 
 
 }

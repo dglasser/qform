@@ -79,6 +79,8 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
 
     private JList<LocalDataSourceConfig> listbox = new JList<>();
 
+    private JButton btnClone = new JButton("Clone");
+
     private JButton btnNew = new JButton("New");
 
     private JButton btnEdit = new JButton("Edit");
@@ -99,6 +101,7 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
     private Object[][] buttonConfig = 
     {
          {btnNew,   "N", "OPEN_NEW", "Configure a new data source."}
+        ,{btnClone, "O", "CLONE", "Clone the selected data source."}
         ,{btnEdit, "E", "EDIT_EXISTING", "Edit the selected data source."}
         ,{btnDelete, "D", "DELETE_EXISTING", "Delete the selected data source configuration."}
         ,{btnSave, "S", "SAVE", "Save changes."}
@@ -115,6 +118,7 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
     public final static int EDIT_NEW = 2;
 
     public final static int EDIT_EXISTING = 3;
+    public final static int CLONE = 4;
 
 
     private int screenState = NOTHING_SELECTED;
@@ -122,16 +126,17 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
     
     private final static boolean[][] buttonStates = 
     {
-        {true,  false,  false,  false,  false,  true,   false}   // 0 NOTHING_SELECTED
-       ,{true,  true,   true,   false,  false,  true,   true}    // 1 ITEM_SELECTED
-       ,{false, false,  false,  true,   true,   false,  false}   // 2 EDIT_NEW
-       ,{false, false,  false,  true,   true,   false,  false}   // 3 EDIT_EXISTING
+        {true,  false,  false,  false,  false,  false,  true,   false}   // 0 NOTHING_SELECTED
+       ,{true,  true,   true,   true,   false,  false,  true,   true}    // 1 ITEM_SELECTED
+       ,{false, false,  false,  false,  true,   true,   false,  false}   // 2 EDIT_NEW
+       ,{false, false,  false,  false,  true,   true,   false,  false}   // 3 EDIT_EXISTING
+       ,{false, false,  false,  false,  true,   true,   false,  false}   // 4 CLONE
 
     };
 
-    private boolean listStates[] = {true, true, false, false};
+    private boolean listStates[] = {true, true, false, false, false};
 
-    private boolean configPanelStates[] = {false, false, true, true};
+    private boolean configPanelStates[] = {false, false, true, true, true};
 
     private boolean disableSelectionEvents = false;
 
@@ -158,6 +163,20 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
                     // get fired as a result of removing the selection.
                     disableSelectionEvents = true;
                     listbox.removeSelectionInterval(index, index);
+                }
+                break;
+            case CLONE :
+                config = configList.get(index);
+                if(config != null) {
+                    config = (LocalDataSourceConfig) config.clone();
+                    config.setDisplayName(null);
+                    selectedConfig = null;
+                    if(index > -1) {
+                        disableSelectionEvents = true;
+                        listbox.removeSelectionInterval(index, index);
+                    }
+                    configPanel.displayObject(config);
+                    configPanel.focusDisplayNameField();
                 }
                 break;
             case EDIT_EXISTING :
@@ -193,6 +212,9 @@ public class LocalDataSourceConfigDialog extends JDialog implements ActionListen
         }
         else if(command.equals("EDIT_EXISTING")) {
             setScreenState(EDIT_EXISTING);
+        }
+        else if(command.equals("CLONE")) {
+            setScreenState(CLONE);
         }
         else if(command.equals("DELETE_EXISTING")) {
 
