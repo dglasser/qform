@@ -1166,6 +1166,9 @@ public class MainPanel extends MDIPanel implements ActionListener, InternalFrame
                     }
 
                     this.addNewLocalDataSource(ld, ds);
+
+                    // Open the dialog to create a new query form.
+                    newFormButton.doClick();
     
                 }
                 catch(ClassNotFoundException ex) {
