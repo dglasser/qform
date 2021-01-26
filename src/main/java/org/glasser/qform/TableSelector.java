@@ -254,7 +254,11 @@ public class TableSelector extends JDialog implements ActionListener, ListSelect
         
         btnRefresh.setToolTipText("Refresh this list.");
         btnRefresh.addActionListener(this);
-        btnRefresh.setPreferredSize(new Dimension(20, 20));
+        Dimension d = new Dimension(20,20);
+        btnRefresh.setPreferredSize(d);
+        btnRefresh.setMinimumSize(d);
+        btnRefresh.setMaximumSize(d);
+        btnRefresh.setIcon(GUIHelper.getImageIconFromClasspath("org/glasser/svg/refresh.svg", d));
         hdrPanel.add(btnRefresh, BorderLayout.EAST);
         panel.add(centerPanel, BorderLayout.CENTER);
 

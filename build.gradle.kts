@@ -75,12 +75,14 @@ dependencies {
     implementation("commons-dbcp:commons-dbcp:1.4")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("org.slf4j:slf4j-api:1.7.25")
+	implementation("org.apache.xmlgraphics:batik-all:1.14")
 
     runtimeOnly("commons-collections:commons-collections:3.2.2")
     runtimeOnly("commons-pool:commons-pool:1.6")
     runtimeOnly("commons-dbcp:commons-dbcp:1.4")
     runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
     runtimeOnly("org.slf4j:slf4j-api:1.7.25")
+	implementation("org.apache.xmlgraphics:batik-all:1.14")
 
     // JDBC drivers
     runtimeOnly("mysql:mysql-connector-java:8.0.19")
@@ -112,9 +114,9 @@ tasks.jar {
     manifest {
         attributes("Main-Class" to application.mainClassName,
                    "Class-Path" to "commons-collections-3.2.2.jar commons-dbcp-1.4.jar commons-pool-1.6.jar " +
-				                   "logback-core-1.2.3.jar logback-classic-1.2.3.jar slf4j-api-1.7.25.jar " +
+				                   "logback-core-1.2.3.jar logback-classic-1.2.3.jar slf4j-api-1.7.25.jar batik-all-1.14.jar xmlgraphics-commons-2.6.jar xml-apis-1.4.01.jar xml-apis-ext-1.3.04.jar " +
                    "libs/commons-collections-3.2.2.jar libs/commons-dbcp-1.4.jar libs/commons-pool-1.6.jar " +
-				   "libs/logback-core-1.2.3.jar libs/logback-classic-1.2.3.jar libs/slf4j-api-1.7.25.jar")
+				   "libs/logback-core-1.2.3.jar libs/logback-classic-1.2.3.jar libs/slf4j-api-1.7.25.jar libs/batik-all-1.14.jar libs/xmlgraphics-commons-2.6.jar libs/xml-apis-1.4.01.jar libs/xml-apis-ext-1.3.04.jar")
     }
     getArchiveVersion().set("")
 }

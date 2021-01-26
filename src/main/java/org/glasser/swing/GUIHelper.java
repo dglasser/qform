@@ -58,13 +58,21 @@ package org.glasser.swing;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import javax.swing.event.*;
 import java.net.URL;
 import java.util.*;
 import java.lang.reflect.*;
+import java.net.URISyntaxException;
+import org.glasser.svg.SvgUtil;
 import org.glasser.util.*;
 
 import java.util.ResourceBundle;
+
+//import org.apache.batik.transcoder.image.*;
+//import org.apache.batik.transcoder.TranscoderInput;
+//import org.apache.batik.transcoder.TranscoderException;
+//import org.apache.batik.transcoder.TranscoderOutput;
 
 public class GUIHelper {
 
@@ -648,17 +656,101 @@ public class GUIHelper {
      * this will return an ImageIcon constructed from the given image.
      */
     public static ImageIcon getImageIconFromClasspath(String imageFilePath) {
+        return getImageIconFromClasspath(imageFilePath, null);
+    }
 
+
+    /**
+     * Given the path, relative to the classpath, of an image file which is IN the classpath,
+     * this will return an ImageIcon constructed from the given image.
+     */
+    public static ImageIcon getImageIconFromClasspath(String imageFilePath, Dimension maybeConstrainImageSize) {
+
+        boolean isSvg = imageFilePath.toLowerCase().endsWith(".svg");
         ClassLoader cl = GUIHelper.class.getClassLoader(); 
         URL url = cl.getResource(imageFilePath);
+        try {
+            if(url != null) {
+    //            logger.debug("getImageIconFromClasspath(): Image icon URL: {}", url);
+                Image image = null;
+                if(isSvg) {
+                    image = constrainImageSize(SvgUtil.svgToBufferedImage(url), maybeConstrainImageSize);
+                }
+                else {
+                    image = Toolkit.getDefaultToolkit().getImage(url);
+                    if(image != null && maybeConstrainImageSize != null) {
+                        image = constrainImageSize(image,  maybeConstrainImageSize);
+                    }
+                }
 
-        if(url != null) {
-//            logger.debug("getImageIconFromClasspath(): Image icon URL: {}", url);
-            return new ImageIcon(url);
+                if(image != null) {
+                    return new ImageIcon(image);
+                }
+                else {
+                    logger.error("getImageIconFromClasspath(): Icon image not found: " + imageFilePath );
+                    return null;
+                }
+            }
+            else {
+                logger.error("getImageIconFromClasspath(): Icon image not found: " + imageFilePath);
+                return null;
+            }
         }
-        else {
-            logger.error("getImageIconFromClasspath(): Icon image not found: " + imageFilePath);
+        catch(Exception ex) {
+            logger.error("getImageIconFromClasspath(): " + ex, ex );
             return null;
+        }
+    }
+
+    public static Image constrainImageSize(Image image, Dimension d) {
+        try {
+            if(d == null) {
+                return image;
+            }
+            int w = image.getWidth(null);
+            int h = image.getHeight(null);
+            int dw = d.width;
+            int dh = d.height;
+             
+            if(w < 0 || h < 0) {
+                return image;
+            }
+            if(dw <=0 && dh <=0) {
+                return image;
+            }
+            if(dh <= 0 || h <= dh) {  // Height is OK.
+                if(w > dw) {
+                    return image.getScaledInstance(dw, -1, Image.SCALE_SMOOTH);
+                }
+                else { // Width is OK too.
+                    return image;
+                }
+            }
+
+            if(dw <= 0 || w <= dw) { // Width is OK, Height is not.
+                return image.getScaledInstance(-1, dh, Image.SCALE_SMOOTH);
+            }
+
+            // Neither width nor height are OK.
+
+            float dAr = (float) dw / (float) dh;
+            float ar = (float) w / (float) h;
+
+            if(dAr == ar) {
+                return image.getScaledInstance(dw, dh, Image.SCALE_SMOOTH);
+            }
+
+            if(dAr > ar) {
+                // Desired dimensions are wider and flatter, so shrink down image height
+                return image.getScaledInstance(-1, dh, Image.SCALE_SMOOTH);
+            }
+
+            // Desired dimensions are taller and narrower, shrink image width.
+            return image.getScaledInstance(dw, -1, Image.SCALE_SMOOTH);
+        }
+        catch(Exception ex) {
+            logger.error("constrainImage(): " + ex, ex );
+            return image;
         }
     }
 
