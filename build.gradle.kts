@@ -96,8 +96,6 @@ dependencies {
         }
     }
 
-    runtimeOnly("com.oracle.jdbc:com.springsource.oracle.jdbc:10.2.0.2")
-
     implementation("com.bmuschko:gradle-izpack-plugin:3.0")
 
     izpack("org.codehaus.izpack:izpack-ant:5.1.3")
