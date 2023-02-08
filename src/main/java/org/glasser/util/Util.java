@@ -148,7 +148,6 @@ public class Util {
     public static boolean isCurrentJavaVersionAtLeast(String minVersion) {
 
         String version = System.getProperty("java.version");
-        System.out.println("version " + version);
         ArrayList list = new ArrayList();
         StringTokenizer versionTokenizer = new StringTokenizer(version, "._");
         StringTokenizer minVersionTokenizer = new StringTokenizer(minVersion, "._");
