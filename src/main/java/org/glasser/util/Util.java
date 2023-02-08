@@ -141,34 +141,48 @@ public class Util {
      * System property "java.version" is equal to or later than the version
      * string passed in.
      * 
-     * @param minVersion a String representing a Java version, for example "1.3.1". The 
-     * String may only contain digits and dots.
+     * @param minVersion a String representing a Java version, for 
+     * example "1.8.0_152". The String may only contain digits, dots
+     * and underscores. 
      */
     public static boolean isCurrentJavaVersionAtLeast(String minVersion) {
 
         String version = System.getProperty("java.version");
+        System.out.println("version " + version);
         ArrayList list = new ArrayList();
-        StringTokenizer versionTokenizer = new StringTokenizer(version, ".");
-        StringTokenizer minVersionTokenizer = new StringTokenizer(minVersion, ".");
+        StringTokenizer versionTokenizer = new StringTokenizer(version, "._");
+        StringTokenizer minVersionTokenizer = new StringTokenizer(minVersion, "._");
 
-        while(minVersionTokenizer.hasMoreElements()) {
+        while(minVersionTokenizer.hasMoreElements() || versionTokenizer.hasMoreElements()) {
 
-            // if the current version has fewer segments than the minimum
+            // if one version has fewer segments than the other
             // version, we'll right-pad it with zeros.
+
             int ver = 0;
             if(versionTokenizer.hasMoreElements()) { 
                 ver = Integer.parseInt( versionTokenizer.nextToken() );
             }
 
-            int min = Integer.parseInt( minVersionTokenizer.nextToken());
+            int min = 0;
+            if(minVersionTokenizer.hasMoreElements()) {
+                min = Integer.parseInt( minVersionTokenizer.nextToken());
+            }
 
-            // each segment of the current version must be at least as 
+            // Each segment of the current version must be at least as 
             // much as the corresponding segment of the minimum version.
+
+            // As soon as we find two corresponding segements that
+            // are different, were done.
+            if(ver > min) {
+                return true;
+            }
+
             if(ver < min) {
                 return false;
             }
         }
 
+        // The current version is the same as the minimum version.
         return true;
 
     }
